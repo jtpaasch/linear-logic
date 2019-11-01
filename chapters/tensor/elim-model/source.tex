@@ -1,0 +1,354 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Tensor elim models}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A simple proof}
+
+Consider again the following proof tree, which utilizes a tensor elimination.
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \infer2[\tensorIntro/]{b(s) \tensor/ t(s, p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(s)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)^{b}}
+  \infer2[\traderule/]{b(p)}
+  
+  \infer2[\tensorElim/$^{a, b}$]{b(p)}
+\end{prooftree*}
+
+
+\noindent
+For this proof tree, we have a tensor --- namely, ``$b(s)  \tensor/ t(s, p)$'' --- and we also have a proof to show that the pieces of the tensor lead to ``$b(p)$.'' With both of those things, we use \tensorElim/ to conclude ``$b(p)$.''
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The left side of the tree}
+
+Let's model the above proof tree, to confirm that the elimination rule makes sense. First, let's model the tensor on the left. We begin with assumptions ``$b(p)$'' and ``$t(s, p)$.'' When we draw them into the initial state, we get this:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (s) [label=below:{$s$}] at (-0.5, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (0.75, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 1);
+    \draw[spaced-arrows,->] (s) to node [fill=white] {$t$} (p);
+
+\end{diagram}
+
+\noindent
+Next, the proof tree combines those two assumptions into a tensor. To model that, we first remove the assumptions, to signify that we use them up:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+\end{diagram}
+
+\noindent
+Then we draw them back in, to signify that they have combined into the tensor: 
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (s) [label=below:{$s$}] at (-0.5, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (0.75, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 1);
+    \draw[spaced-arrows,->] (s) to node [fill=white] {$t$} (p);
+
+\end{diagram}
+
+\noindent
+So of course, we end up right back where we started. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The right side of the tree}
+
+Next, let's model the right side of the proof tree. Since this is an independent proof, let's start this part of the diagram in a separate box, over to the right. This is also a part that we are modeling as a hypothetical possibility, so let's draw it with dotted lines:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (s) [label=below:{$s$}] at (-0.5, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (0.75, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 1);
+    \draw[spaced-arrows,->] (s) to node [fill=white] {$t$} (p);
+
+  % State 1
+  \draw[densely dotted] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+\end{diagram}
+
+\noindent
+Now let's draw in the two assumptions, which are ``$b(s)^{a}$'' and ``$t(s, p)^{b}$'':
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (s) [label=below:{$s$}] at (-0.5, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (0.75, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 1);
+    \draw[spaced-arrows,->] (s) to node [fill=white] {$t$} (p);
+
+  % State 1
+  \draw[densely dotted] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (s_1) [label=below:{$s$}] at (2.75, 1) {};
+    \node[o-point] (p_1) [label=below:{$p$}] at (4, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (2.75, 1);
+    \draw[dotted, spaced-arrows,->] (s_1) to node [fill=white] {$t$} (p_1);
+
+\end{diagram}
+
+\noindent
+Next, the proof tree applies the trade rule, to conclude ``$b(p)$.'' To model that, we draw a transition to a new (hypothetical) state:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (s) [label=below:{$s$}] at (-0.5, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (0.75, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 1);
+    \draw[spaced-arrows,->] (s) to node [fill=white] {$t$} (p);
+
+  % State 1
+  \draw[densely dotted] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (s_1) [label=below:{$s$}] at (2.75, 1) {};
+    \node[o-point] (p_1) [label=below:{$p$}] at (4, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (2.75, 1);
+    \draw[dotted, spaced-arrows,->] (s_1) to node [fill=white] {$t$} (p_1);
+
+  % State 2
+  \draw[dotted, spaced-arrows,->] (4.5, 0.5) -- (5.5, 0.5);
+  \draw[densely dotted] (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+\end{diagram}
+
+\noindent
+Then we draw in the result of the trade, namely that I end up with potatoes in my basket:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (s) [label=below:{$s$}] at (-0.5, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (0.75, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 1);
+    \draw[spaced-arrows,->] (s) to node [fill=white] {$t$} (p);
+
+  % State 1
+  \draw[densely dotted] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (s_1) [label=below:{$s$}] at (2.75, 1) {};
+    \node[o-point] (p_1) [label=below:{$p$}] at (4, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (2.75, 1);
+    \draw[dotted, spaced-arrows,->] (s_1) to node [fill=white] {$t$} (p_1);
+
+  % State 2
+  \draw[dotted, spaced-arrows,->] (4.5, 0.5) -- (5.5, 0.5);
+  \draw[densely dotted] (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+    \node[o-point] (p_1) [label=below:{$p$}] at (7.25, 0) {};
+
+    \coordinate[label=left:{\fbox{$b$}}] (b) at (7.55, 0.45);
+
+\end{diagram}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Connect the two}
+
+Notice what $S_{1}$--$S_{2}$ depict. They depict that \emph{if} we were to start with ``$b(s)$'' and ``$t(s, p)$,'' then we \emph{would} end up with ``$b(p)$.'' But notice how $S_{0}$ matches up exactly with $S_{1}$. The pieces in each line up:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (s) [label=below:{$s$}] at (-0.5, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (0.75, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 1);
+    \draw[spaced-arrows,->] (s) to node [fill=white] {$t$} (p);
+
+  % State 1
+  \draw[densely dotted] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (s_1) [label=below:{$s$}] at (2.75, 1) {};
+    \node[o-point] (p_1) [label=below:{$p$}] at (4, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (2.75, 1);
+    \draw[dotted, spaced-arrows,->] (s_1) to node [fill=white] {$t$} (p_1);
+
+  % State 2
+  \draw[dotted, spaced-arrows,->] (4.5, 0.5) -- (5.5, 0.5);
+  \draw[densely dotted] (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+    \node[o-point] (p_1) [label=below:{$p$}] at (7.25, 0) {};
+
+    \coordinate[label=left:{\fbox{$b$}}] (b) at (7.55, 0.45);
+
+  % Arrows to connect S_0 with S_1
+  \draw[spaced-arrows,->] (-0.2, 1.3) -- (2.5, 1.3);
+  \draw[spaced-arrows,->] (0.95, 0) -- (3.75, 0);  
+
+\end{diagram}
+
+\noindent
+So we could plug $S_{0}$ right into $S_{1}$:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (s) [label=below:{$s$}] at (-0.5, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (0.75, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 1);
+    \draw[spaced-arrows,->] (s) to node [fill=white] {$t$} (p);
+
+  % State 1
+  \draw[spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[densely dotted] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (s_1) [label=below:{$s$}] at (2.75, 1) {};
+    \node[o-point] (p_1) [label=below:{$p$}] at (4, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (2.75, 1);
+    \draw[dotted, spaced-arrows,->] (s_1) to node [fill=white] {$t$} (p_1);
+
+  % State 2
+  \draw[dotted, spaced-arrows,->] (4.5, 0.5) -- (5.5, 0.5);
+  \draw[densely dotted] (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+    \node[o-point] (p_1) [label=below:{$p$}] at (7.25, 0) {};
+
+    \coordinate[label=left:{\fbox{$b$}}] (b) at (7.55, 0.45);
+
+\end{diagram}
+
+\noindent
+$S_{1}$--$S_{2}$ shows us what \emph{would} happen if $S_{1}$ were actualized. So, if we push $S_{0}$ over the top of $S_{1}$, we actualize it. Let's draw $S_{0}$ right over the top of $S_{1}$. That way, $S_{1}$ will have solid lines instead of dotted lines, to represent that it's actualized:
+
+\begin{diagram}
+
+  % State 1
+  \draw[] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (s_1) [label=below:{$s$}] at (2.75, 1) {};
+    \node[o-point] (p_1) [label=below:{$p$}] at (4, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (2.75, 1);
+    \draw[spaced-arrows,->] (s_1) to node [fill=white] {$t$} (p_1);
+
+  % State 2
+  \draw[dotted, spaced-arrows,->] (4.5, 0.5) -- (5.5, 0.5);
+  \draw[densely dotted] (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+    \node[o-point] (p_1) [label=below:{$p$}] at (7.25, 0) {};
+
+    \coordinate[label=left:{\fbox{$b$}}] (b) at (7.55, 0.45);
+
+\end{diagram}
+
+\noindent
+And once that first step has been actualized, then $S_{2}$ would become actualized. Let's draw $S_{2}$ with solid lines now, to show that it's actualized too:
+
+\begin{diagram}
+
+  % State 1
+  \draw[] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (s_1) [label=below:{$s$}] at (2.75, 1) {};
+    \node[o-point] (p_1) [label=below:{$p$}] at (4, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (2.75, 1);
+    \draw[spaced-arrows,->] (s_1) to node [fill=white] {$t$} (p_1);
+
+  % State 2
+  \draw[spaced-arrows,->] (4.5, 0.5) -- (5.5, 0.5);
+  \draw[] (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+    \node[o-point] (p_1) [label=below:{$p$}] at (7.25, 0) {};
+
+    \coordinate[label=left:{\fbox{$b$}}] (b) at (7.55, 0.45);
+
+\end{diagram}
+
+\noindent
+At this point, we have modeled the entire proof tree. So we can finally step back and ask: is the situation we have modeled here intelligible? Do the moves in the proof tree actually make sense?
+
+The answer is yes. When we play out the elimination in a model, we can see that the inference (namely, the tensor elimination) does indeed capture exactly what happens in the situation.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+In this chapter, we modeled the process of tensor elimination. And we saw that, when the pieces of a tensor lead to a further conclusion, then if we have the tensor to begin with, we can safely infer that further conclusion.
+
+
+\end{document}

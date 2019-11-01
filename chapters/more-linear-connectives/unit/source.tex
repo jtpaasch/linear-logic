@@ -1,0 +1,342 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Unit}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The concept of unit}
+
+Imagine a factory that you turn on without putting any parts into the machines. The factory runs, and the machines whir, but nothing comes out the other side, since no parts went in to begin with.
+
+There is a proof like this in linear logic. It uses no assumptions, and it produces an empty result. To describe this, we say it is a \vocab{trivial result}, and that it requires \vocab{no assumptions} to produce it. This trivial result is called the \vocab{unit}. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Notations for unit}
+
+We can write the unit in a variety of ways. Sometimes you see it written as an empty set of parentheses, like this:
+
+\begin{center}
+  $\textsf{()}$
+\end{center}
+
+\noindent
+Sometimes you see it written as the number one, and that's how we will write it, like this:
+
+\begin{center}
+  \unit/
+\end{center}
+
+\noindent
+The unit symbol is just a constant (it never changes). So to form it, we simply have to write it down. The formation rule is this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\unit/ :: prop}
+\end{prooftree*}
+
+\noindent
+This says that unit is a proposition. Notice that there is nothing above the inference line. This is because we don't need to assume that, say, some ``$A$'' is a proposition, or that some ``$B$'' is a proposition, before we produce the proposition ``$\unit/$.'' We need no assumptions at all. The unit simply \emph{is} a proposition.
+
+Of course, the unit can be used in judgments too. Here it is, in a hypothetical judgment:
+
+\begin{equation*}
+  \ndturnstile/ \unit/ :: true
+\end{equation*}
+
+\noindent
+That judgment says that unit follows, given no assumptions. Notice that there are zero assumptions on the left side of the turnstile. We could also write that hypothetical judgment like this:
+
+\begin{equation*}
+  \emptyassumptions/ \ndturnstile/ \unit/ :: true
+\end{equation*}
+
+\noindent
+That makes it explicit that we simply haven't forgotten to write something on the left side of the turnstile.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Another explanation}
+
+Above, we said that the unit is the trivial result of using no assumptions. There is another way to look at this. Suppose we use a bunch of assumptions, and with all of that, all we prove is an empty result:
+
+\begin{equation*}
+  A_{1} :: true, A_{2} :: true, \ldots, A_{n} :: true \ndturnstile/ \unit/ :: true
+\end{equation*}
+
+\noindent
+If all of those assumptions result in nothing, we can simply throw them away. After all, they got us nowhere! So the above is really equivalent to this:
+
+\begin{equation*}
+  \emptyassumptions/ \ndturnstile/ \unit/ :: true
+\end{equation*}
+
+\noindent
+Which is just this:
+
+\begin{equation*}
+  \ndturnstile/ \unit/ :: true
+\end{equation*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction rule}
+
+To introduce a unit, we can simply introduce it with the start rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\unit/ :: true}
+\end{prooftree*}
+
+\noindent
+Indeed, this is precisely the \vocab{unit introduction rule}. A unit requires no assumptions, so to introduce it, we simply assert it, without any assumptions. 
+
+To make this explicit, instead of writing ``\startrule/'' next to the inference line, we can write ``\unitIntro/'' (that's the unit symbol followed by a capital ``I,'' the first letter of ``Introduction''):
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\unitIntro/]{\unit/ :: true}
+\end{prooftree*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Elimination rule}
+
+How do we use the unit? What is the elimination rule? Well, suppose we have derived a unit:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{\unit/ :: true}
+  \infer[no rule]1{}
+\end{prooftree*}
+
+\noindent
+And suppose that we have also derived something else (call it ``$A$''):
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{\unit/ :: true}
+  \hypo{}
+  \ellipsis{}{A :: true}
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+What follows from this? Since the unit is trivial (it is empty and uses no resources), the only thing that follows is ``$A$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{\unit/ :: true}
+  \hypo{}
+  \ellipsis{}{A :: true}
+  \infer2{A :: true}
+\end{prooftree*}
+
+\noindent
+This is the \vocab{unit elimination rule}. It says that if we have derived a unit along with something else ``$A$,'' then we can drop the unit, and simply continue with ``$A$.''
+
+We will write the label for this rule like this: ``\unitElim/'' (that's the unit symbol, followed by a capital ``E,'' the first letter of ``Elimination''). Here's the full elimination rule, with its label:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{\unit/ :: true}
+  \hypo{}
+  \ellipsis{}{A :: true}
+  \infer2[\unitElim/]{A :: true}
+\end{prooftree*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Local soundness}
+
+The \unitElim/ rule is locallly sound. To show this, we first introduce the unit, then we immediately eliminate it, and then we show that the elimination takes us through a useless detour.
+
+First, then, let's introduce the unit (omitting the ``$:: true$'' annotations):
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\unitIntro/]{\unit/}
+\end{prooftree*}
+
+\noindent
+Next we want to eliminate it. To eliminate it, we need to have derived something else. So let's suppose that we have derived ``$A$'' from a proof ``$\Proof/$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\unitIntro/]{\unit/}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[no rule]1{A}
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Now eliminate the unit:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\unitIntro/]{\unit/}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[no rule]1{A}
+  \infer2[\unitElim/]{A}
+\end{prooftree*}
+
+\noindent
+Finally, we ask: does this final step take us through a useless detour? Yes, it does. What is the conclusion of the elimination? It is ``$A$,'' highlighted here with a box:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\unitIntro/]{\unit/}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[no rule]1{A}
+  \infer2[\unitElim/]{\fbox{$A$}}
+\end{prooftree*}
+
+\noindent
+But we already derived that directly through ``$\Proof/$,'' highlighted here with a box:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\unitIntro/]{\unit/}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[no rule]1{\fbox{$A$}}
+  \infer2[\unitElim/]{A}
+\end{prooftree*}
+
+\noindent
+So we can just get ``$A$'' through ``$\Proof/$'':
+
+\begin{prooftree*}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[no rule]1{\fbox{$A$}}
+\end{prooftree*}
+
+\noindent
+The proof reduction (beta reduction) is thus this:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \infer1[\unitIntro/]{\unit/}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[no rule]1{A}
+  \infer2[\unitElim/]{A}
+\end{prooftree}
+\hskip 2cm \rightsquigarrow_{\beta} \hskip 2cm
+\begin{prooftree}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[no rule]1{A}
+\end{prooftree}
+$$
+
+\noindent
+This proves that the elimination rule is locally sound.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Local completeness}
+
+The unit elimination rule is also locally complete. To show this, we eliminate it, and then see if we can re-introduce it from the pieces that the elimination rule leaves us. So, let us begin by eliminating a unit. To do that, suppose first that we have derived a unit:
+
+\begin{prooftree*}
+  \hypo{\Proof/_{1}}
+  \ellipsis{}{\unit/}
+\end{prooftree*}
+
+\noindent
+Next, we need to derive something else:
+
+\begin{prooftree*}
+  \hypo{\Proof/_{1}}
+  \ellipsis{}{\unit/}
+  \infer[no rule]1{}
+  \hypo{\Proof/_{2}}
+  \ellipsis{}{}
+  \infer[no rule]1{??}
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then we can use the elimination rule to eliminate the unit:
+
+\begin{prooftree*}
+  \hypo{\Proof/_{1}}
+  \ellipsis{}{\unit/}
+  \infer[no rule]1{}
+  \hypo{\Proof/_{2}}
+  \ellipsis{}{}
+  \infer[no rule]1{??}
+  \infer2[\unitElim/]{??}
+\end{prooftree*}
+
+\noindent
+The question is, what should we put in place of ``$\Proof/_{2}$'' and the question marks? What could we derive there that would allow us to re-introduce the unit? Well, we could simply derive the unit itself:
+
+\begin{prooftree*}
+  \hypo{\Proof/_{1}}
+  \ellipsis{}{\unit/}
+  \infer[no rule]1{}
+  \hypo{}
+  \infer1[\unitIntro/]{\unit/}
+  \infer2[\unitElim/]{??}
+\end{prooftree*}
+
+\noindent
+Then the elimination will result in a unit:
+
+\begin{prooftree*}
+  \hypo{\Proof/_{1}}
+  \ellipsis{}{\unit/}
+  \infer[no rule]1{}
+  \hypo{}
+  \infer1[\unitIntro/]{\unit/}
+  \infer2[\unitElim/]{\unit/}
+\end{prooftree*}
+
+\noindent
+With that, we have shown that we can re-introduce the unit, after eliminating it, and that proves that the rule is locally complete. The full proof expansion (eta expansion) is this:
+
+$$
+\begin{prooftree}
+  \hypo{\Proof/_{1}}
+  \ellipsis{}{\unit/}
+  \infer[no rule]1{}
+\end{prooftree}
+\hskip 2cm \rightsquigarrow_{\eta} \hskip 2cm
+\begin{prooftree}
+  \hypo{\Proof/_{1}}
+  \ellipsis{}{\unit/}
+  \infer[no rule]1{}
+  \hypo{}
+  \infer1[\unitIntro/]{\unit/}
+  \infer2[\unitElim/]{\unit/}
+\end{prooftree}
+$$
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+The unit is the trivial (empty) result, which is produced from no assumptions. In this chapter, we covered the introduction and elimination rules for unit, and we showed that the elimination rule is in harmony with the introduction rule (it is locally sound and complete).
+
+
+\end{document}

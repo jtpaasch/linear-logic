@@ -1,0 +1,229 @@
+\documentclass[../../../main.tex]{subfiles}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Translation soundness}
+
+In the last chapter, we proved that our translation scheme is complete. In this chapter, we will prove that it is sound.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Soundness}
+
+To check the completeness of our translation scheme, we checked that every provable judgment from minimal logic could be translated into a provable judgment in linear logic. To check the \vocab{soundness} of our translation scheme, we need to check the other direction. We need to make sure that every judgment we can prove in the translated system can be proven in minimal logic.
+
+If there are any translation proofs that are not actually provable in minimal logic, then the translation scheme would be delivering incorrect results for those proofs. The scheme would be giving false positives, so to speak, because it would be saying ``these are translations of proofs from minimal logic,'' when in fact, there are no such matching proofs in minimal logic.
+
+How do we tell if our translations scheme is adding translations that aren't provable in minimal logic? Well, we look at every possible provable translation, and check to see it can be proved in minimal logic.
+
+Let us write this down as a theorem that we intend to prove:
+
+\begin{theorem}[Soundness]
+Let ``$\nd{\Gamma} \ndturnstile/ \nd{A} :: true$'' stand for any judgment in minimal logic, and let ``$\bang/\nd{\Gamma}^{*} \ndturnstile/ \nd{A}^{*} :: true$'' stand for the translation of that judgment into linear logic. If ``$\bang/\nd{\Gamma}^{*} \ndturnstile/ \nd{A}^{*} :: true$'' is provable in linear logic, then ``$\nd{\Gamma} \ndturnstile/ \nd{A} :: true$'' is provable in minimal logic.
+\end{theorem}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Translating back}
+
+To prove soundness, we need to translate judgments and proofs from linear logic back into minimal logic. Of course, we are not trying to translate everything in linear logic back into minimal logic. That would be impossible, because linear logic can prove more than minimal logic can. All we are translating are those judgments and proofs in linear logic that could be translations from minimal logic in the first place. And that means, in particular, that we are only considering lollis with a banged antecedent and judgments whose assumptions are all bangs.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Translating individual judgments}
+
+Let us say that we can translate individual judgments from linear logic into individual judgments in minimal logic, according to the following rules. Instead of an asterisk, we will use a superscripted circle to indicate that a proposition needs to be translated.
+
+\begin{align*}
+  A :: true \hskip 1cm &\rightsquigarrow \hskip 1cm \nd{A} :: true \hskip 1cm \text{ if $A$ is atomic} \\
+  \bang/A \lolli/ B :: true \hskip 1cm &\rightsquigarrow \hskip 1cm \nd{A}^{\circ} \impl/ \nd{B}^{\circ} :: true
+\end{align*}
+
+\noindent
+These rules say: 
+
+\begin{itemize}
+  \item{If the judgment is about an atomic proposition, then we translate that directly into the equivalent minimal logic atomic proposition.}
+  \item{If the judgment is about a lolli of the form ``$\bang/A \lolli/ B$,'' then we replace the lolli with an implication symbol, we remove the bang, and then we translate each of ``$A$'' and ``$B$'' individually. We indicate that we need to translate each of these by attaching a superscripted circle to it.}
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Translating hypothetical judgments}
+
+We can translate hypothetical judgments like this:
+
+\begin{equation*}
+  \bang/\context/ \ndturnstile/ A :: true
+  \hskip 1cm \rightsquigarrow \hskip 1cm
+  \nd{\context/}^{\circ} \ndturnstile/ \nd{A}^{\circ} :: true
+\end{equation*}
+
+That says: to translate the judgment ``$\bang/\context/ \ndturnstile/ A :: true$'' into minimal logic, remove the bangs from the context, and translate each formula from the bang into minimal logic. Also, translate the conclusion of the judgment into minimal logic.
+
+If the context is empty (i.e., if $\context/ = \emptyassumptions/$), then we have the translation for a categorical judgment:
+
+\begin{equation*}
+  \emptyassumptions/ \ndturnstile/ A :: true
+  \hskip 1cm \rightsquigarrow \hskip 1cm
+  \emptyassumptions/ \ndturnstile/ \nd{A}^{\circ} :: true
+\end{equation*}
+
+\noindent
+Notice that we are only considering linear logic judgments which have all banged assumptions.
+
+We will say that a proof of the linear logic judgment (on the left) is equivalent to a proof of the minimal logic judgment (on the right).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Translating proofs}
+
+Let us consider every possible final step or steps that can happen in an arbitrary translated linear logic proof. For each possible final step or steps, we will show a way to translate it back into an equivalent proof in minimal logic. These translations will preserve the assumptions and conclusions of the proof trees.
+
+\begin{enumerate}
+
+\item If a proof ends with a use of the \startrule/, the last step can be translated like this:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\bang/\context/}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{\bang/A}
+  \infer1[\bangCopy/]{A}
+  \infer2[\bangWeak/]{A}
+\end{prooftree}
+\hskip 1cm \rightsquigarrow \hskip 1cm
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\context/^{\circ}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{A^{\circ}}
+  \infer[no rule]2{}
+\end{prooftree}
+$$
+
+\noindent
+This translation preserves the translated assumptions and the translated conclusion:
+
+\begin{equation*}
+  \bang/\context/, \bang/A \ndturnstile/ A
+  \hskip 1cm \rightsquigarrow \hskip 1cm
+  \context/^{\circ}, A^{\circ} \ndturnstile/ A^{\circ}
+\end{equation*}
+
+\item If a proof ends with a use of the \lolliIntro/ rule, the last step can be translated like this:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\bang/\context/}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{\bang/A^{a}}
+  \infer1[\bangCopy/]{A}
+  \ellipsis{}{}
+  \infer[no rule]2{}
+  \ellipsis{}{B}
+  \infer1[\lolliIntro/$^{a}$]{\bang/A \lolli/ B}
+\end{prooftree}
+\hskip 1cm \rightsquigarrow \hskip 1cm
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\context/^{\circ}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{A^{\circ a}}
+  \ellipsis{}{}
+  \infer[no rule]2{}
+  \ellipsis{}{B^{\circ}}
+  \infer1[\implIntro/$^{a}$]{A^{\circ} \impl/ B^{\circ}}
+\end{prooftree}
+$$
+
+\noindent
+This translation preserves the translated assumptions and the translated conclusion:
+
+\begin{equation*}
+  \bang/\context/ \ndturnstile/~\bang/A \lolli/ B
+  \hskip 1cm \rightsquigarrow \hskip 1cm
+  \context/^{\circ} \ndturnstile/ A^{\circ} \impl/ B^{\circ}
+\end{equation*}
+
+\item If a proof ends with a use of the \implElim/ rule, the last step can be translated like this:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\bang/\context/}
+  \ellipsis{}{\Proof/_{1}}
+  \ellipsis{}{\bang/A \lolli/ B}
+  \hypo{}
+  \infer[no rule]1{\bang/\context/}
+  \hypo{}
+  \infer[no rule]1{\bang/\context/^{a}}
+  \ellipsis{}{\Proof/_{2}}
+  \ellipsis{}{A}
+  \infer2[\bangProm/$^{a}$]{\bang/A}
+  \infer2[\lolliElim/]{B}
+\end{prooftree}
+\hskip 1cm \rightsquigarrow \hskip 1cm
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\context/^{\circ}}
+  \ellipsis{}{\Proof/_{1}}
+  \ellipsis{}{A^{\circ} \impl/ B^{\circ}}
+  \hypo{}
+  \infer[no rule]1{\context/^{\circ}}
+  \ellipsis{}{\Proof/_{2}}
+  \ellipsis{}{A^{\circ}}
+  \infer2[\implElim/]{B^{\circ}}
+\end{prooftree}
+$$
+
+\noindent
+This translation preserves the translated assumptions and the translated conclusion:
+
+\begin{equation*}
+  \bang/\context/ \ndturnstile/ B
+  \hskip 1cm \rightsquigarrow \hskip 1cm
+  \context/^{\circ} \ndturnstile/ B^{\circ}
+\end{equation*}
+
+\end{enumerate}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Proving soundness}
+
+We can use the above translations, to prove that our translation scheme is sound.
+
+\begin{proof}
+For every proof of a translated judgment in linear logic, the above translations show that we can convert every possible form that the last steps of the translated proof can take back into an equivalent version in minimal logic. Moreover, the translation does not alter the translated assumptions or translated conclusion of the tree.
+
+We can translate an entire proof tree by using the above translations to translate each step in the proof tree, starting at the bottom and working up. Since each step preserves the same translated assumptions and the same translated conclusion, the final proof tree will also have the same translated assumptions and the same translated conclusion. Hence, it will be a proof of the equivalent translated judgment in minimal logic.
+
+Thus, any provable translated judgment in linear logic has an equivalent judgment in minimal logic that is also provable. There are no provable translated judgments in linear logic that do not have a provable equivalent judgment in minimal logic.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+In this chapter, we showed that our translation scheme is sound, by showing that for any provable translation in linear logic, there is an equivalent provable judgment in minimal logic. We proved this by showing that we can translate every possible step of a translated linear logic proof tree back into an equivalent form in a minimal logic proof tree, in such a way that we don't alter the translated assumptions or conclusion.
+
+
+\end{document}

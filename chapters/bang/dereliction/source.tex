@@ -1,0 +1,426 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Dereliction}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{How to use bangs?}
+
+Consider the proof tree that we began at the end of the last chapter:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+  
+  \infer2[\traderule/]{b(s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  
+  \infer2[\traderule/]{b(p)}
+  
+\end{prooftree*}
+
+\noindent
+As we noted in the last chapter, this tree is not quite correct. The problem is that we are not using the bang correctly. In this chapter, we will discuss the proper way to use bangs, once you have them in a proof tree. 
+
+But first, let us play out this proof tree a little more, to see why we need a more principled way to use bangs.
+
+Note that, according to the assumptions of this tree, I can trade potatoes for squash as many times as I like. Suppose now that I want to use this fact to trade the squash I obtained for potatoes. 
+
+Here we encounter a slight problem. How should we write this inference into our proof tree? Suppose we just make the inference using the \traderule/ rule, and put it at the bottom of the tree, like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+  
+  \infer2[\traderule/]{b(s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  
+  \infer2[\traderule/]{b(p)}
+  \infer1[\traderule/]{b(s)}
+  
+\end{prooftree*}
+
+\noindent
+This doesn't look right, and it feels plain awkward. The \traderule/ rule needs two premises, and this only has one. So this doesn't work well with the way that we build proof trees.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A first example of dereliction}
+
+To use bangs in a way that works better with proof trees, we have a special rule that we call dereliction. This is actually just a bang elimination rule, but the literature around linear natural deduction often calls it dereliction, so we will call it that too. 
+
+According to the dereliction rule, if we want to use a bang, we need to show what we can derive from it. We do this on a hypothetical branch of the tree, which we discharge when we're done.
+
+Let us start with the first two assumptions of the above proof tree:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+  
+  \infer[no rule]2{}
+  
+\end{prooftree*}
+
+\noindent
+Let's also switch their order. This will make the structure of the dereliction rule clearer.
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \infer[no rule]2{}  
+\end{prooftree*}
+
+\noindent
+What we want to do is use the bang ``$!t(p, s)$'' with the trade rule to get ``$b(s)$.'' According to the dereliction rule, we need to show on a hypothetical branch that from ``$t(p, s)$,'' we can derive ``$b(s)$.'' So, let us assume an un-banged copy of the bang, over on the side. Here it is, highlighted with a box:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+
+  \hypo{}
+  \infer1[\startrule/]{\fbox{$t(p, s)$}}
+  
+  \infer[no rule]3{}  
+\end{prooftree*}
+
+\noindent
+This is a hypothetical branch, so let us mark it with a superscripted label, because we are going to discharge it. Let's use the label ``$a$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+
+  \hypo{}
+  \infer1[\startrule/]{\fbox{$t(p, s)^{a}$}}
+  
+  \infer[no rule]3{}  
+\end{prooftree*}
+
+\noindent
+Next, we want to show what we can derive from this. In our case, we can use the \traderule/ rule to derive the conclusion we want, which is ``$b(p, s)$.'' Here it is, with the conclusion highlighted:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)^{a}}
+  
+  \infer2[\traderule/]{\fbox{$b(s)$}}
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+At this point, we have shown that we \emph{could} derive ``$b(s)$,'' \emph{if} we had an un-banged copy of the bang ``$!t(p, s)$.'' And that counts as evidence or proof that we can derive ``$b(s)$'' from the bang ``$!t(p, s)$'' (under the current operating assumptions). After all, the bang can produce as many copies of ``$t(p, s)$'' as we need, and our hypothetical branch here shows how we would get to ``$b(s)$'' from any given copy of ``$t(p, s)$.'' So we are licensed to conclude ``$b(s)$'' from the bang ``$!t(p, s)$.''
+
+To do this, we discharge our hypothetical branch, and conclude that ``$b(s)$'' follows from the bang, using the \vocab{dereliction} rule, which we will symbolize as \bangDer/ (that's a bang followed by a capital ``$D$,'' the first letter of ``Dereliction''):
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)^{a}}
+  
+  \infer2[\traderule/]{b(s)}
+  \infer2[\bangDer/$^{a}$]{b(s)}
+\end{prooftree*}
+
+\noindent
+With that, we have derived the conclusion we wanted --- namely, ``$b(s)$'' --- and we have done it by using the bang as we originally intended. Moreover, this way of using the bang fits in much more naturally with the way we build proof trees already.
+
+Note that when we use the dereliction rule, we discharge an assumption. So the hypothetical judgment that this tree proves is this:
+
+\begin{equation*}
+  !t(p, s), b(p) \ndturnstile/ b(s)
+\end{equation*}
+
+\noindent
+This is because the only open assumptions are ``$!t(p, s)$'' and ``$b(p)$.'' The use of ``$t(p, s)^{a}$'' over on the right has been discharged, so it is closed.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The dereliction rule}
+
+We can write out a template for the dereliction rule. It looks like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{!A :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{A :: true^{x}}
+  \ellipsis{}{$B :: true$}
+  
+  \infer2[\bangDer/$^{x}$]{B :: true}
+\end{prooftree*}
+
+\noindent
+This says: suppose that you have a bang of the form ``$!A$'' (omitting ``$:: true$'' of course). If you can assume an un-banged copy of that judgment, and then from that assumption derive some further judgment ``$B$,'' then you are justified in concluding ``$B$.'' The copy you assumed is discharged, of course, but it is there to show that from any copy of ``$A$,'' you can get to ``$B$.''
+
+The idea behind this rule is very much like the idea behind the \lolliIntro/ rule. With \lolliIntro/, we assume some judgment ``$A$,'' and then we show that from that assumption we can derive some further judgment ``$B$.'' That is proof that ``$A \lolli/ B$'' is a legitimate conclusion we can draw. 
+
+Here we do something similar. Given a bang of the form ``$!A$,'' if we show that from an un-banged copy we can derive some further conclusion ``$B$,'' then we are justified in concluding that ``$B$'' follows from the bang ``$!A$.'' After all, there is an unlimited number of copies of ``$A$'' that we can get from the bang.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Using a bang again}
+
+Now let us use the bang a second time. Let us suppose that the potato vendor is willing to trade squash for potatoes. Let's add that as a new assumption over to the side:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)^{a}}
+  
+  \infer2[\traderule/]{b(s)}
+  \infer2[\bangDer/$^{a}$]{b(s)}
+
+  \hypo{}
+  \infer1[\startrule/]{\fbox{$t(s, p)$}}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Now we can apply the \traderule/ to get a new batch of potatoes in our basket:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)^{a}}
+  
+  \infer2[\traderule/]{b(s)}
+  \infer2[\bangDer/$^{a}$]{b(s)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}  
+  
+  \infer2[\traderule/]{\fbox{$b(p)$}}
+\end{prooftree*}
+
+\noindent
+Now that we have potatoes in our basket, we want to use the bang again to trade for squash a second time. That is, the squash vendor is willing to trade potatoes for squash an unlimited number of times, so we can go back to the squash vendor with our potatoes, and make a second trade.
+
+But this requires that we use the bang ``$!t(p, s)$'' again. Every time we want to use a bang, we need a new branch that starts with the bang. So, let us put our bang over on the left side (we put it on the left to make the structure of the dereliction clearer):
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\fbox{$!t(p, s)$}}
+
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)^{a}}
+  
+  \infer2[\traderule/]{b(s)}
+  \infer2[\bangDer/$^{a}$]{b(s)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}  
+  
+  \infer2[\traderule/]{b(p)}
+
+  \infer[no rule]2{}  
+\end{prooftree*}
+
+\noindent
+Next, we assume a new un-banged copy of the bang, which we can put over on the side:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)^{a}}
+  
+  \infer2[\traderule/]{b(s)}
+  \infer2[\bangDer/$^{a}$]{b(s)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}  
+  
+  \infer2[\traderule/]{b(p)}
+
+  \hypo{}
+  \infer1[\startrule/]{\fbox{$t(p, s)$}}
+  
+  \infer[no rule]2{}
+
+  \infer[no rule]2{}  
+\end{prooftree*}
+
+\noindent
+We'll discharge it, so we need to mark it with a new label, say ``$b$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)^{a}}
+  
+  \infer2[\traderule/]{b(s)}
+  \infer2[\bangDer/$^{a}$]{b(s)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}  
+  
+  \infer2[\traderule/]{b(p)}
+
+  \hypo{}
+  \infer1[\startrule/]{\fbox{$t(p, s)^{b}$}}
+  
+  \infer[no rule]2{}
+
+  \infer[no rule]2{}  
+\end{prooftree*}
+
+\noindent
+Then we derive the conclusion we want from this assumption. In our case, we want to use the \traderule/ to get squash:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)^{a}}
+  
+  \infer2[\traderule/]{b(s)}
+  \infer2[\bangDer/$^{a}$]{b(s)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}  
+  
+  \infer2[\traderule/]{b(p)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)^{b}}
+  
+  \infer2[\traderule/]{\fbox{$b(s)$}}
+
+  \infer[no rule]2{}  
+\end{prooftree*}
+
+\noindent
+Now we've shown that if we had a copy of ``$!t(p, s)$,'' we could derive ``$b(s)$'' (under the current operating assumptions). So, we are licensed to use the dereliction rule to infer that conclusion. Hence, we discharge the tree, and use the \bangDer/ rule to get our conclusion:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)^{a}}
+  
+  \infer2[\traderule/]{b(s)}
+  \infer2[\bangDer/$^{a}$]{b(s)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}  
+  
+  \infer2[\traderule/]{b(p)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)^{b}}
+  
+  \infer2[\traderule/]{b(s)}
+
+  \infer2[\bangDer/$^{b}$]{\fbox{$b(s)$}}
+\end{prooftree*}
+
+\noindent
+Now we've used the bang twice. The tree might look complicated, but it has a straightforward structure. We have a bang (on the left), and then we show on a hypothetical branch how to derive a particular conclusion (under the current operating assumptions). Then we use the dereliction rule to discharge that hypothetical branch and extract the conclusion we want. This happens twice in the tree, but both times, the structure is the same.
+ 
+Note again that some assumptions are discharged. In this case, two have been discharged. So the hypothetical judgment that this tree proves is the following:
+
+\begin{equation*}
+  !t(p, s), b(p), t(s, p) \ndturnstile/ b(s)
+\end{equation*}
+
+\noindent
+The only open assumptions are ``$!t(p, s)$,'' ``$b(p)$,'' and ``$t(s, p)$.'' The assumptions marked as ``$t(p, s)^{a}$'' and ``$t(p, s)^{b}$ have been discharged.
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+To use a bang, we need some way to get a copy of it, which we can then use to build further inferences in a proof tree. The \bangDer/ rule operates a lot like the \lolliIntro/ rule. It says: supposing that you have a bang, you can assume an un-banged copy of it and derive some further conclusion from it. If you can show that path to the new conclusion, then you are licensed to infer the conclusion (and discharge the branch which showed it).
+
+
+\end{document}

@@ -1,0 +1,381 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{The bang}
+
+
+In linear natural deduction, every assumption must be used exactly once. With this, we can reason about situations where assumptions get used up.
+
+But sometimes, an assumption holds true always, throughout the entire situation we want to reason about. To accommodate this, we add a special operator to our natural deduction system, which marks a proposition as being always available.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Notation and meaning}
+
+To say that a proposition is always available, we put an exclamation mark in front of it. So, for example, if we want to say that a proposition ``$A$'' is always available, we would write this:
+
+\begin{equation*}
+  !A :: prop
+\end{equation*}
+
+\noindent
+Remember, to say that anything is a proposition means that we know how to verify it. Hence, to say that ``$!A$'' is a proposition means that we know how to verify not only that ``$A$,'' but also that ``$A$'' is always available and not merely available for one-time use.
+
+If in addition to that, we also have a proof of ``$!A$,'' then we can express the judgment that ``$!A$'' is true:
+
+\begin{equation*}
+  !A :: true
+\end{equation*}
+
+\noindent
+If you like, you can think of an explanation point as a factory that can produce as many copies of a judgment as you need. On this reading, the judgment ``$!A :: true$'' is a factory that can produce as many copies of ``$A :: true$'' as you need. Each such \emph{copy} that the factory produces is a one-time use (linear) judgment, but the factory can make as many one-time use copies as you need.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Formation}
+
+Here is the rule we use to formulate the explanation-point proposition:
+
+\begin{prooftree*}
+  \hypo{A :: prop}
+  \infer1{\bang/A :: prop}
+\end{prooftree*}
+
+\noindent
+This says that if ``$A$'' is a proposition, then we can take that and add an explanation point to the front of it to form ``$\bang/A$,'' which is also a proposition.
+
+The ``$\bang/$'' symbol is called a \vocab{bang} symbol. We pronounce ``$\bang/A$'' as ``bang $A$.'' Another name for the bang is the \vocab{of course} symbol. So we could also read ``$\bang/A$'' as ``of course $A$.''
+
+We will often refer to the whole proposition ``$\bang/A$'' as ``a bang.'' Strictly speaking, the bang is really just the symbol before ``$A$,'' but it is much easier to say ``the bang'' than it is to say ``the proposition formed with the bang.''
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Exponentials}
+
+The bang is a special type of operator that we call an \vocab{exponential}. One way to think of it is like this: it is called an exponential because it lets us make multiple copies of a proposition. 
+
+There is another exponential operator, besides the bang. It is usually written as a question mark, as in ``$?A$.'' We will not discuss that here.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{No repeats}
+
+Consider this proof tree (I am omitting the ``$:: true$'' annotations):
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)}
+  
+  \infer2[\traderule/]{b(s)}
+\end{prooftree*}
+
+\noindent
+This tree represents a proof that, if I start with potatoes in my basket and the squash vendor will trade potatoes for squash, then I will end up with squash in my basket. 
+
+Remember, though, that the assumptions get used up in the trade. After the trade, I no longer have potatoes in my basket, and I no longer have the option to trade potatoes for squash. Because of this, I cannot re-use the assumption ``$t(p, s)$.'' 
+
+Using the natural deduction system we have discussed so far (without the bang), I can \emph{almost} end up in a situation where I can trade something twice. For example, suppose that the potato vendor is willing to trade squash for potatoes. Let's add that as another assumption, over on the side:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)}
+  
+  \infer2[\traderule/]{b(s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+I can, of course, take the squash I got from the squash vendor, and trade with the potato vendor. That will get me a new batch of potatoes in my basket:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)}
+  
+  \infer2[\traderule/]{b(s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  
+  \infer2[\traderule/]{b(p)}
+\end{prooftree*}
+
+\noindent
+At this point, I have potatoes in my basket (for the second time), but I cannot use the assumption ``$t(p, s)$'' to trade my new batch of potatoes for a new batch of squash. The trade pictured in the following diagram is illegal:
+
+\begin{diagram}
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{}
+      \infer1[\startrule/]{b(p)}
+      \hypo{}
+      \infer1[\startrule/]{\fbox{$t(p, s)$}}
+      \infer2[\traderule/]{b(s)}
+      \hypo{}
+      \infer1[\startrule/]{t(s, p)}
+      \infer2[\traderule/]{\fbox{$b(p)$}}
+    \end{prooftree}
+  };
+
+  \draw[spaced-arrows,->] (-0.25, -0.8) -- (-0.75, -0.8) -- (-0.75, -1.25) -- (0.1, -2.5) -- (0.1, -3);
+  \draw[spaced-arrows,->] (-0.1, 0.65) -- (3.75, 0.65) -- (3.75, -1.25) -- (0.25, -2.5) -- (0.25, -3);
+
+  \node (l) [] at (0.175, -3.25) {\traderule/};
+
+  \draw[spaced-arrows,->] (0.1, -3.5) -- (0.1, -4.25);
+  \draw[spaced-arrows,->] (0.25, -3.5) -- (0.25, -4.25);
+
+  \node (l) [] at (0.175, -4.75) {\fbox{$b(p)$}};
+
+\end{diagram}
+
+\noindent
+This is illegal because we said in our original description of the farmer's market scenario that vendors all have a trade-once policy. 
+
+But this is \emph{also} illegal because in our system of linear natural deduction, every assumption gets used up when you use it in an inference. So, even if the vendors wanted to do another trade, we could not represent that in our proof trees, because up to this point, our natural deduction system has not allowed this. 
+
+Now we are introducing bangs, and bangs will allow us to represent these kinds of possibilities.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction rule}
+
+Let us change the rules of the farmer's market. Let us say that some vendors can decide if they want to perform many trades, and let us represent those trade options with bangs. So, for example, if a vendor will trade potatoes for squash an unlimited number of times, we can write that in the following way (remember that I am omitting the ``$:: true$'' annotation):
+
+\begin{equation*}
+  !t(p, s)
+\end{equation*}
+
+\noindent
+This says that I can trade potatoes for squash an unlimited number of times. 
+
+How should we introduce bangs like this into our proof trees? Is there an introduction rule?
+
+The answer is yes. In order to introduce a bang into a proof tree, we need to first prove the un-banged proposition, without any assumptions. That is, to introduce ``$!A :: true$,'' we need to show that we can prove show that ``$A :: true$'' holds, without any assumptions.
+
+Let us represent the idea that you can prove ``$A :: true$'' without any open assumptions like this:
+
+\begin{prooftree*}
+  \hypo{\emptyassumptions/}
+  \ellipsis{}{A :: true}
+\end{prooftree*}
+
+\noindent
+The ``$\emptyassumptions/$'' symbol stands for the empty set. We use it to indicate that there are no open assumptions at the top of the tree. Notice that we say there are no \emph{open} assumptions. There \emph{can} be assumptions that are discharged.
+
+If we can prove ``$A :: true$'' without any open assumptions, then we can conclude that ``$A :: true$'' is always available. That is, we can conclude ``$!A :: true$.'' So we can write the introduction rule like this:
+
+\begin{prooftree*}
+  \hypo{\emptyassumptions/}
+  \ellipsis{}{A :: true}
+  \infer1[\bangIntro/]{!A :: true}
+\end{prooftree*}
+
+\noindent
+The name for this rule is \vocab{bang introduction} (or \vocab{of course introduction}), and we will represent it with a bang symbol, followed by a capital ``I'' (the first letter of ``Introduction'').
+
+The idea here is this: if we can prove ``$A :: true$'' without using up any assumptions, then surely ``$A :: true$'' is always available. After all, whenever we need a copy of ``$A :: true$,'' we can just prove it again. So this rule means that if we can prove ``$A :: true$'' once, without using any open assumptions, then we are justified in inferring that ``$A :: true$'' is available for use as many times as we like.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Example}
+
+Let's prove some categorical judgment (i.e., let's prove a conclusion that has no open assumptions). Consider this proof tree:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)}
+  
+  \infer2[\traderule/]{b(s)}
+\end{prooftree*}
+
+\noindent
+This proves a hypothetical judgment, because it proves that ``$b(s) :: true$'' under the assumptions ``$b(p) :: true$'' and ``$t(p, s) :: true$.'' Here is the hypothetical judgment (omitting the ``$:: true$'' annotations):
+
+\begin{equation*}
+  b(p), t(p, s) \ndturnstile/ b(s) 
+\end{equation*}
+
+\noindent
+In the proof tree, we can use \lolliIntro/ to discharge one of the assumptions:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)^{a}}
+  
+  \infer2[\traderule/]{b(s)}
+  \infer1[\lolliIntro/$^{a}$]{t(p, s) \lolli/ b(s)}
+\end{prooftree*}
+
+\noindent
+Now we have discharged one of the assumptions, so the hypothetical judgment that this tree proves has one less assumption on the left side:
+
+\begin{equation*}
+  b(p) \ndturnstile/ t(p, s) \lolli/ b(s) 
+\end{equation*}
+
+\noindent
+We can use \lolliIntro/ again, to discharge the last open assumption:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)^{b}}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)^{a}}
+  
+  \infer2[\traderule/]{b(s)}
+  \infer1[\lolliIntro/$^{a}$]{t(p, s) \lolli/ b(s)}
+  \infer1[\lolliIntro/$^{b}$]{b(p) \lolli/ (t(p, s) \lolli/ b(s))}
+\end{prooftree*}
+
+\noindent
+Now we have discharged all of the assumptions, so the hypothetical judgment that this tree proves is actually a categorical judgment (it has no open assumptions):
+
+\begin{equation*}
+  \ndturnstile/ b(p) \lolli/ (t(p, s) \lolli/ b(s))
+\end{equation*}
+
+\noindent
+If you like, we could write the $\emptyassumptions/$ symbol on the left of the turnstile, to show how this matches up with the \bangIntro/ rule:
+
+\begin{equation*}
+  \emptyassumptions/ \ndturnstile/ b(p) \lolli/ (t(p, s) \lolli/ b(s))
+\end{equation*}
+
+\noindent
+At this point, we have derived a judgment --- namely, ``$b(p) \lolli/ (t(p, s) \lolli/ b(s))$'' --- which depends on no assumptions. So, we can now use the \bangIntro/ rule, to introduce this judgment with a bang:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)^{b}}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)^{a}}
+  
+  \infer2[\traderule/]{b(s)}
+  \infer1[\lolliIntro/$^{a}$]{t(p, s) \lolli/ b(s)}
+  \infer1[\lolliIntro/$^{b}$]{b(p) \lolli/ (t(p, s) \lolli/ b(s))}
+  \infer1[\bangIntro/]{!(b(p) \lolli/ (t(p, s) \lolli/ b(s)))}
+\end{prooftree*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Parentheses}
+
+In the above proof, notice that I surrounded the entire conclusion in parentheses, before putting the bang symbol in front of it. That is, the final proposition of the above tree looks like this:
+
+\begin{equation*}
+  !(b(p) \lolli/ (t(p, s) \lolli/ b(s)))
+\end{equation*}
+
+\noindent
+I put an extra set of parentheses around the whole expression before adding the bang to make it clear that the bang applies to the whole expression. If we left the parentheses out, the final proposition would look like this:
+
+\begin{equation*}
+  !b(p) \lolli/ (t(p, s) \lolli/ b(s))
+\end{equation*}
+
+\noindent
+And then we might think that the bang applies only to ``$b(p)$,'' like this:
+
+\begin{equation*}
+  !(b(p)) \lolli/ (t(p, s) \lolli/ b(s))
+\end{equation*}
+
+\noindent
+To make the scope of the bang clear, we should always use parentheses.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Bang assumptions}
+
+Of course, we can also simply assert an assumption with a bang, using the \startrule/ rule, just as we can assert any other judgment with the \startrule/ rule. For example, let us return to the situation we were discussing a moment ago:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)}
+  
+  \infer2[\traderule/]{b(s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  
+  \infer2[\traderule/]{b(p)}
+\end{prooftree*}
+
+\noindent
+Let us now suppose that the squash vendor will trade potatoes for squash, any number of times. To show that, we can simply assume from the start that ``$t(p, s)$'' is marked with a bang. The proof tree now looks like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+  
+  \infer2[\traderule/]{b(s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  
+  \infer2[\traderule/]{b(p)}
+\end{prooftree*}
+
+\noindent
+This proof tree is not quite correct. We will have to modify it a little to use the bang properly. We will cover that in the next chapter. Here, we can leave the proof tree as it is, just to illustrate that we can start a branch by assuming a bang with the \startrule/ rule.
+
+Notice that, of all the assumptions in this proof tree, only ``$t(p, s)$'' is marked with a bang here. This tells us that the squash vendor is willing to trade potatoes for squash any number of times. But ``$t(s, p)$'' is not marked with a bang, and that tells us the potato vendor is \emph{not} willing to trade squash for potatoes multiple times. On the contrary, the potato vendor is only willing to make that trade once.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Assumptions vs. proven judgments}
+
+Note that bang assumptions --- i.e., bangs that we introduce into a proof tree with the \startrule/ rule --- are just that: \emph{assumptions}. That is, we start the proof tree with them, so they belong to the set of facts that we assume to be true when we start reasoning. A bang that is introduced with the \bangIntro/ rule, on the other hand, is not an assumption. It is something we proved, so it is a derived conclusion.
+
+As a parallel, think about lollis. We can start a branch on a proof tree by assuming a lolli with the \startrule/ rule. But we can also prove a lolli, using the \lolliIntro/ rule. Like bangs, lollis that are introduced with the \startrule/ rule are assumptions --- they belong to the set of facts that we assume to be true when we start reasoning. A lolli that is introduced with the \lolliIntro/ rule, on the other hand, is not an assumption. It is something we proved.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+We can mark a proposition as always available by putting a bang in front of it. There are two ways to introduce a bang into a proof tree. The \bangIntro/ rule says that if we prove a judgment without any open assumptions (i.e., if we prove a categorical judgment), then we can add a bang to the front of it. Of course, we can always introduce a bang as an assumption, using the \startrule/ rule. 
+
+
+\end{document}

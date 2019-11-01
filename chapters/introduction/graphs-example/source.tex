@@ -1,0 +1,328 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Graphs example}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Graphs}
+
+A \vocab{graph} consists of vertices and edges. Here is a picture:
+
+\begin{diagram}
+
+  \node[o-point] (a) [] at (0, -1) {};
+  \node[o-point] (b) [] at (0, 0) {};
+  \node[o-point] (c) [] at (-1.5, 1) {};
+  \node[o-point] (d) [] at (1, 1) {};
+  \node[o-point] (e) [] at (3, 0.25) {};
+
+  \draw (a) -- (b);
+  \draw (b) -- (c);
+  \draw (b) -- (d);
+  \draw (d) -- (e);
+
+\end{diagram}
+
+\noindent
+Each dot is a \vocab{vertex}, and each line is an \vocab{edge} between two vertices.
+
+We can name this graph --- let's call it $G$ --- and we can label the vertices, to make it easier to talk about the graph:
+
+\begin{diagram}
+
+  \node[o-point] (a) [label=left:$a$] at (0, -1) {};
+  \node[o-point] (b) [label=above:$b$] at (0, 0) {};
+  \node[o-point] (c) [label=below left:$c$] at (-1.5, 1) {};
+  \node[o-point] (d) [label=above:$d$] at (1, 1) {};
+  \node[o-point] (e) [label=below:$e$] at (3, 0.25) {};
+
+  \draw (a) -- (b);
+  \draw (b) -- (c);
+  \draw (b) -- (d);
+  \draw (d) -- (e);
+
+\end{diagram}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Defining Graphs}
+
+We can define a graph by listing all its vertices and edges. Here is the list of vertices (call it $V$, for ``Vertices''):
+
+\begin{equation}
+V = \{a , b, c, d, e \}
+\end{equation}
+
+\noindent
+To specify an edge, we write the two vertices as a pair. For instance, here is the edge that stretches from $a$ to $b$:
+
+\begin{equation}
+(a, b)
+\end{equation}
+
+\noindent
+Here is a list of the edges (call it $E$, for ``Edges''):
+
+\begin{equation}
+E = \{ (a, b), (b, c), (b, d), (d, e) \}
+\end{equation}
+
+\noindent
+We can now define our graph $G$ as the pair of those vertices and edges:
+
+\begin{equation}
+G = (V, E)
+\end{equation}
+
+\noindent
+Or, if we want to write it out in full:
+
+\begin{equation}
+G = (\{a , b, c, d, e \}, \{ (a, b), (b, c), (b, d), (d, e) \})
+\end{equation}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Edges}
+
+To indicate that a pair of vertices $v_{1}$ and $v_{2}$ are actually present in the list of edges, we will write this (the $\in$ symbol means ``in''):
+
+\begin{equation}
+(v_{1}, v_{2}) \in E
+\end{equation}
+
+\noindent
+To indicate that there is an edge between one vertex $v_{1}$ and another vertex $v_{2}$, we will write this:
+
+\begin{equation}
+\mathsf{edge}(v_{1}, v_{2})
+\end{equation}
+
+\noindent
+Let us formulate an inference rule about this. Let us say that, if a pair of vertices $v_{1}$ and $v_{2}$ are present in the list of edges, then we can conclude that there is an edge between them:
+
+\begin{prooftree*}
+  \hypo{(v_{1}, v_{2}) \in E}
+  \infer1[\rulename{Edge}]{\mathsf{edge}(v_{1}, v_{2})}
+\end{prooftree*}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Paths}
+
+A \vocab{path} is any route through a graph, where we move from vertex to vertex by traveling across edges. 
+
+To indicate that there is a path from vertex $v_{1}$ to $v_{2}$, we will write this:
+
+\begin{equation}
+\mathsf{path}(v_{1}, v_{2})
+\end{equation}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Inference rules}
+
+Let us say that for any two vertices $v_{1}$ and $v_{2}$, if there is an edge between them, then there is a path between them:
+
+\begin{prooftree*}
+  \hypo{\mathsf{edge}(v_{1}, v_{2})}
+  \infer1[\rulename{Path}]{\mathsf{path}(v_{1}, v_{2})} 
+\end{prooftree*}
+
+\noindent
+Let us say that if there is a path from one vertex to another, then there is also a path back:
+
+\begin{prooftree*}
+  \hypo{\mathsf{path}(v_{1}, v_{2})}
+  \infer1[\rulename{Path~symmetry}]{\mathsf{path}(v_{2}, v_{1})} 
+\end{prooftree*}
+
+\noindent
+Let us say that, if there is a path from one vertex to a second, and then another path from the second to a third, then there is a path from the first to the third (by going through the second):
+
+\begin{prooftree*}
+  \hypo{\mathsf{path}(v_{1}, v_{2})}
+  \hypo{\mathsf{path}(v_{2}, v_{3})}
+  \infer2[\rulename{Path~transitivity}]{\mathsf{path}(v_{1}, v_{3})} 
+\end{prooftree*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A simple proof}
+
+Is there a path from $a$ to $b$ in our graph from above? Yes, and we can prove it.
+
+First, we must show that there is an edge from $a$ to $b$. To construct a proof of that, we use the \rulename{Edge} rule, and we replace $v_{1}$ with $a$ and $v_{2}$ with $b$:
+
+\begin{prooftree*}
+  \hypo{(a, b) \in E}
+  \infer1[\rulename{Edge}]{\mathsf{edge}(a, b)}
+\end{prooftree*}
+
+\noindent
+Next, we must show that there is a path from $a$ to $b$. For that, we can use the \rulename{Path} rule. We append this next step to the bottom of our proof:
+
+\begin{prooftree*}
+  \hypo{(a, b) \in E}
+  \infer1[\rulename{Edge}]{\mathsf{edge}(a, b)}
+  \infer1[\rulename{Path}]{\mathsf{path}(a, b)} 
+\end{prooftree*}
+
+\noindent
+Now we have shown that there is a path from $a$ to $b$. Our proof is done.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A more complex proof}
+
+Is there a path from $c$ to $e$? Yes, and again we can prove it. First, let us show that there is a path from $c$ to $b$:
+
+\begin{prooftree*}
+  \hypo{(c, b) \in E}
+  \infer1[\rulename{Edge}]{\mathsf{edge}(c, b)}
+  \infer1[\rulename{Path}]{\mathsf{path}(c, b)} 
+\end{prooftree*}
+
+\noindent
+Next, let us show that there is a path from $b$ to $d$. We will do this beside the other one:
+
+\begin{prooftree*}
+
+  \hypo{(c, b) \in E}
+  \infer1[\rulename{Edge}]{\mathsf{edge}(c, b)}
+  \infer1[\rulename{Path}]{\mathsf{path}(c, b)} 
+  
+  \hypo{(b, d) \in E}
+  \infer1[\rulename{Edge}]{\mathsf{edge}(b, d)}
+  \infer1[\rulename{Path}]{\mathsf{path}(b, d)}   
+
+  \infer[rule style=no rule]2{}
+  
+\end{prooftree*}
+
+\noindent
+Now we have shown that there is a path from $c$ to $b$, and we have shown that there is a path from $b$ to $d$. We can use \rulename{Path~transitivity} to connect the two:
+
+\begin{prooftree*}
+
+  \hypo{(c, b) \in E}
+  \infer1[\rulename{Edge}]{\mathsf{edge}(c, b)}
+  \infer1[\rulename{Path}]{\mathsf{path}(c, b)} 
+  
+  \hypo{(b, d) \in E}
+  \infer1[\rulename{Edge}]{\mathsf{edge}(b, d)}
+  \infer1[\rulename{Path}]{\mathsf{path}(b, d)}   
+
+  \infer2[\rulename{Path~transitivity}]{\mathsf{path}(c, d)}
+  
+\end{prooftree*}
+
+\noindent
+Next, we must show that there is a path from $d$ to $e$. We can do that next to the proof we already have:
+
+\begin{prooftree*}
+
+  \hypo{(c, b) \in E}
+  \infer1[\rulename{Edge}]{\mathsf{edge}(c, b)}
+  \infer1[\rulename{Path}]{\mathsf{path}(c, b)} 
+  
+  \hypo{(b, d) \in E}
+  \infer1[\rulename{Edge}]{\mathsf{edge}(b, d)}
+  \infer1[\rulename{Path}]{\mathsf{path}(b, d)}   
+
+  \infer2[\rulename{Path~transitivity}]{\mathsf{path}(c, d)}
+  
+  \hypo{(d, e) \in E}
+  \infer1[\rulename{Edge}]{\mathsf{edge}(d, e)}
+  \infer1[\rulename{Path}]{\mathsf{path}(d, e)}   
+
+  \infer[rule style=no rule]2{}
+  
+\end{prooftree*}
+
+\noindent
+Finally, we can use \rulename{Path~transitivity} to connect the two:
+
+\begin{prooftree*}
+
+  \hypo{(c, b) \in E}
+  \infer1[\rulename{Edge}]{\mathsf{edge}(c, b)}
+  \infer1[\rulename{Path}]{\mathsf{path}(c, b)} 
+  
+  \hypo{(b, d) \in E}
+  \infer1[\rulename{Edge}]{\mathsf{edge}(b, d)}
+  \infer1[\rulename{Path}]{\mathsf{path}(b, d)}   
+
+  \infer2[\rulename{Path~transitivity}]{\mathsf{path}(c, d)}
+  
+  \hypo{(d, e) \in E}
+  \infer1[\rulename{Edge}]{\mathsf{edge}(d, e)}
+  \infer1[\rulename{Path}]{\mathsf{path}(d, e)}   
+
+  \infer2[\rulename{Path~transitivity}]{\mathsf{path}(c, e)}  
+  
+\end{prooftree*}
+
+\noindent
+To see the tree-like structure of the proof more clearly, visualize it differently:
+
+\begin{diagram}
+
+  \node (a) [] {$\mathsf{path}(c, e)$};
+  
+  \node (b) [above left=of a] {$\mathsf{path}(c, d)$};
+  
+  \node (c) [above left=of b] {$\mathsf{path}(c, b)$};
+  \node (d) [above=of c] {$\mathsf{edge}(c, b)$};
+  \node (e) [above=of d] {$(c, b) \in E$};
+  
+  \node (f) [above right=of b] {$\mathsf{path}(b, d)$};
+  \node (g) [above=of f] {$\mathsf{edge}(b, d)$};
+  \node (h) [above=of g] {$(b, d) \in E$}; 
+
+  \node (i) [above right=of a] {$\mathsf{path}(d, e)$};
+  \node (j) [above=of i] {$\mathsf{edge}(d, e)$};
+  \node (k) [above=of j] {$(d, e) \in E$};  
+
+  \path[->] (e) edge (d);
+  \path[->] (d) edge (c);
+  \path[->] (c) edge (b);
+
+  \path[->] (h) edge (g);
+  \path[->] (g) edge (f);
+  \path[->] (f) edge (b);
+
+  \path[->] (b) edge (a);
+
+  \path[->] (k) edge (j);
+  \path[->] (j) edge (i);
+  \path[->] (i) edge (a);
+  
+\end{diagram}
+
+\noindent
+With that, our proof is done. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+Graphs are defined by a list of vertices and edges between the vertices. By defining some inference rules that tell us how to construct a path through a graph, we can then reason about such paths by chaining together the inference rules to construct proofs.
+
+
+\end{document}

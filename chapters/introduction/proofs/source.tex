@@ -1,0 +1,189 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Proofs}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Proof systems}
+
+A proof system is a collection of inference rules. We construct proofs by chaining together inference rules. 
+
+So a proof is just an argument that has been constructed solely from inference rules. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Stacking inferences}
+
+Suppose we have two inference rules that look something like this:
+
+$$
+  \begin{prooftree}
+    \hypo{~~~~A~~~~}
+    \infer1[\rulename{Tick}]{~~~~B~~~~}
+  \end{prooftree}
+  \hskip 2cm
+  \begin{prooftree}
+    \hypo{~~~~B~~~~}
+    \infer1[\rulename{Tock}]{~~~~C~~~~}
+  \end{prooftree}
+$$
+
+\noindent
+These are just made up rules of course. \rulename{Tick} says if we have a statement of the form $A$, we can infer a statement of form $B$. \rulename{Tock} says if we have a statement of form $B$, we can infer a statement of form $C$.
+
+Since the conclusion of \rulename{Tick} matches the premise of \rulename{Tock}, we can chain them together:
+
+\begin{prooftree*}
+  \hypo{~~~~A~~~~}
+  \infer1[\rulename{Tick}]{~~~~B~~~~}
+  \infer1[\rulename{Tock}]{~~~~C~~~~}
+\end{prooftree*}
+
+\noindent
+We can visualize this chain of inferences another way:
+
+\begin{diagram}
+
+  \node (a) [] {$A$};
+  
+  \node (b) [below=of a] {$B$};
+  
+  \node (c) [below=of b] {$C$};
+
+  \path[->] (a) edge [right] node {\rulename{Tick}} (b);
+  \path[->] (b) edge [right] node {\rulename{Tock}} (c);
+  
+\end{diagram}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Trees}
+
+Suppose I have three rules that look something like this:
+
+$$
+  \begin{prooftree}
+    \hypo{~~~~C~~~~}
+    \infer1[\rulename{Fee}]{~~~~D~~~~}
+  \end{prooftree}
+  \hskip 1cm
+  \begin{prooftree}
+    \hypo{~~~~E~~~~}
+    \infer1[\rulename{Fie}]{~~~~F~~~~}
+  \end{prooftree}
+  \hskip 1cm
+  \begin{prooftree}
+    \hypo{~~D}
+    \hypo{F~~}
+    \infer2[\rulename{Foe}]{G}
+  \end{prooftree}  
+$$
+
+\noindent
+Note that \rulename{Foe} has two premises above the line. \rulename{Fee} and \rulename{Fie} match those premises, so we can chain them together:
+
+\begin{prooftree*}
+  \hypo{~~~~C~~~~}
+  \infer1[\rulename{Fee}]{~~D~~}
+
+  \hypo{~~~~E~~~~}  
+  \infer1[\rulename{Fie}]{~~F~~}
+
+  \infer2[\rulename{Foe}]{G}
+\end{prooftree*}
+
+\noindent
+This is a tree. The root is at the bottom, and there are two branches above it. To visualize it differently:
+
+\begin{diagram}
+
+  \node (g) [] {$G$};
+
+  \node (d) [above left=of g] {$D$};
+  \node (c) [above=of d] {$C$};
+  
+  \node (f) [above right=of g] {$F$};
+  \node (e) [above=of f] {$E$};
+
+  \path[->] (c) edge [left] node {\rulename{Fee}} (d);
+  \path[->] (e) edge [right] node {\rulename{Fie}} (f);
+
+  \path[->] (d) edge [left] node {\rulename{Foe~(left)}~~} (g);
+  \path[->] (f) edge [right] node {~~\rulename{Foe~(right)}} (g);
+  
+\end{diagram}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{More branching}
+
+Suppose I have two branching rules that look something like this:
+
+$$
+  \begin{prooftree}
+    \hypo{~~D}
+    \hypo{F~~}
+    \infer2[\rulename{Tweedledee}]{G}
+  \end{prooftree}
+  \hskip 1cm
+  \begin{prooftree}
+    \hypo{~~G}
+    \hypo{H~~}
+    \infer2[\rulename{Tweedledum}]{J}
+  \end{prooftree}  
+$$
+
+\noindent
+The conclusion of \rulename{Tweedledee} matches the left premise of \rulename{Tweedledum}, so we can chain the two rules at that point:
+
+\begin{prooftree*}
+
+  \hypo{~~D}
+  \hypo{F~~}
+  \infer2[\rulename{Tweedledee}]{G}
+
+  \hypo{H~~}
+  \infer2[\rulename{Tweedledum}]{J}
+
+\end{prooftree*}
+
+\noindent
+This tree has two branching points. Visually:
+
+\begin{diagram}
+
+  \node (j) [] {$J$};
+
+  \node (g) [above left=of j] {$G$};
+  \node (d) [above left=of g] {$D$};
+  \node (f) [above right=of g] {$F$};
+
+  \node (h) [above right=of j] {$H$};
+
+  \path[->] (d) edge [left] node {\rulename{Tweedledee (left)~~}} (g);
+  \path[->] (f) edge [right] node {~~\rulename{Tweedledee (right)}} (g);
+
+  \path[->] (g) edge [left] node {\rulename{Tweedledum~(left)}~~} (j);
+  \path[->] (h) edge [right] node {~~\rulename{Tweedledum~(right)}} (j);
+  
+\end{diagram}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+A proof system is a collection of rules. A proof (in a proof system) is an argument constructed only with inference rules from that proof system. 
+
+To construct proofs, we chain together inference rules. This generates a tree-like structure.
+
+
+\end{document}

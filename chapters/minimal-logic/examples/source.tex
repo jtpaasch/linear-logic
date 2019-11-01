@@ -1,0 +1,315 @@
+\documentclass[../../../main.tex]{subfiles}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Examples}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A custom rule system}
+
+For the sake of example, let us construct a set of inference rules that are customized for a specific situation. Let us reason about familial relations. Let us use the following predicates:
+
+\begin{align*}
+  \nd{sib(x, y)} &= \text{$x$ is a sibling of $y$} \\
+  \nd{par(x, y)} &= \text{$x$ is a parent of $y$} \\
+  \nd{child(x, y)} &= \text{$x$ is a child of $y$} \\
+\end{align*}
+
+\noindent
+Let us use these objects:
+
+\begin{align*}
+  \nd{p} &= \text{Paul} \\
+  \nd{s} &= \text{Shane} \\
+  \nd{z} &= \text{Zoe} \\
+  \nd{c} &= \text{Cal}
+\end{align*}
+
+\noindent
+If you want an example of a particular model, you can suppose that the following relations satisfy the above predicates (feel free to draw this model on paper):
+
+\begin{align*}
+  \nd{sib(x, y)} &= (p, s), (s, p) \text{ (Paul and Shane are siblings)} \\
+  \nd{par(x, y)} &= (z, p), (c, p), (z, s), (c, s) \text{ (Zoe and Cal are the parents) } \\
+  \nd{child(x, y)} &= (p, z), (p, c), (s, z), (s, c) \text{ (Paul and Shane are the children) }
+\end{align*}
+
+\noindent
+Now let us write out the inference rules. First, let us say that if $x$ is a sibling of $y$, then we can infer that $y$ is a sibling of $x$. Let's call this the \rulename{rev} rule, which is short for ``reverse'' (because it lets us reverse the order of the $x$ and the $y$):
+
+\begin{prooftree*}
+  \hypo{\nd{sib(x, y)}}
+  \infer1[\rulename{sib}]{\nd{sib(y, x)}}
+\end{prooftree*}
+
+\noindent
+Let us say that if $x$ is a parent of $y$, then $y$ is a child of $x$. Let's call this the \rulename{child} rule:
+
+\begin{prooftree*}
+  \hypo{\nd{par(x, y)}}
+  \infer1[\rulename{child}]{\nd{child(y, x)}}
+\end{prooftree*}
+
+\noindent
+Let us also create a rule that goes the other way: if $x$ is the child of $y$, then $y$ is the parent of $x$. Let's call this the \rulename{par} rule, which is short for ``parent'':
+
+\begin{prooftree*}
+  \hypo{\nd{child(x, y)}}
+  \infer1[\rulename{par}]{\nd{par(y, x)}}
+\end{prooftree*}
+
+\noindent
+Finally, let's say that if $x$ is the parent of $y$ and of $z$, then $y$ and $z$ are siblings. Let us call this the \rulename{sib} rule, which is short for ``sibling'':
+
+\begin{prooftree*}
+  \hypo{\nd{par(x, y)}}
+  \hypo{\nd{par(x, z)}}
+  \infer2[\rulename{sib}]{\nd{sib(y, z)}}
+\end{prooftree*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{One node trees}
+
+Using the above rule system, we can start to construct some natural deduction proofs for minimal logic. Here is a simple tree:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{sib(p, s)} :: true}
+\end{prooftree*}
+
+\noindent
+This proves the following hypothetical judgment:
+
+\begin{equation*}
+  \nd{sib(p, s)} :: true \ndturnstile/ \nd{sib(p, s)} :: true
+\end{equation*}
+
+\noindent
+The hypothesis of the tree is ``$\nd{sib(p, s)}$,'' and the conclusion is too.
+
+Here is another one:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{sib(s, p)} :: true}
+\end{prooftree*}
+
+\noindent
+This proves the following hypothetical judgment:
+
+\begin{equation*}
+  \nd{sib(s, p)} :: true \ndturnstile/ \nd{sib(s, p)} :: true
+\end{equation*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Two node trees}
+
+Here is a two-node proof tree:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{sib(p, s)} :: true}
+  \infer1[\rulename{rev}]{\nd{sib(s, p)} :: true}
+\end{prooftree*}
+
+\noindent
+This proves the following hypothetical judgment:
+
+\begin{equation*}
+  \nd{sib(p, s)} :: true \ndturnstile/ \nd{sib(s, p)} :: true
+\end{equation*}
+
+\noindent
+The hypothesis of this tree is ``$\nd{sib(p, s)}$,'' and the conclusion is ``$\nd{sib(s, p)}$.''
+
+Here is another example:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{par(z, p)} :: true}
+  \infer1[\rulename{child}]{\nd{child(p, z)} :: true}
+\end{prooftree*}
+
+\noindent
+This proves the following hypothetical judgment:
+
+\begin{equation*}
+  \nd{par(z, p)} :: true \ndturnstile/ \nd{child(p, z)} :: true
+\end{equation*}
+
+\noindent
+Here is a third example:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{par(z, p)} :: true}
+  \hypo{}
+  \infer1[\startrule/]{\nd{par(z, s)} :: true}
+  \infer2[\rulename{sib}]{\nd{sib(p, s)} :: true}
+\end{prooftree*}
+
+\noindent
+This proves the following hypothetical judgment:
+
+\begin{equation*}
+  \nd{par(z, p)} :: true, \nd{par(z, s)} :: true \ndturnstile/ \nd{sib(p, s)} :: true
+\end{equation*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Three node trees}
+
+Here is another example:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{par(z, p)} :: true}
+  \hypo{}
+  \infer1[\startrule/]{\nd{par(z, s)} :: true}
+  \infer2[\rulename{sib}]{\nd{sib(p, s)} :: true}
+  \infer1[\rulename{rev}]{\nd{sib(s, p)} :: true}
+\end{prooftree*}
+
+\noindent
+This proves the following hypothetical judgment:
+
+\begin{equation*}
+  \nd{par(z, p)} :: true, \nd{par(z, s)} :: true \ndturnstile/ \nd{sib(s, p)} :: true
+\end{equation*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Implication introduction}
+
+Here is an example of implication introduction:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{sib(p, s)} :: true^{a}}
+  \infer1[\rulename{rev}]{\nd{sib(s, p)} :: true}
+  \infer1[\implIntro/$^{a}$]{\nd{sib(p, s)} \impl/ \nd{sib(s, p)} :: true}
+\end{prooftree*}
+
+\noindent
+This proves the following categorical judgment:
+
+\begin{equation*}
+  \ndturnstile/ \nd{sib(p, s)} \impl/ \nd{sib(s, p)} :: true
+\end{equation*}
+
+\noindent
+Here is another example:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{par(z, p)} :: true^{a}}
+  \infer1[\rulename{child}]{\nd{child(p, z)} :: true}
+  \infer1[\implIntro/$^{a}$]{\nd{par(z, p)} \impl/ \nd{child(p, z)} :: true}
+\end{prooftree*}
+
+\noindent
+This proves the following categorical judgment:
+
+\begin{equation*}
+  \ndturnstile/ \nd{par(z, p)} \impl/ \nd{child(p, z)} :: true
+\end{equation*}
+
+\noindent
+Here is another example:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{par(z, p)} :: true}
+  \hypo{}
+  \infer1[\startrule/]{\nd{par(z, s)} :: true^{a}}
+  \infer2[\rulename{sib}]{\nd{sib(p, s)} :: true}
+  \infer1[\implIntro/$^{a}$]{\nd{par(z, s)} \impl/ \nd{sib(p, s)} :: true}
+\end{prooftree*}
+
+\noindent
+This proves the following hypothetical judgment:
+
+\begin{equation*}
+  \nd{par(z, p)} :: true \ndturnstile/ \nd{par(z, s)} \impl/ \nd{sib(p, s)} :: true
+\end{equation*}
+
+\noindent
+Here is a further example:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{par(z, p)} :: true^{b}}
+  \hypo{}
+  \infer1[\startrule/]{\nd{par(z, s)} :: true^{a}}
+  \infer2[\rulename{sib}]{\nd{sib(p, s)} :: true}
+  \infer1[\implIntro/$^{a}$]{\nd{par(z, s)} \impl/ \nd{sib(p, s)} :: true}
+  \infer1[\implIntro/$^{b}$]{\nd{par(z, p)} \impl/ (\nd{par(z, s)} \impl/ \nd{sib(p, s)}) :: true}  
+\end{prooftree*}
+
+\noindent
+This proves the following categorical judgment:
+
+\begin{equation*}
+  \ndturnstile/ \nd{par(z, p)} \impl/ (\nd{par(z, s)} \impl/ \nd{sib(p, s)}) :: true
+\end{equation*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Implication elimination}
+
+Here is an example of using implication elimination:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{sib(p, s)} \impl/ \nd{sib(s, p)} :: true}
+  \hypo{}
+  \infer1[\startrule/]{\nd{sib(p, s)} :: true}
+  \infer2[\implElim/]{\nd{sib(s, p)} :: true}
+\end{prooftree*}
+
+\noindent
+That proves the following hypothetical judgment:
+
+\begin{equation*}
+  \nd{sib(p, s)} \impl/ \nd{sib(s, p)} :: true, \nd{sib(p, s)} :: true \ndturnstile/ \nd{sib(s, p)} :: true
+\end{equation*}
+
+\noindent
+Here is another example:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{par(z, p)} \impl/ \nd{child(p, z)} :: true}
+  \hypo{}
+  \infer1[\startrule/]{\nd{par(z, p)} :: true}
+  \infer2[\implElim/]{\nd{child(p, z)} :: true}
+\end{prooftree*}
+
+\noindent
+That proves the following hypothetical judgment:
+
+\begin{equation*}
+  \nd{par(z, p)} \impl/ \nd{child(p, z)} :: true, \nd{par(z, p)} :: true \ndturnstile/ \nd{child(p, z)} :: true
+\end{equation*}
+
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+In this chapter, we constructed a simple set of custom rules that have to do with reasoning about familial relations, and then we constructed a number of example proofs using natural deduction for minimal logic.
+
+
+\end{document}

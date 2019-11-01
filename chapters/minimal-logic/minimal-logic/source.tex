@@ -1,0 +1,405 @@
+\documentclass[../../../main.tex]{subfiles}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Minimal logic}
+
+In this chapter, we will introduce a new system of logic, called \vocab{minimal logic}. We will use natural deduction to explore this system too. It is a very simple logical system that has many parallels with the minimal form of linear logic that we have learned so far. The crucial difference is that minimal logic is not linear.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Models and propositions}
+
+Recall how we got propositions to reason about in linear logic. We first built models, which were comprised of objects and relations. We gave names to the objects, and we assigned predicates to the relations. Then, we combined names and predicates to form propositions which assert something about the situation we were modeling. 
+
+For example, the proposition ``$b(s)$'' was constructed from the name ``$s$'' (short for ``squash'') and the predicate ``$b(x)$'' (short for ``$x$ is in my basket''). The whole proposition ``$b(s)$'' asserts that squash is in my basket.
+
+We could then take these propositions and use them in proof trees. For example, we could start a proof tree like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+\end{prooftree*}
+
+\noindent
+For minimal logic, we do exactly the same thing. When we have a situation we want to reason about, we first construct a model of the situation, complete with names and predicates. Then we can formulate propositions by combining those names and predicates. 
+
+The only thing to note about minimal logic is that models will have no transitions. A model for minimal logic will always have only one state, and that is it. This is because minimal logic is not linear, but I will say more about this below.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Notation}
+
+So suppose I have a proposition that I acquired from a model. Let's use ``$A$'' as a placeholder for this proposition. In what follows, when I want to write down such a proposition for minimal logic, I will put it in bold. So whereas with linear logic, I would write the proposition like this:
+
+\begin{equation*}
+  A :: prop
+\end{equation*}
+
+\noindent
+In minimal logic, I will write it like this:
+
+\begin{equation*}
+  \nd{A} :: prop
+\end{equation*}
+
+\noindent
+Similarly, for truth judgments, in linear logic I would write this:
+
+\begin{equation*}
+  A :: true
+\end{equation*}
+
+\noindent
+But in minimal logic, I will write it like this:
+
+\begin{equation*}
+  \nd{A} :: true
+\end{equation*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Non-linear implication}
+
+In linear natural deduction, we have so far covered only one connective: a lolli. As we noted already, in minimal logic we also have one connective, and it is fairly similar to the lolli. We call it \vocab{implication}. 
+
+We will represent it with an arrow symbol, rather than a lollipop symbol. Like this: 
+
+\begin{equation*}
+  \nd{A \impl/ B}
+\end{equation*}
+
+\noindent
+In other logic textbooks, you might see it represented with a horseshoe, or sometimes with a double arrow. Like in these examples:
+
+\begin{equation*}
+  \nd{A \supset B} \hskip 2cm \nd{A \implies B}
+\end{equation*}
+
+\noindent
+We will use the single arrow. Here is the formation rule:
+
+\begin{prooftree*}
+  \hypo{\nd{A} :: prop}
+  \hypo{\nd{B} :: prop}
+  \infer2{\nd{A \impl/ B} :: prop}
+\end{prooftree*}
+
+\noindent
+This says that if ``$\nd{A}$'' is a proposition, and if ``$\nd{B}$'' is a proposition, then you can put them together with the implication arrow to form ``$\nd{A \impl/ B}$,'' and that whole expression ``$\nd{A \impl/ B}$'' is also a proposition.
+
+You should read an implication ``$\nd{A \impl/ B}$'' like this: ``if $\nd{A}$ then $\nd{B}$.'' You can also say ``$\nd{A}$ implies $\nd{B}$,'' or ``$\nd{B}$ if $\nd{A}$.''
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The \startrule/ rule}
+
+As with natural deduction for linear logic, in natural deduction for minimal logic we can also use the \startrule/ rule to begin a branch with any assumption. So the \startrule/ looks like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A} :: true}
+\end{prooftree*} 
+
+\noindent
+Here, ``$\nd{A}$'' is a placeholder that can stand for any proposition from minimal logic. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Implication introduction}
+
+The introduction rule for regular implication is much like the introduction for lollis. Suppose we assume some judgment ``$\nd{A} :: true$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A} :: true}
+\end{prooftree*}
+
+\noindent
+Suppose also that, from that, we can show how to derive some further judgment ``$\nd{B} :: true$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A} :: true}
+  \ellipsis{}{\nd{B} :: true}
+\end{prooftree*}
+
+\noindent
+At this point, we've shown that, if we had an ``$\nd{A}$,'' we could derive a ``$\nd{B}$.'' That is, we've shown that there is a path from ``$\nd{A}$'' to ``$\nd{B}$.'' 
+
+We can encode this ``if $\nd{A}$ then $\nd{B}$'' connection as an implication: ``$\nd{A \impl/ B}$.'' We can introduce that at the bottom of the tree, using the \vocab{implication introduction} rule, which we symbolize as ``\implIntro/'' (that's the implication symbol, followed by a capital ``I,'' which is the first letter of ``Introduction''):
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A} :: true}
+  \ellipsis{}{\nd{B} :: true}
+  \infer1[\implIntro/]{\nd{A \impl/ B} :: true}
+\end{prooftree*}
+
+\noindent
+We also need to discharge the path from ``$\nd{A}$'' to ``$\nd{B}$,'' which we do in the usual way: we mark the assumption with a unique superscripted label, and we mark the introduction with the same label.
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A} :: true^{x}}
+  \ellipsis{}{\nd{B} :: true}
+  \infer1[\implIntro/$^{x}$]{\nd{A \impl/ B} :: true}
+\end{prooftree*}
+
+\noindent
+That is the full template for the implication introduction rule. As you can see, it is very much like the \lolliIntro/ rule. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Implication elimination}
+
+The elimination rule for implication is the same as it is for the lolli. Suppose you have an implication:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{\nd{A \impl/ B} :: true}
+\end{prooftree*}
+
+\noindent
+This says ``if $\nd{A}$ were true, then $\nd{B}$ would be too.'' So, suppose that you do know that ``$\nd{A}$'' is true. Let's put that over on the right side:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{\nd{A \impl/ B} :: true}
+  
+  \hypo{}
+  \ellipsis{}{\nd{A} :: true}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+It follows, then, that ``$\nd{B}$'' must be true:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{\nd{A \impl/ B} :: true}
+  
+  \hypo{}
+  \ellipsis{}{\nd{A} :: true}
+  
+  \infer2{\nd{B} :: true}
+\end{prooftree*}
+
+\noindent
+This rule is called \vocab{implication elimination}, and we will symbolize it as \implElim/, which is an implication symbol followed by a capital ``E'' (the first letter of ``Elimination''). Let's mark that at the inference line:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{\nd{A \impl/ B} :: true}
+  \hypo{}
+  \ellipsis{}{\nd{A} :: true}
+  \infer2[\implElim/]{\nd{B} :: true}
+\end{prooftree*}
+
+\noindent
+That is the full template for implication elimination.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Proof trees}
+
+A natural deduction \vocab{proof} in minimal logic is a proof tree, just as it is in linear logic. And we build these proof trees for minimal logic in much the same way that we build them for linear logic.
+
+To begin any branch, we use the \startrule/. Then we apply further rules to derive conclusions. The pure rules that belong to every minimal logic natural deduction system are the \startrule/ rule, as well as \implIntro/ and \implElim/. 
+
+Of course, in addition to those pure rules, we can define custom rules for specific situations (as we did with the farmer's market).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Hypothetical judgments}
+
+Hypothetical judgments are much the same in minimal logic as they are in linear logic. They have the form:
+
+\begin{equation*}
+  \nd{A}_{1} :: true, \ldots, \nd{A}_{n} :: true \ndturnstile/ \nd{B} :: true
+\end{equation*}
+
+\noindent
+This expresses the judgment that ``$\nd{B}$'' is true, under the assumptions that ``$\nd{A}_{1}$'' through ``$\nd{A}_{n}$'' are true.
+
+A proof of a hypothetical judgment in minimal logic is a proof tree, just as it is in linear logic, such that the assumptions of the hypothetical judgment correspond to the open (non-discharged) assumptions on the proof tree, and the conclusion of the hypothetical judgment corresponds to the bottom node of the proof tree.
+
+For example, a proof of the above mentioned hypothetical judgment might look something like this:
+
+\begin{diagram}
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{} 
+      \infer1[\startrule/]{\cancel{\nd{A}_{0} :: true^{b}}}
+      \ellipsis{}{}
+      \hypo{} 
+      \infer1[\startrule/]{\nd{A}_{1} :: true}
+      \ellipsis{}{}      
+      \hypo{\ldots}
+      \infer[no rule]1{}
+      \ellipsis{}{}      
+      \hypo{}
+      \infer1[\startrule/]{\nd{A}_{n} :: true}
+      \ellipsis{}{}
+      \infer[no rule]4{}
+      \ellipsis{}{}
+      \infer1[]{\nd{B} :: true}
+    \end{prooftree}
+  };
+
+  \draw (-1.45, -1.1) -- (-1.45, -1.35) -- (0.5, -1.35) -- (0.5, -1.1);
+  \draw[spaced-arrows,->] (-0.5, -2.05) -- (-0.5, -1.35);
+  \node (c_1_l) [label=below:{conclusion}] at (-0.5, -1.95) {};
+
+  \draw (-4.85, 1.1) -- (-4.85, 1.35) -- (-2, 1.35) -- (-2, 1.1);
+  \draw[spaced-arrows,->] (-3.5, 2.05) -- (-3.5, 1.35);
+  \node (a_1_l) [label={closed assumption}] at (-3.75, 2) {};
+
+  \draw (-1.8, 1.1) -- (-1.8, 1.35) -- (0.9, 1.35) -- (0.9, 1.1);
+  \draw[spaced-arrows,->] (-0.5, 2.05) -- (-0.5, 1.35);
+  \node (a_2_l) [label={open assumption}] at (-0.5, 2) {};
+
+  \draw (2, 1.1) -- (2, 1.35) -- (4.8, 1.35) -- (4.8, 1.1);
+  \draw[spaced-arrows,->] (3.5, 2.05) -- (3.5, 1.35);
+  \node (a_3_l) [label={open assumption}] at (3.5, 2) {};
+
+\end{diagram}
+
+\noindent
+We have not filled in the body of the proof tree, but we can see that the open assumptions at the tips of each undischarged branch match the assumptions of the hypothetical judgment ``$\nd{A}_{1} :: true$, $\ldots$, $\nd{A}_{n} :: true$,'' and the conclusion of the tree at the bottom matches the conclusion of the hypothetical judgment ``$\nd{B} :: true$.'' Of course, there can be one or more discharged assumptions too, as we see over on the left.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Some schematic examples}
+
+Here are some schematic examples of proofs we can construct in minimal logic. They are \emph{schematic} because we will use placeholders like ``$\nd{A}$'' and ``$\nd{B}$'' instead of actual propositions. But these are just examples, to help convey what minimal logic trees are like.
+
+First, let us prove this hypothetical judgment:
+
+\begin{equation*}
+  \nd{A} :: true \ndturnstile/ \nd{A} :: true
+\end{equation*}
+
+\noindent
+To prove this, we start a branch by assuming ``$\nd{A} :: true$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A} :: true}
+\end{prooftree*}
+
+\noindent
+And that's it. We're done. The assumption is ``$\nd{A} :: true$,'' but the conclusion is too, so this proves ``$\nd{A} :: true \ndturnstile/ \nd{A}$ :: true.'' That is, it proves that if we can conclude that ``$\nd{A}$'' is true, if we've assumed that ``$\nd{A}$'' is true.
+
+Here is another example. Let us prove this hypothetical judgment (I omit the ``$:: true$'' annotations now):
+
+\begin{equation*}
+  \nd{A \impl/ B}, \nd{A} \ndturnstile/ \nd{B}
+\end{equation*}
+
+\noindent
+First, we introduce the assumptions with the \startrule/ rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A \impl/ B}}
+  
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then we use \implElim/ to get our conclusion:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A \impl/ B}}
+  
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}}
+  
+  \infer2[\implElim/]{\nd{B}}
+\end{prooftree*}
+
+\noindent
+Here is a third example. Let us prove this hypothetical judgment:
+
+\begin{equation*}
+  \nd{A \impl/ B}, \nd{A} \ndturnstile/ \nd{C \impl/ B}
+\end{equation*}
+
+\noindent
+First, we introduce our assumptions:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A \impl/ B}}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}}
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then we use \implElim/ to derive ``$\nd{B}$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A \impl/ B}}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}}
+  \infer2[\implElim/]{\nd{B}}
+\end{prooftree*}
+
+\noindent
+Next, we assume ``$\nd{C}$,'' which we will discharge in a moment (so we'll put a label on it):
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A \impl/ B}}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}}
+  \infer2[\implElim/]{\nd{B}}
+  \hypo{}
+  \infer1[\startrule/]{\nd{C}^{a}}
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+At this point, we have shown that if we assume ``$\nd{C}$,'' we can derive ``$\nd{B}$'' (given the other assumptions, of course). So, we can discharge the branch from ``$\nd{C}$'' to  ``$\nd{B}$,'' and introduce the implication ``$\nd{C \impl/ B}$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A \impl/ B}}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}}
+  \infer2[\implElim/]{\nd{B}}
+  \hypo{}
+  \infer1[\startrule/]{\nd{C}^{a}}
+  \infer2[\implIntro/$^{a}$]{\nd{C \impl/ B}}
+\end{prooftree*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+Minimal logic is a simple logical system that is much like the minimal form of linear logic that we have covered so far. In this chapter, we covered the natural deduction rules for minimal logic: we covered the \startrule/ rule, as well as the \implIntro/ and \implElim/ rules. These rules operate much like their analogues from linear logic, and minimal logic proof trees are built in much the same way too.
+
+
+\end{document}

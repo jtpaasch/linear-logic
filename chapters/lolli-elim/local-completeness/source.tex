@@ -1,0 +1,234 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Local completeness}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Harmony again}
+
+As we noted before, elimination rules are supposed to be in \vocab{harmony} with the introduction rules, and what we mean by that is this: the elimination rule must be \vocab{locally sound} and \vocab{locally complete}. We talked about local soundness in the last two chapters. Here we'll talk about local completeness.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Local completeness}
+
+In a certain sense, the elimination rules for a connective take apart the connective and pull out the pieces. To say that the elimination rules are locally \vocab{complete} is to say that they pull out all of the pieces, and don't forget any. If the elimination rules only pulled out some of the pieces, then they would not be complete.
+
+Is there a way to determine if a connective's elimination rules are locally complete? Yes, there is a check we can do. We first eliminate the connective, and then we see if the elimination rules give us enough pieces to re-introduce the connective. If we can re-introduce the connective, then that tells us that the elimination rules are complete.
+
+In the case of the lolli, this holds true. If you think about it, the lolli elimination rule takes a lolli apart. Of course, it needs an antecedent, but once it has an antecedent, it can then extract the consequent. And notice: that is all there is to a lolli --- an antecedent and a consequent.
+
+We can build a proof to show that the lolli elimination rule is locally complete, much like how we built a proof to show that the lolli elimination rule is locally sound. We will do that in this chapter.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Local completeness and soundness}
+
+Before we construct the proof of local completeness, it is worth noting again that local completeness and local soundness work together. Local soundness makes sure that the elimination rules don't add too much information to the proof tree, while local completeness makes sure that they don't add too little.
+
+The checks work together too. To check local soundness, we first introduce the connective and then we eliminate it. To check local completeness, we first eliminate the connective and then we introduce it. The check for soundness ensures that eliminating a collective doesn't put us in a state we can't get back to. The check for completeness ensures that eliminating a connective doesn't put us in a state we can't move forward from.
+
+So local soundness and completeness ensure that elimination rules do not change the amount of information in a proof tree. And to ensure that, we need to check \emph{both} soundness and completeness.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Generality}
+
+When we checked local soundness, we were very general with our proof. That is why we used placeholders like ``$A$'' and ``$B$'' instead of particular propositions. We will do that here too, when we check local completeness.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Setting up}
+
+Let us build a proof to show that lolli elimination is locally complete. To do that, we eliminate a lolli and then try to immediately re-introduce it. As we proceed, we must also introduce any assumptions that are needed to make the proof tree complete. 
+
+So, let us first eliminate a lolli. For this, we'll need a lolli. Suppose then that we have derived a lolli ``$A \lolli/ B$.'' We want to stay at a general level, so we will let ``$A$'' and ``$B$'' stand for any propositions. Like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A \lolli/ B}
+\end{prooftree*}
+
+\noindent
+How did we derive this? What goes above the lolli in the proof tree? 
+
+\begin{prooftree*}
+  \hypo{\fbox{??}}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A \lolli/ B}
+\end{prooftree*}
+
+\noindent
+We want to be general, so we don't want to assume that we have derived this through any particular proof. Instead, we'll assume only that it comes from \emph{some} proof (whatever it might be). Let's represent that with ``$\Proof/$'' (that's the capital Greek letter ``Pi,'' with a subscripted number one). Like this:
+
+\begin{prooftree*}
+  \hypo{\fbox{$\Proof/$}}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A \lolli/ B}
+\end{prooftree*}
+
+\noindent
+Next, we want to eliminate the lolli. In order to eliminate a lolli, we need a copy of the antecedent. In this case, the antecedent of the lolli is ``$A$,'' so we need to assume an ``$A$'':
+
+\begin{prooftree*}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A \lolli/ B}
+  
+  \hypo{}
+  \infer1[\startrule/]{~~\fbox{$A$}~~}
+  
+  \infer[rule style=no rule]2{}
+\end{prooftree*}
+
+\noindent
+Once we have that, we can use \lolliElim/ to eliminate the lolli, and derive ``$B$'':
+
+\begin{prooftree*}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A \lolli/ B}
+  
+  \hypo{}
+  \infer1[\startrule/]{~~A~~}
+  
+  \infer2[\lolliElim/]{\fbox{$B$}}
+\end{prooftree*}
+
+\noindent
+At this point, our initial setup is complete. We have constructed a proof tree which represents in a very general way a lolli being eliminated.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduce it again}
+
+The next step is to attempt to re-introduce the lolli. Can we do this with the information we have? The answer is yes. 
+
+What do we need to see in a proof tree in order to introduce the lolli ``$A \lolli/ B$''? We need to see an ``$A$'' somewhere higher up on the proof tree, above a ``$B$.''
+
+In our proof tree, we do indeed have an ``$A$'' higher up than ``$B$.'' Here it is, highlighted:
+
+\begin{diagram}
+
+  \draw[densely dotted, fill=grey90] 
+      (-0.15, 0.35) -- (0.85, 0.35) -- (0.85, -0.65) -- (-0.25, -0.65) -- (-0.25, -1) -- (-0.8, -1) --
+      (-0.8, -0.4) -- (-0.15, -0.4) -- (-0.15, 0.35);
+  
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{\Proof/}
+      \ellipsis{}{}
+      \infer[rule style=no rule]1{A \lolli/ B}
+      \hypo{}
+      \infer1[\startrule/]{~~A~~}
+      \infer2[\lolliElim/]{B}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+So we can use that to introduce a lolli again:
+
+\begin{diagram}
+
+  \draw[densely dotted, fill=grey90] 
+      (-0.15, 0.6) -- (0.85, 0.6) -- (0.85, -0.4) -- (-0.25, -0.4) -- (-0.25, -0.65) -- 
+      (0.2, -0.65) -- (0.2, -1.25) -- (-1.25, -1.25) -- (-1.25, -0.65) -- (-0.8, -0.65) --
+      (-0.8, -0.15) -- (-0.15, -0.15) -- (-0.15, 0.6);
+  
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{\Proof/}
+      \ellipsis{}{}
+      \infer[rule style=no rule]1{A \lolli/ B}
+      \hypo{}
+      \infer1[\startrule/]{~~A^{a}~~}
+      \infer2[\lolliElim/]{B}
+      \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+This shows that, if we eliminate a lolli, we end up with enough information to reintroduce the lolli.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Compact notation}
+
+We call this process \vocab{proof expansion}. What we did was start with a small proof:
+
+\begin{prooftree*}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A \lolli/ B}
+\end{prooftree*}
+
+\noindent
+Then we expanded it to a bigger proof: 
+
+\begin{prooftree*}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A \lolli/ B}
+  \hypo{}
+  \infer1[\startrule/]{~~A^{a}~~}
+  \infer2[\lolliElim/]{B}
+  \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+\end{prooftree*}
+
+\noindent
+We can summarize this particular expansion by writing it out like this:
+
+$$
+\begin{prooftree}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A \lolli/ B}
+\end{prooftree}
+\hskip 1cm\rightsquigarrow_{\eta}\hskip 1cm
+\begin{prooftree}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A \lolli/ B}
+  \hypo{}
+  \infer1[\startrule/]{~~A^{a}~~}
+  \infer2[\lolliElim/]{B}
+  \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+\end{prooftree}
+$$
+
+\noindent
+On the left, we have the original proof tree, and on the right we have the expanded proof tree. The squiggly arrow in the middle indicates that we have made some transformations to the tree. 
+
+The subscripted ``$\eta$'' (the lowercase Greek letter ``eta'') on the squiggly arrow is a special symbol that we use to indicate that the transformation we have performed here is a proof \emph{expansion} (rather than a reduction or any other kind of transformation). So we attach a little ``$\eta$'' character to the squiggly arrow to indicate that.
+
+In fact, we often call a ``proof expansion'' by another name: we call it an \vocab{$\eta$-expansion} (or just ``eta-reduction,'' if you don't want to write out the Greek letter). The names ``proof expansion'' and ``$\eta$-reduction'' are synonyms in this context.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+This proof expansion shows that the \lolliElim/ rule pulls out all of the pieces from a lolli. After we have applied the \lolliElim/ rule, it leaves enough information laying around that we can reintroduce the lolli from the pieces. And this means that \lolliElim/ is locally \vocab{complete}.
+
+The \lolliElim/ rule would be \vocab{incomplete} if it removed so much information from the tree that we couldn't re-introduce the lolli. 
+
+The \lolliElim/ rule takes the lolli apart, so to speak, and it should leave us with all the pieces that we need to reintroduce the lolli. If we didn't get all the pieces back, we should be suspicious that the \lolliElim/ rule isn't completely taking apart the lolli. 
+
+
+\end{document}

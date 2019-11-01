@@ -1,0 +1,237 @@
+\documentclass[../../../main.tex]{subfiles}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Translating implication elimination}
+
+In the last chapter, we looked at minimal logic proofs that end with the \implIntro/ rule, and we established a way to translate that last step into an equivalent form in a linear logic proof. In this chapter, we will look at minimal logic proofs that end with an \implElim/ rule, and we'll learn how to translate such last steps into an equivalent form in linear logic.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Implication elimination}
+
+Suppose we have a proof whose last step is \implElim/. That is, at the end of the tree, we see something like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer[no rule]1{}
+  \ellipsis{}{\nd{A} \impl/ \nd{B}}
+  
+  \hypo{}
+  \infer[no rule]1{}
+  \ellipsis{}{\nd{A}}
+  
+  \infer2[\implElim/]{\nd{B}}
+\end{prooftree*}
+
+\noindent
+This is a tree that has two branches: one that grows upwards from ``$\nd{A} \impl/ \nd{B}$'' on the left, and one that grows upwards from ``$\nd{A}$'' on the right. Let us suppose that these branches ultimately lead up to a set of assumptions ``$\nd{\context/}$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{\Proof/_{1}}
+  \ellipsis{}{\nd{A} \impl/ \nd{B}}
+  
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{\Proof/_{2}}
+  \ellipsis{}{\nd{A}}
+  
+  \infer2[\implElim/]{\nd{B}}
+\end{prooftree*}
+
+\noindent
+What is the hypothetical judgment that this tree proves? It is this:
+
+\begin{equation*}
+  \nd{\context/} \ndturnstile/ \nd{B}
+\end{equation*}
+
+\noindent
+If we translate this to linear logic, we get this:
+
+\begin{equation*}
+  \nd{\context/} \ndturnstile/ \nd{B}
+  \hskip 1cm \rightsquigarrow \hskip 1cm
+  \bang/\nd{\context/}^{*} \ndturnstile/ \nd{B}^{*}
+\end{equation*}
+
+\noindent
+But this hypothetical judgment hides the final step that we have in the minimal logic proof tree, which is an implication elimination. So let's focus on the proof tree. Let's first translate the relevant individual judgments on the proof tree into linear logic equivalents:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{\Proof/_{1}}
+  \ellipsis{}{\nd{A} \impl/ \nd{B}}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{\Proof/_{2}}
+  \ellipsis{}{\nd{A}}
+  \infer2[\implElim/]{\nd{B}}
+\end{prooftree}
+\hskip 1cm \rightsquigarrow \hskip 1cm
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/_{1}}
+  \ellipsis{}{\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/_{2}}
+  \ellipsis{}{\nd{A}^{*}}
+  \infer2[\implElim/]{\nd{B}^{*}}
+\end{prooftree}
+$$
+
+\noindent
+Also, we need to add bangs to the context assumptions, since linear logic translations always have banged assumptions:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{\Proof/_{1}}
+  \ellipsis{}{\nd{A} \impl/ \nd{B}}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{\Proof/_{2}}
+  \ellipsis{}{\nd{A}}
+  \infer2[\implElim/]{\nd{B}}
+\end{prooftree}
+\hskip 1cm \rightsquigarrow \hskip 1cm
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/_{1}}
+  \ellipsis{}{\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/_{2}}
+  \ellipsis{}{\nd{A}^{*}}
+  \infer2[\lolliElim/]{\nd{B}^{*}}
+\end{prooftree}
+$$
+
+\noindent
+Next, we need to patch up the bottom right. There we can see an un-banged ``$\nd{A}^{*}$,'' but the antecedent of the lolli is a banged ``$\nd{A}^{*}$.'' So we can't actually apply the \lolliElim/ rule here yet, until we get a banged ``$\nd{A}^{*}$'' to match the antecedent of the lolli. In other words, we need to fill in the question marks here:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{\Proof/_{1}}
+  \ellipsis{}{\nd{A} \impl/ \nd{B}}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{\Proof/_{2}}
+  \ellipsis{}{\nd{A}}
+  \infer2[\implElim/]{\nd{B}}
+\end{prooftree}
+\hskip 1cm \rightsquigarrow \hskip 1cm
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/_{1}}
+  \ellipsis{}{\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/_{2}}
+  \ellipsis{}{\nd{A}^{*}}
+  \ellipsis{}{\fbox{??}}
+  \ellipsis{}{\bang/\nd{A}^{*}}
+  \infer2[\lolliElim/]{\nd{B}^{*}}
+\end{prooftree}
+$$
+
+\noindent
+For this, we can use the promotion rule. Since ``$\nd{A}^{*}$"' is derived from banged assumptions (i.e., ``$\bang/\nd{\context/}^{*}$''), we can use the \bangProm/ rule to promote ``$\nd{A}^{*}$'' to ``$\bang/\nd{A}^{*}$'':
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{\Proof/_{1}}
+  \ellipsis{}{\nd{A} \impl/ \nd{B}}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{\Proof/_{2}}
+  \ellipsis{}{\nd{A}}
+  \infer2[\implElim/]{\nd{B}}
+\end{prooftree}
+\hskip 1cm \rightsquigarrow \hskip 1cm
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/_{1}}
+  \ellipsis{}{\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{* a}}
+  \ellipsis{}{\Proof/_{2}}
+  \ellipsis{}{\nd{A}^{*}}
+  \infer2[\bangProm/$^{a}$]{\bang/\nd{A}^{*}}
+
+  \infer2[\lolliElim/]{\nd{B}^{*}}
+\end{prooftree}
+$$
+
+\noindent
+And with that, we have established how to translate the last step of a tree that uses \implElim/ into a linear equivalent.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{No context}
+
+The translation scheme we developed above is general, because it includes an arbitrary context. It can handle the case where there is no context too, if we let ``$\nd{\context/}$'' be empty (i.e., ``$\emptyassumptions/$''). Of course, then the judgments in the proof tree cannot be derived from ``$\nd{\context/}$.'' Rather, they must be introduced by the start rule. So the translation scheme looks like this:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A} \impl/ \nd{B}}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}}
+  \infer2[\implElim/]{\nd{B}}
+\end{prooftree}
+\hskip 1cm \rightsquigarrow \hskip 1cm
+\begin{prooftree}
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}}
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{*}}
+  \infer2[\lolliElim/]{\nd{B}^{*}}
+\end{prooftree}
+$$
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Translating an entire tree}
+
+We have now shown how to translate the last step of any proof tree we can build in linear logic. We know we have covered \emph{every} possible case because we systematically covered every possible inference rule that we have covered in minimal logic.
+
+At this point, we can expand our reasoning to cover an entire proof. To translate an entire proof, we simply translate each step of the tree using the translation schemes we've covered in the last few chapters. We start at the bottom, translate the last step, then move up and translate the next step, then move up again, and we repeat this process until we have translated the entire tree.
+
+There is one more important point to mention here. In translating each step, we did not change the (translated) assumptions or the (translated) conclusion. What this means is that when we translate each step, we do not alter the overall hypothetical or categorical judgment that the proof tree proves. We can apply our translations for step after step, and in no case will we alter the (translated) assumptions or the (translated) conclusion.
+
+This means that the final proof tree, once it's all been translated, will prove the same judgment that we set out to translate. Or rather, it will prove the translated form of the judgment --- i.e., it will prove the same conclusion (though translated into linear logic) from the same assumptions (though translated into linear logic and banged).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+In this chapter, we looked at minimal logic proof trees that end with the \implElim/ rule. To translate these, we translate the individual judgments in the proof tree into linear equivalents, we add bangs to the context, and we use the promotion rule for some bookkeeping that we need to regarding bangs.
+
+We also pointed out that now we have a complete method to translate proof trees from minimal logic into proof trees in linear logic. To translate the entire tree, we simply translate each step, starting from the bottom and working our way up. Each translation step preserves the same assumptions and conclusions, so there is no danger of altering the judgment that the translated tree proves.
+
+
+\end{document}

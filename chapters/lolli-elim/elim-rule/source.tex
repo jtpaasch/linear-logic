@@ -1,0 +1,165 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Lolli elimination}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Using a lolli}
+
+Suppose you have a lolli. What can you do with it? Well, a lolli of the form ``$A \lolli/ B$'' says: if you give me an ``$A$,'' I'll use it up, and give you back a ``$B$.'' So, if you have an ``$A$,'' you can feed it to the lolli, to get back a ``$B$.''
+
+Here it is, as a rule template:
+
+\begin{prooftree*}
+  \hypo{A \lolli/ B :: true}
+  \hypo{A :: true}
+  \infer2[\lolliElim/]{B :: true}
+\end{prooftree*}
+
+\noindent
+The order of the premises doesn't matter. If we wanted to, we could flip the premises around and write the rule like this:
+
+\begin{prooftree*}
+  \hypo{A :: true}
+  \hypo{A \lolli/ B :: true}
+  \infer2[\lolliElim/]{B :: true}
+\end{prooftree*}
+
+\noindent
+Whichever way we write it, we call this rule the \vocab{lolli elimination rule}, or the \vocab{linear implication elimination} rule. As a shorthand, we write it as ``\lolliElim/,'' which is a lolli, followed by a capital ``E'' (the first letter of the word ``Elimination''). 
+
+We call this an ``elimination'' rule, because it tells us how to remove a lolli from a proof tree. Notice in the rule that the lolli gets used up, so to speak. It no longer appears below the inference line. This is also true of the other premise. It gets used up too. After we apply this elimination rule, the only thing left is the consequent of the lolli.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The meaning of the lolli}
+
+We call \lolliElim/ an ``elimination'' rule, but there is another way to interpret it. The rule tells us how to \emph{use} a lolli. In particular, it tells us that if we have an ``$A$,'' we can use the lolli to get back a ``$B$.''. 
+
+If you think about it, a lolli represents a kind of process. It's a process that takes an ``$A$'' as input, and spits out a ``$B$'' as output. Notice how, in the \lolliElim/ rule, the ``$A$'' in the left premise matches the input of the lolli, the ``$B$'' in the conclusion matches the output of the lolli:
+
+\begin{diagram}
+
+  \draw[spaced-arrows,->] (-2.6, 0.55) -- (-2.6, 1.5) -- (-0.5, 1.5) -- (-0.5, 0.6);
+  \node (l_1) [fill=white] at (-1.5, 1.5) {input};
+
+  \draw[spaced-arrows,->] 
+      (0.6, 0.55) -- (0.6, 1.5) -- (3.25, 1.5) -- (3.25, -1.25) -- (-0.95, -1.25) -- (-0.95, -0.65);
+  \node (l_2) [fill=white] at (2, 1.5) {output};
+  
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{\fbox{$A$} :: true}
+      \hypo{\fbox{$A$} \lolli/ \fbox{$B$} :: true}
+      \infer2[\lolliElim/]{\fbox{$B$} :: true}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+Using a lolli to get a ``$B$'' is a very common pattern of reasoning. You have an ``$A$,'' but you need to get a ``$B$.'' So, you look for a lolli ``$A \lolli/ B$.'' If you can get that, you can use it to get your ``$B$.''
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Example}
+
+Suppose we have derived a lolli somewhere in a proof tree. Something like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{}
+  \infer1{t(s, p) \lolli/ b(p) :: true}
+\end{prooftree*}
+
+\noindent
+Suppose we have also derived the antecedent of that lolli as well: 
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{}
+  \infer1{t(s, p) :: true}
+
+  \hypo{}
+  \ellipsis{}{}
+  \infer1{t(s, p) \lolli/ b(p) :: true}
+  
+  \infer[rule style=no rule]2{}
+\end{prooftree*}
+
+\noindent
+Now we have a match for the lolli's input:
+
+\begin{diagram}
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{}
+      \ellipsis{}{}
+      \infer1{\fbox{$t(s, p)$} :: true}
+      \hypo{}
+      \ellipsis{}{}
+      \infer1{\fbox{$t(s, p)$} \lolli/ b(p) :: true}
+      \infer[rule style=no rule]2{}
+    \end{prooftree}
+  };
+  
+  \draw[spaced-arrows,->] (-2.5, -0.6) -- (-2.5, -1.5) -- (0.25, -1.5) -- (0.25, -0.7);
+  \node (l_1) [fill=white] at (-1, -1.5) {input};
+
+\end{diagram}
+
+\noindent
+So we can apply the \lolliElim/ rule, to get the consequent:
+
+\begin{diagram}
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{}
+      \ellipsis{}{}
+      \infer1{t(s, p) :: true}
+      \hypo{}
+      \ellipsis{}{}
+      \infer1{t(s, p) \lolli/ \fbox{$b(p)$} :: true}
+      \infer2[\lolliElim/]{\fbox{$b(p)$} :: true}
+    \end{prooftree}
+  };
+  
+  \draw[spaced-arrows,->] (2.5, 0) -- (4, 0) -- (4, -2) -- (-1, -2) -- (-1, -1.15);
+  \node (l_1) [fill=white] at (1.5, -2) {output};
+
+\end{diagram}
+
+\noindent
+Here it is in its plain form, without any boxes or arrows showing where the input and output is:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{}
+  \infer1{t(s, p) :: true}
+
+  \hypo{}
+  \ellipsis{}{}
+  \infer1{t(s, p) \lolli/ b(p) :: true}
+  
+  \infer2[\lolliElim/]{b(p) :: true}
+\end{prooftree*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+The \lolliElim/ rule says: if you know that ``$A \lolli/ B$'' is true, and you also know that ``$A$'' is true, then you can conclude that ``$B$'' is true. 
+
+This whole pattern tells us how we can use lollis. If we have a lolli, and we also have the antecedent, we can infer the consequent. This uses up the lolli and the antecedent, but it does leave us with the consequent.
+
+\end{document}

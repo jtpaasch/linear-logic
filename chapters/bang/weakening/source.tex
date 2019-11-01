@@ -1,0 +1,267 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Weakening}
+
+
+Regular assumptions are linear, in the sense that in a linear natural deduction proof tree, each regular assumption must be used exactly once. But bang assumptions are different. As we have seen, they can get used as many times as they are needed. They can also get used zero times. When an inference \emph{doesn't} use one of its premises, we call that weakening.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The rule}
+
+Suppose we have some derivation of ``$B :: true$.'' Like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{B :: true}
+\end{prooftree*}
+
+\noindent
+Suppose that we have also derived a bang, say ``$!A :: true$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{!A :: true}
+  \hypo{}
+  \ellipsis{}{B :: true}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+The weakening rule says that, if we are in this situation, we are allowed to ignore the bang assumption, and simply conclude ``$B :: true$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{!A :: true}
+
+  \hypo{}
+  \ellipsis{}{B :: true}
+  
+  \infer2[\bangWeak/]{B :: true}
+\end{prooftree*}
+
+\noindent
+We call this the \vocab{weakening rule}. The symbol we use for it is ``$\bangWeak/$,'' which is a bang, followed by a capital ``W'' (the first letter of ``Weakening''). 
+
+The meaning of this rule is straightforward. It tells us that the bang assumption can be ignored, and not used at all in an inference. This is not true for linear (non-banged) assumptions. A linear assumption must be used exactly once in an inference. But bangs are like factories: they can produce as many copies of an assumption as we need, including zero copies.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Example}
+
+Consider this proof tree:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)}
+  
+  \infer2[\traderule/]{b(s)}
+\end{prooftree*}
+
+\noindent
+Here we start with the assumptions that I have potatoes in my basket and I can trade potatoes for squash. Then we use the \traderule/ rule to conclude that I will end up with squash in my basket.
+
+Suppose now that the cucumber vendor has decided that today they will trade squash for cucumbers as many times as I like. Let's add that as a bang assumption:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)}
+  
+  \infer2[\traderule/]{b(s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{!t(s, c)}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Now, what do we do with this? Well, I could use this option, to trade my squash for cucumbers. To do that, we first get a copy of the bang assumption:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)}
+  
+  \infer2[\traderule/]{b(s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{!t(s, c)}
+  \infer1[\bangCopy/]{t(s, c)}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then we use the \traderule/ rule to make the trade:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)}
+  
+  \infer2[\traderule/]{b(s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{!t(s, c)}
+  \infer1[\bangCopy/]{t(s, c)}
+  
+  \infer2[\traderule/]{b(c)}
+\end{prooftree*}
+
+\noindent
+But we are also allowed to not use the bang. So let's rewind the proof back to the point where we just have the bang over to the side:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)}
+  
+  \infer2[\traderule/]{b(s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{!t(s, c)}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+At this point, we can decide to simply not use the bang. And to indicate that we are not using the bang, we use the weakening rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)}
+  
+  \infer2[\traderule/]{b(s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{!t(s, c)}
+  
+  \infer2[\bangWeak/]{b(s)}
+\end{prooftree*}
+
+\noindent
+Now we have derived the conclusion ``$b(s)$,'' but we have made it clear in the tree that we did so without using the bang.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Hypothetical assumptions}
+
+What is the hypothetical judgment that the above proof proves? We figure this out in the same we have for all the other proof trees we've examined: we identify the open assumptions, and the conclusion. Here they are:
+
+
+\begin{diagram}
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{}
+      \infer1[\startrule/]{b(p)}
+      \hypo{}
+      \infer1[\startrule/]{t(p, s)}
+      \infer2[\traderule/]{b(s)}
+      \hypo{}
+      \infer1[\startrule/]{!t(s, c)}
+      \infer2[\bangWeak/]{b(s)}
+    \end{prooftree}
+  };
+
+  \draw (-0.5, -0.75) -- (-0.5, -1) -- (0.75, -1) -- (0.75, -0.75);
+  \draw[spaced-arrows,->] (0.15, -1.75) -- (0.15, -1);
+  \node (c_1_l) [label=below:{conclusion}] at (0.5, -1.65) {};
+
+  \draw (-3.25, 0.85) -- (-3.25, 1.1) -- (-1.45, 1.1) -- (-1.45, 0.85);
+  \draw[spaced-arrows,->] (-2.35, 1.85) -- (-2.35, 1.1);
+  \node (a_1_l) [label=below:{assumption}] at (-2.55, 2.45) {};
+
+  \draw (-1.25, 0.85) -- (-1.25, 1.1) -- (0.75, 1.1) -- (0.75, 0.85);
+  \draw[spaced-arrows,->] (-0.35, 1.85) -- (-0.35, 1.1);
+  \node (a_2_l) [label=below:{assumption}] at (-0.35, 2.45) {};
+  
+  \draw (1.1, 0.25) -- (1.1, 0.5) -- (3.2, 0.5) -- (3.2, 0.25);
+  \draw[spaced-arrows,->] (2, 1.25) -- (2, 0.5);
+  \node (a_3_l) [label={assumption}] at (2.1, 1.05) {};  
+
+\end{diagram}
+
+\noindent
+So, this proof tree proves the following hypothetical judgment:
+
+\begin{equation*}
+  b(p), t(p, s), !t(s, c) \ndturnstile/ b(s)
+\end{equation*}
+
+\noindent
+Pretend for a moment that you don't know the above proof for this hypothetical judgment. Now inspect the hypothetical judgment itself, and think to yourself, ``what would a proof tree of this judgment look like?''
+
+If you think about it, you can see that the first two premises could be used to derive the conclusion. That is, you could use ``$b(p)$'' and ``$t(p, s)$'' with the \traderule/ rule to get ``$b(s)$.'' But then, what about ``$!t(s, c)$.'' Now that you know about weakening, you could make the reasonable guess that this bang must be ignored with weakening, since it seems to have very little to do with the conclusion.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Tidy proofs}
+
+Why use a weakening rule at all? Why not just leave the unused bang assumptions hanging out, over on the side? Well, by definition a proof tree must be a single tree, and all the pieces need to connect. The weakening rule gives us a way to keep the bang assumption connected, but still make it very clear that the proof does not use it.
+
+Of course, if the bang assumption is irrelevant to your proof, you can simply just omit the bang assumption entirely. The weakening rule is here for cases where you need to mention a bang assumption.
+
+When do you need to mention a bang assumption that doesn't get used? There are any number of situations where you might care about this. For example, you might want to prove that an assembly line can put together a certain product, and your proof might show that there is a particular part of the assembly line that never gets used. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Circles and choice}
+
+According to the original formulation of the farmer's market scenario, I will always make a trade whenever I can. But the rules were set up in such a way that there was always only one way I could play that game, and the game would always end. This is because vendors would only trade once, and there is a finite number of possible trades. So, to play the game, I make every trade that is available, until there are no more trades.
+
+Bangs change the rules of the game. With bangs, there is not always a single way to play out the trades. As we have just seen, with the weakening rule, I can choose \emph{not} to use a trade option. So now there is an element of choice in the game that wasn't there before.
+
+Also, bangs introduce the possibility of circles. That is, I can end up in a situation where I can trade $x$ for $y$, then I can trade $y$ for $x$, and then I can repeat that circle again and again. Of course, this can only happen if the options to trade $x$ for $y$ and vice versa are banged. But nevertheless, it's a possibility. So now, I can end up in an infinite loop, where I cannot predict or prove how what I will have in my basket when the market closes. (I might have $x$ in my basket at the end, or I might have $y$ in my basket at the end.)
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Contraction}
+
+There is another rules connected to the bang. 
+
+\begin{itemize}
+
+\item{It is called the \vocab{contraction rule}, and it can be seen as an extension of the dereliction rule. The dereliction rule lets you make one copy to get a further conclusion. The contraction rule is similar, but it lets you make multiple copies to get a further conclusion.}
+
+\end{itemize}
+
+\noindent
+We will not analyze the contraction rule any further here. I am simply noting it so that you are aware of it.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+The weakening rule lets us ignore a bang in a derivation. More exactly, we use it when the bang is used to produce zero copies of a judgment in an inference.
+
+
+\end{document}

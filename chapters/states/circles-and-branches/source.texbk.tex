@@ -1,0 +1,240 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Circles and Branches}
+
+
+Last time, we modeled a scenario where we moved through four states, in sequence: one after the other. But of course, we can move through states in more complicated ways.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Going in circles}
+
+Recall the scenario we modeled last time. Jo is standing by her counter, with three dimes in front of her. She first holds nothing in her hand, then she picks up one nickel, then she picks up another nickel, and then she puts them both down. Here's the diagram:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+    \node[o-point] (jo_1) [label=below:{Jo}] at (6, -0.25) {};
+    \node[o-point] (n_1_1) [label=above:{$n_{1}$}] at (4.75, 1) {};
+    \node[o-point] (n_2_1) [label=above:{$n_{2}$}] at (6, 1.25) {};
+    \node[o-point] (n_3_1) [label=above:{$n_{3}$}] at (7.25, 1) {};
+  
+    \draw[spaced-arrows,->] (jo_1) to node [fill=white] {holds} (n_1_1);
+
+  % State 2
+  \draw[spaced-arrows,->] (4, -1) -- (2, -2);  
+  \draw (-2, -5) -- (2, -5) -- (2, -2) -- (-2, -2) -- (-2, -5);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (0, -5);
+
+    \node[o-point] (jo_2) [label=below:{Jo}] at (0, -4.25) {};
+    \node[o-point] (n_1_2) [label=above:{$n_{1}$}] at (-1.25, -3) {};
+    \node[o-point] (n_2_2) [label=above:{$n_{2}$}] at (0, -2.75) {};
+    \node[o-point] (n_3_2) [label=above:{$n_{3}$}] at (1.25, -3) {};
+  
+    \draw[spaced-arrows,->] (jo_2) to node [fill=white] {holds} (n_1_2);
+    \draw[spaced-arrows,->] (jo_2) to node [fill=white] {holds} (n_3_2);
+
+  % State 3
+  \draw[spaced-arrows,->] (2, -3.5) -- (4, -3.5);
+  \draw (4, -5) -- (8, -5) -- (8, -2) -- (4, -2) -- (4, -5);
+  \coordinate[label=below:{\textbf{S}$_{3}$}] (s_3) at (6, -5);
+
+    \node[o-point] (jo_3) [label=below:{Jo}] at (6, -4.25) {};
+    \node[o-point] (n_1_3) [label=above:{$n_{1}$}] at (4.75, -3) {};
+    \node[o-point] (n_2_3) [label=above:{$n_{2}$}] at (6, -2.75) {};
+    \node[o-point] (n_3_3) [label=above:{$n_{3}$}] at (7.25, -3) {};
+
+\end{diagram}
+
+\noindent
+Suppose we alter the situation. Instead of saying that the scenario terminates with Jo putting the nickels down, suppose we say instead that Jo can put the nickels down and start all over again, at the beginning. And she can repeat this indefinitely.
+
+To diagram that, we drop the last state from above, and we draw an arrow from $S_{2}$ back to the initial state, $S_{0}$. Like this:
+
+\begin{diagram}
+
+  % State 0
+  \draw[spaced-arrows,->] (-1, -2) -- (-1, -1);
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+    \node[o-point] (jo_1) [label=below:{Jo}] at (6, -0.25) {};
+    \node[o-point] (n_1_1) [label=above:{$n_{1}$}] at (4.75, 1) {};
+    \node[o-point] (n_2_1) [label=above:{$n_{2}$}] at (6, 1.25) {};
+    \node[o-point] (n_3_1) [label=above:{$n_{3}$}] at (7.25, 1) {};
+  
+    \draw[spaced-arrows,->] (jo_1) to node [fill=white] {holds} (n_1_1);
+
+  % State 2
+  \draw[spaced-arrows,->] (4, -1) -- (2, -2);  
+  \draw (-2, -5) -- (2, -5) -- (2, -2) -- (-2, -2) -- (-2, -5);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (0, -5);
+
+    \node[o-point] (jo_2) [label=below:{Jo}] at (0, -4.25) {};
+    \node[o-point] (n_1_2) [label=above:{$n_{1}$}] at (-1.25, -3) {};
+    \node[o-point] (n_2_2) [label=above:{$n_{2}$}] at (0, -2.75) {};
+    \node[o-point] (n_3_2) [label=above:{$n_{3}$}] at (1.25, -3) {};
+  
+    \draw[spaced-arrows,->] (jo_2) to node [fill=white] {holds} (n_1_2);
+    \draw[spaced-arrows,->] (jo_2) to node [fill=white] {holds} (n_3_2);
+
+\end{diagram}
+
+\noindent
+This now represents a system that can go in a circle (we call this a \vocab{loop}). If Jo has nothing in her hand, she can pick up one nickel, then she can pick up another, then she can put them down and start all over again.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Branches}
+
+Suppose that we modify Jo's situation again. Suppose we say that, to begin with Jo has no nickels in her hand, but then she can pick up either the first nickel, or the third nickel. That is, Jo has a choice, at which point the scenario can split into two \vocab{branches}. To model this, we draw the initial state:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+
+\end{diagram}
+
+\noindent
+Then we draw the two possibilities, as two states that $S_{0}$ can transition to:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+    \node[o-point] (jo_1) [label=below:{Jo}] at (6, -0.25) {};
+    \node[o-point] (n_1_1) [label=above:{$n_{1}$}] at (4.75, 1) {};
+    \node[o-point] (n_2_1) [label=above:{$n_{2}$}] at (6, 1.25) {};
+    \node[o-point] (n_3_1) [label=above:{$n_{3}$}] at (7.25, 1) {};
+  
+    \draw[spaced-arrows,->] (jo_1) to node [fill=white] {holds} (n_1_1);
+
+  % State 2
+  \draw[spaced-arrows,->] (1, -1) -- (1, -2);
+  \draw (-2, -5) -- (2, -5) -- (2, -2) -- (-2, -2) -- (-2, -5);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (0, -5);
+
+    \node[o-point] (jo_2) [label=below:{Jo}] at (0, -4.25) {};
+    \node[o-point] (n_1_2) [label=above:{$n_{1}$}] at (-1.25, -3) {};
+    \node[o-point] (n_2_2) [label=above:{$n_{2}$}] at (0, -2.75) {};
+    \node[o-point] (n_3_2) [label=above:{$n_{3}$}] at (1.25, -3) {};
+  
+    \draw[spaced-arrows,->] (jo_2) to node [fill=white] {holds} (n_3_2);
+
+\end{diagram}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{More than two branches}
+
+Suppose we want to say that initially Jo has nothing in her hand, but then she can pick up any one of the three nickels. To model that, we simply have three branches coming out of the initial state: 
+
+\begin{diagram}
+
+  % State 0
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+    \node[o-point] (jo_1) [label=below:{Jo}] at (6, -0.25) {};
+    \node[o-point] (n_1_1) [label=above:{$n_{1}$}] at (4.75, 1) {};
+    \node[o-point] (n_2_1) [label=above:{$n_{2}$}] at (6, 1.25) {};
+    \node[o-point] (n_3_1) [label=above:{$n_{3}$}] at (7.25, 1) {};
+  
+    \draw[spaced-arrows,->] (jo_1) to node [fill=white] {holds} (n_1_1);
+
+  % State 2
+  \draw[spaced-arrows,->] (1, -1) -- (1, -2);
+  \draw (-2, -5) -- (2, -5) -- (2, -2) -- (-2, -2) -- (-2, -5);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (0, -5);
+
+    \node[o-point] (jo_2) [label=below:{Jo}] at (0, -4.25) {};
+    \node[o-point] (n_1_2) [label=above:{$n_{1}$}] at (-1.25, -3) {};
+    \node[o-point] (n_2_2) [label=above:{$n_{2}$}] at (0, -2.75) {};
+    \node[o-point] (n_3_2) [label=above:{$n_{3}$}] at (1.25, -3) {};
+  
+    \draw[spaced-arrows,->] (jo_2) to node [fill=white] {holds} (n_3_2);
+
+  % State 3
+  \draw[spaced-arrows,->] (2, -1) -- (4, -2);
+  \draw (4, -5) -- (8, -5) -- (8, -2) -- (4, -2) -- (4, -5);
+  \coordinate[label=below:{\textbf{S}$_{3}$}] (s_3) at (6, -5);
+
+    \node[o-point] (jo_3) [label=below:{Jo}] at (6, -4.25) {};
+    \node[o-point] (n_1_3) [label=above:{$n_{1}$}] at (4.75, -3) {};
+    \node[o-point] (n_2_3) [label=above:{$n_{2}$}] at (6, -2.75) {};
+    \node[o-point] (n_3_3) [label=above:{$n_{3}$}] at (7.25, -3) {};
+
+    \draw[spaced-arrows,->] (jo_3) to node [fill=white] {holds} (n_2_3);
+
+\end{diagram}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+When we model a scenarios that change state, sometimes the sequence of states goes in a loop. To diagram this, we draw the transition arrows so they point back to a previous state in the sequence.
+
+Another possibility is that scenarios have branches: that is, at some state in the sequence, there is more than one possible next state. To diagram this, we draw each of the alternative states, and draw an arrow to each of them.
+
+
+\end{document}

@@ -1,0 +1,181 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Propositions}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Verifying statements of fact}
+
+Statements of fact can be true or false, but not all of them can be verified. Suppose I make this statement:
+
+\begin{center}
+  There is a cell which dies.
+\end{center}
+
+\noindent
+To verify this, I simply need to find a cell that actually dies, and show you. This is a fairly easy task, because most of the cells we encounter die, so there are many possible candidates I can pick, any one of which will prove my point. (Any one that shows the statement to be true is called a \vocab{witness} to the statement.)
+
+But now consider this statement:
+
+\begin{center}
+  Every cell dies.
+\end{center}
+
+\noindent
+Surely this statement is either true, or false. It's got to be one or the other.
+
+However, to verify it, we would need to go through each and every cell that ever has or ever will exist, and show you that it dies. And that of course is practically impossible. There are just too many cells to go through.
+
+That being said, there \emph{might} be some other way to verify the statement that every cell dies, without going through each and every cell. 
+
+For example, I might be able to discover that there is something about every cell's chemical make up which shows that it will necessarily break down and come apart at some point. 
+
+But this is something we would have to \emph{discover}. And until we discover it, we simply cannot verify the claim that every cell dies.
+
+I am no biologist, so I could be wrong about this, but I am under the impression that we cannot at present verify whether every cell dies. There are some cells that appear to live for ever (the so called HeLa cells, for example), but it is not at present clear whether they actually \emph{will} live forever. So, until I am told otherwise, let us assume that ``Every cell dies'' is not verifiable.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Propositions}
+
+We will call any statement of fact that can be verified a \vocab{proposition}. Philosophers and logicians sometimes use the word ``proposition'' in different ways than this, but here, we will use it only for statements of fact that can be verified.
+
+This means that one of the judgments that is available to us is this: we can decide whether an expression is a proposition.
+
+If we want to say that some statement (call it $A$) is a proposition, we will write it like this:
+
+\begin{center}
+  $A :: prop$
+\end{center}
+
+\noindent
+For example, I can take the expression ``There is a cell which dies,'' and form an opinion in my mind that it is a proposition. And I can write that judgment down like this:
+
+\begin{center}
+  There is a cell which dies $:: prop$
+\end{center}
+
+\noindent
+Is this judgment correct? Yes, it is, because we know how to verify the expression ``There is a cell which dies.'' How do we verify it? As we said earlier, we know that in order to verify this, we simply need to find a cell which dies and point to it.
+
+I could also form a judgment that ``Every cell dies'' is a proposition. I would write that judgment down like this:
+
+\begin{center}
+  Every cell dies $:: prop$
+\end{center}
+
+\noindent
+Is this judgment correct? As we said earlier, the answer is no. At present (as far as I know), biologists are not able how to verify the statement ``Every cell dies,'' so my judgment that it is a proposition is incorrect.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Verification}
+
+Suppose that we have a proposition (call it $A$) in front of us. To say that $A$ is a proposition means we know \emph{how} to verify it. Well, suppose that we go ahead and verify it. So now we have the evidence in front of us which verifies $A$. Let us call this evidence $a$. 
+
+We can now look at $a$ and form a judgment about it: namely, we can judge that it \emph{verifies} $A$. To put it down on paper, let us write it like this:
+
+\begin{center}
+  $a :: proof(A)$
+\end{center}
+
+\noindent
+There may be more than one way to verify a proposition. For instance, perhaps there is another way to verify it (call it $b$). Then we could also say:
+
+\begin{center}
+  $b :: proof(A)$
+\end{center}
+
+\noindent
+As an example of all this, consider this judgment:
+
+\begin{center}
+  There is a cell which dies $:: prop$
+\end{center}
+
+\noindent
+To say that ``There is a cell which dies'' is a proposition means we know how to verify it. And indeed we do. As we said, we simply need to find a cell that dies, and point to it.
+
+So, suppose we do this. Suppose that we find a cell, put it under a microscope, and record it dying onto a video (call it ``video.2313''). So we have video evidence of it. 
+
+This counts as a verification of the proposition. So we could say this:
+
+\begin{center}
+  video.2313 $:: proof($There is a cell which dies$)$
+\end{center}
+
+\noindent
+Perhaps we also verify the proposition in another way. For example, suppose that someone performs a study (call it ''study.15376'') which shows that all cells must die. We could then judge that to be a verification of the proposition too:
+
+\begin{center}
+  study.15376 $:: proof($There is a cell which dies$)$
+\end{center}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Truth}
+
+As we said, if we know \emph{how} to verify a statement, then we can correctly judge it to be a proposition. However, if we also \emph{do} verify it, we can then judge that the statement is \emph{true}. 
+
+So we have another form of judgment available to us: we can say that a proposition is true. If we want to say that a proposition (call it $A$) is true, we will say:
+
+\begin{center}
+  $A :: true$
+\end{center}
+
+\noindent
+Keep the conditions of this judgment in mind. There are exactly two conditions that we must meet in order to correctly judge that $A$ is true.
+
+\begin{itemize}
+  \item{$A$ must be a proposition, i.e., this judgment must be correct: $A :: prop$.}
+  \item{We must have a verification of $A$, i.e., we must have a judgment of the form $a :: proof(A)$, where $a$ can be replaced with any verification of $A$.}
+\end{itemize}
+
+\noindent
+We can put this into the form of an inference rule:
+
+\begin{prooftree*}
+  \hypo{A :: prop}
+  \hypo{a :: proof(A)}
+  \infer2[Truth]{A :: true}
+\end{prooftree*}
+
+\noindent
+A consequence of this is that we cannot judge whether, say, nonsense strings of characters are true. For instance, we cannot make a judgment like this:
+
+\begin{center}
+  Find blu thunkst $:: true$
+\end{center}
+
+\noindent
+This is not a valid judgment, because ``Find blu thunkst'' cannot be judged to be a proposition, nor does it even make sense to ask about ``verifying'' it. How would you ``verify'' a nonsense string of characters?
+
+Similarly, we cannot judge whether, say, a question or a command is true. For instance, we cannot make this judgment:
+
+\begin{center}
+  Close the window! $:: true$
+\end{center}
+
+\noindent
+The command ``Close the window!'' is not a proposition, and again, it doesn't even make sense to ask how you verify it.
+
+When it comes to judging whether an expression is true or not, we are only interested in propositions which we have verifications for, i.e., statements that we can actually verify, and that we actually have verified. So we will only say $A :: true$ if $A$ is a proposition and we have a verification $a$ of it.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+There are very many judgments we can make about expressions. For our purposes here, we are interested particularly in propositions, which we are defining as statements of fact that can be  verified. So, by our definition, the judgment $A :: prop$ is correct only if $A$ is verifiable. 
+
+Further, we are interested in judgements which state whether a proposition is true or not. Hence, the judgment $A :: true$ is correct only if $A$ is indeed verified.
+
+\end{document}

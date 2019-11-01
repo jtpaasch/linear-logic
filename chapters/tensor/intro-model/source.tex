@@ -1,0 +1,205 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Tensor intro models}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A simple proof}
+
+Here is a simple proof that involves tensor introduction:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(p, s) :: true}
+  \infer2{b(p) \tensor/ t(p, s) :: true}
+\end{prooftree*}
+
+\noindent
+For this proof tree, we start with two assumptions: ``$b(p) :: true$'' and ``$t(p, s) :: true$.'' Then we use the \tensorIntro/ rule to introduce the tensor of the two: ``$b(p) \tensor/ t(p, s) :: true$.''
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The initial state}
+
+Let's model the above proof tree. As usual, the first step is to model all of the assumptions in an initial state. So let's do that:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 1) {};
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 1);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (s);
+
+\end{diagram}
+
+\noindent
+Here we can see both assumptions in $S_{0}$. In this diagram, we can see that potatoes are in my basket, and we can see that I can trade potatoes for squash.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Using up the premises}
+
+Next, we want to add the tensor, as we do in the proof tree. But remember that we must remain linear, and whenever we introduce a tensor, we use up the two propositions that go into the tensor. 
+
+So before we add the tensor to our model, we should remove the assumptions that we use to build it. First then, let's remove the assumption ``$t(p, s) :: true$.'' That leaves this:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 1) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 1);
+
+\end{diagram}
+
+\noindent
+Now let's remove the other assumption, ``$b(p) :: true$.'' That leaves us with an initial state that's empty:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+\end{diagram}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Add the tensor}
+
+Finally, we can add the tensor. The tensor ``$b(p) \tensor/ t(p, s) :: true$'' says: both ``$b(p)$'' and ``$t(p, s)$'' are both true simultaneously. So, to model this, we simply draw both of them into the same state. Let's put the first one in:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 1) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 1);
+
+\end{diagram}
+
+\noindent
+Now let's add the second one in:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 1) {};
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 1);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (s);
+
+\end{diagram}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Evaluation}
+
+At this point, we have modeled the whole proof tree. We began with the two assumptions, and then to introduce a tensor of the two, we removed the two, and then we drew them both back in to represent the tensor.
+
+This process shows us that the inference from the assumptions ``$b(p) :: true$'' and ``$t(p, s) :: true$'' to the conclusion ``$b(p) \tensor/ t(p, s) :: true$'' is a good inference. We can see that we ended up with a state that is exactly the same as the one we started with.
+
+I should note that the linear criterion is important here. It is important that we ``used up'' the two parts of the tensor, \emph{before} we introduced the tensor. To see why this matters, suppose that we didn't remove the two parts. That is, suppose we started with the assumptions in the initial state, like this:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 1) {};
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 1);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (s);
+
+\end{diagram}
+
+\noindent
+And then we didn't remove anything. Instead, we simply added the tensor, on top of what we already have. How do we model the tensor? Well, we draw both parts of the tensor in. So, we need to draw in ``$b(p) :: true$'' and ``$t(p, s) :: true$.'' 
+
+Let's first add ``$b(p) :: true$'' to the picture. There already is one, so we need to add a second one:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 1) {};
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, 0) {};
+
+    \node[o-point] (p') [label=below:{$p$}] at (0.75, 1) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 1);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (s);
+
+    \coordinate[label=above:{\fbox{$b$}}] (b') at (0.75, 1);
+
+\end{diagram}
+
+\noindent
+Now we can add in ``$t(p, s) :: true$.'' That's already represented in the picture, so we need to add another copy:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 1) {};
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, 0) {};
+
+    \node[o-point] (p') [label=below:{$p$}] at (0.75, 1) {};
+    \node[o-point] (s') [label=below:{$s$}] at (-0.5, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 1);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (s);
+
+    \coordinate[label=above:{\fbox{$b$}}] (b') at (0.75, 1);
+    \draw[spaced-arrows,->] (p') to node [fill=white] {$t$} (s');
+
+\end{diagram}
+
+\noindent
+Now we have two copies of everything. In this model, we can see ``$b(p)$'' and ``$t(p, s)$,'' when they represent assumptions, and we can see each of them a second time, when they represent the tensor. 
+
+This is obviously wrong. In the farmer's market scenario, I never have two baskets, and I can never repeat a trade. So this does not represent the situation correctly.
+
+But of course, we do end up with the right number of things when we remove the assumptions from the model, before we connect them together again in the tensor. This is why we have to be careful to point out that, when we introduce a tensor, we use up the pieces that we use to build the tensor.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+To model the introduction of a tensor, we first diagram the two pieces that make up the tensor. Then we remove those pieces, and draw them again, to represent their presence in the tensor.
+
+
+\end{document}

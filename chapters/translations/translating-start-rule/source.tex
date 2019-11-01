@@ -1,0 +1,471 @@
+\documentclass[../../../main.tex]{subfiles}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Translating the \startrule/ rule}
+
+In the last chapter, we learned how to translate categorical and hypothetical judgments from minimal logic into linear logic. In this and the next chapters, we'll look at how to translate entire proofs from minimal logic into linear logic.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Equivalent proofs}
+
+In the last chapter, we said that hypothetical (or categorical) judgments from minimal logic can be translated into equivalent hypothetical (or categorical) judgments in linear logic, according to this scheme:
+
+\begin{equation*}
+  \nd{A}_{1}, \ldots, \nd{A}_{n} \ndturnstile/ \nd{B}
+  \hskip 1cm \rightsquigarrow \hskip 1cm
+  \bang/\nd{A}_{1}^{*}, \ldots, \bang/\nd{A}_{n}^{*} \ndturnstile/ \nd{B}^{*}
+\end{equation*}
+
+\noindent
+Likewise, we can say that a (minimal logic) \emph{proof} of the judgment on the left is equivalent to a (linear logic) \emph{proof} of the judgment on the right. 
+
+Why should we think that a minimal logic proof of the left judgment is equivalent to a proof of the linear judgment on the right? It is because they both prove the same thing. The one proves a hypothetical judgment, which is equivalent to the hypothetical judgment that the other one proves.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The strategy}
+
+So, all we need to do to get an equivalent proof in linear logic is establish a way to construct a proof of the equivalent hypothetical (or categorical) judgment. We'll proceed systematically. 
+
+What we'll do is imagine an arbitrary proof in minimal logic. We don't care about the details of this proof tree, we only need to imagine that we have \emph{some} proof tree from minimal logic.
+
+Then we want to think about the last step in that proof tree. And we ask: what are all the possible inference rules that can be applied in the last step? Here we want to be very systematic, so that we go through \emph{every} possibility.
+
+Fortunately, this isn't hard, because we are working with very few inference rules. And that means we can actually go through all the cases. So, one possibility is that the last step of the tree uses the \startrule/ rule. Another possibility is that the last step uses the \implIntro/ rule. And a third possibility is that it uses the \implElim/ rule. But that's it. That's the entire set of possibilities.
+
+Next, for each of these cases, we will write down how to translate that last step into an equivalent proof step in a linear logic proof tree. So, for example, if the last step in a minimal logic tree is an instance of the \startrule/ rule, we'll write down how to translate that into an equivalent use of the \startrule/ rule in a linear logic proof tree. If the last step is an instance of the \implIntro/ rule, we'll write down how to translate that step into an equivalent use of the \lolliIntro/ rule in a linear logic proof tree. And if it's the \implElim/ rule, we'll write down how to translate that into an equivalent use of the \lolliElim/ rule.
+
+When we finish that, we'll have shown how to convert the last step in a minimal logic proof tree into an equivalent last step in a linear logic proof tree. It's worth emphasizing again that since we will systematically look at how to do this with every inference rule, we will show how to do this translation for \emph{any} possible last step in a minimal logic proof tree. 
+
+Once we've shown how to transform the last step of a minimal logic proof tree, we can move on to translate an entire proof tree from minimal logic. To do that, we start with the last step of the minimal logic tree, we do the translation, then we move up one step, translate that part, and so on. We simply repeat the process, working upwards one step at a time, until we go through the entire tree.
+
+In this chapter, we'll look at how to translate proofs that use the \startrule/ rule as their final step. In the next chapter, we'll discuss how to translate proofs that end with an \implIntro/ rule, and in the chapter after that, we'l discuss how to translate proofs that end with an \implElim/ rule.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The \startrule/ rule}
+
+Suppose we have a minimal logic proof tree that consists of a single use of the \startrule/ rule. If we let ``$\nd{A}$'' be a placeholder that can stand for any proposition, it will look like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A} :: true}
+\end{prooftree*}
+
+\noindent
+This is a very simple proof tree. It begins and ends with one use of the \startrule/ rule. What is the hypothetical judgment that it proves? It proves this:
+
+\begin{equation*}
+  \nd{A} :: true \ndturnstile/ \nd{A} :: true
+\end{equation*}
+
+\noindent
+The assumption of the proof tree is ``$\nd{A} :: true$,'' so that goes on the left side of the turnstile, but the conclusion of the proof tree is also ``$\nd{A} :: true$,'' so that goes on the right side of the turnstile.
+
+Can we construct an equivalent proof in linear logic? Yes, to translate the above hypothetical judgment, we need to translate it like this:
+
+\begin{equation*}
+  \nd{A} :: true \ndturnstile/ \nd{A} :: true 
+  \hskip 1cm \rightsquigarrow \hskip 1cm
+  \bang/\nd{A}^{*} :: true \ndturnstile/ \nd{A}^{*} :: true
+\end{equation*}
+
+\noindent
+So, in linear logic we need to generate a proof of this:
+
+\begin{equation*}
+  \bang/\nd{A}^{*} :: true \ndturnstile/ \nd{A}^{*} :: true
+\end{equation*}
+
+\noindent
+To do that, we start by assuming the bang:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{*} :: true}
+\end{prooftree*}
+
+\noindent
+This says: first assume a banged version of ``$\nd{A}^{*}$'' (i.e., assume a banged version of whatever it is that ``$\nd{A}$'' translates into in linear logic). 
+
+Next, we can use the \bangCopy/ rule to extract an un-banged version of ``$\nd{A}^{*}$'' (i.e., whatever it is that ``$\nd{A}$'' translates into in linear logic):
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{*} :: true}
+  \infer1[\bangCopy/]{\nd{A}^{*} :: true}
+\end{prooftree*}
+
+\noindent
+Now we have proven the hypothetical judgment we were after:
+
+\begin{equation*}
+  \bang/\nd{A}^{*} :: true \ndturnstile/ \nd{A}^{*} :: true
+\end{equation*}
+
+\noindent
+The assumption of the tree is ``$\bang/\nd{A}^{*} :: true$,'' which goes on the left side of the turnstile, and the conclusion of the tree is ``$\nd{A}^{*}$,'' which goes on the right side of the turnstile.
+
+If you like, you can use the \bangDer/ rule instead of \bangCopy/. The proof tree for that looks like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{*} :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{* a} :: true}
+  
+  \infer2[\bangDer/$^{a}$]{\nd{A}^{*} :: true}
+\end{prooftree*}
+
+\noindent
+But this proves the very same hypothetical judgment:
+
+\begin{equation*}
+  \bang/\nd{A}^{*} :: true \ndturnstile/ \nd{A}^{*} :: true
+\end{equation*}
+
+\noindent
+We can summarize how to translate a proof of ``$\nd{A} :: true \ndturnstile/ \nd{A} :: true$'' from minimal logic into an equivalent proof in linear logic, like this:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A} :: true}
+\end{prooftree}
+\hskip 1cm \rightsquigarrow \hskip 1cm
+\begin{prooftree}
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{*} :: true}
+  \infer1[\bangCopy/]{\nd{A}^{*} :: true}
+\end{prooftree}
+$$
+
+\noindent
+Or this (if you prefer \bangDer/):
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A} :: true}
+\end{prooftree}
+\hskip 1cm \rightsquigarrow \hskip 1cm
+\begin{prooftree}
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{*} :: true}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{* a} :: true}
+  \infer2[\bangDer/$^{a}$]{\nd{A}^{*} :: true}
+\end{prooftree}
+$$
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The Gamma abbreviation}
+
+To refer to a list of zero or more assumptions (we don't care what they are, we just care that they're there), I will write ``$\context/$'' (for linear logic) or ``$\nd{\context/}$'' (for minimal logic). This is just the capital Greek letter ``Gamma,'' and we pronounce it just like that: ``Gamma.'' 
+
+Using ``$\context/$'' is nice, because we don't have to write out a bunch of assumptions we don't necessarily care about. So instead of writing this:
+
+\begin{equation*}
+  \nd{A}_{1} :: true, \ldots, \nd{A}_{n} :: true
+\end{equation*}
+
+\noindent
+I can just write this:
+
+\begin{equation*}
+  \nd{\context/}
+\end{equation*}
+
+\noindent
+We can put an asterisk on the Gamma, to indicate that it should be translated. Or rather, the asterisk indicates that each assumption in Gamma should be translated. So I can write this:
+
+\begin{equation*}
+  \nd{\context/}^{*}
+\end{equation*}
+
+\noindent
+As a shorthand for this:
+
+\begin{equation*}
+  \nd{A}_{1}^{*} :: true, \ldots, \nd{A}_{n}^{*} :: true
+\end{equation*}
+
+\noindent
+Similarly, we can put a bang in front of the Gamma, to indicate that each assumption in Gamma should be banged. So I can write this:
+
+\begin{equation*}
+  \bang/\nd{\context/}
+\end{equation*}
+
+\noindent
+As a shorthand for this:
+
+\begin{equation*}
+  \bang/\nd{A}_{1} :: true, \ldots, \bang/\nd{A}_{n} :: true
+\end{equation*}
+
+\noindent
+We often refer to the Gamma as the \vocab{context}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The \startrule/ rule with context}
+
+In the above example, there were no other assumptions besides the one introduced with the \startrule/ rule. To be fully general though, we need to consider cases where there are other assumptions (a context) before we use the \startrule/ rule.
+
+Remember that in minimal logic, there can be other assumptions floating around, and you don't have to use them. So we might have a hypothetical judgment in minimal logic that looks like this:
+
+\begin{equation*}
+  \nd{\context/}, \nd{A} :: true \ndturnstile/ \nd{A} :: true
+\end{equation*}
+
+\noindent
+This says: ``$\nd{A}$'' is true, given the assumption ``$\nd{A}$,'' and some other assumptions ``$\nd{\context/}$'' (which we don't need or care to list out explicitly right now).
+
+What does the proof tree for this judgment look like? First, this proof tree will start with the assumptions ``$\nd{\context/}$,'' which we can write simply like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{}
+\end{prooftree*}
+
+\noindent
+Then, there may be further steps that derive further conclusions from those assumptions. We can represent that like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+\end{prooftree*}
+
+\noindent
+We can read this like so: ``a proof $\Proof/$ from assumptions $\context/$.''
+
+Then, we use the \startrule/ to introduce ``$\nd{A}$.'' Like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}}
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+In minimal logic, you don't have to use all of your assumptions, so there is nothing preventing this kind of a proof tree. The \emph{conclusion} that we draw from this is still the same. It is ``$\nd{A}$.'' But the assumptions don't include only ``$\nd{A}$.'' They also include the other assumptions --- namely, ``$\nd{\context/}$'' --- which simply aren't used in this proof.
+
+We can translate the hypothetical judgment into an equivalent hypothetical judgment in linear logic, in the usual way. We translate each hypothesis, and we add a bang to the front of each assumption:
+
+\begin{equation*}
+  \nd{\context/}, \nd{A} :: true \ndturnstile/ \nd{A} :: true
+  \hskip 1cm \rightsquigarrow \hskip 1cm
+  \bang/\nd{\context/}^{*}, \bang/\nd{A}^{*} :: true \ndturnstile/ \nd{A}^{*} :: true
+\end{equation*}
+
+\noindent
+Or more simply (omitting the ``$:: true$'' annotations):
+
+\begin{equation*}
+  \nd{\context/}, \nd{A} \ndturnstile/ \nd{A}
+  \hskip 1cm \rightsquigarrow \hskip 1cm
+  \bang/\nd{\context/}^{*}, \bang/\nd{A}^{*} \ndturnstile/ \nd{A}^{*}
+\end{equation*}
+
+\noindent
+So in linear logic, to prove an equivalent hypothetical judgment, we need to prove this:
+
+\begin{equation*}
+  \bang/\nd{\context/}^{*}, \bang/\nd{A}^{*} \ndturnstile/ \nd{A}^{*}
+\end{equation*}
+
+\noindent
+To do that, we again have a proof $\Proof/$ from the asssumptions $\context/$:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+\end{prooftree*}
+
+\noindent
+Then we introduce ``$\bang/\nd{A}^{*}$'' with the \startrule/ rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{*}}
+
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then we derive ``$\nd{A}^{*}$'' on the right side of the tree:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{*}}
+  \infer1[\bangCopy/]{\nd{A}^{*}}
+
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then we use the weakening rule (\bangWeak/) to ignore the context:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{*}}
+  \infer1[\bangCopy/]{\nd{A}^{*}}
+
+  \infer2[\bangWeak/]{\nd{A}^{*}}
+\end{prooftree*}
+
+\noindent
+If you like, we could use \bangDer/ instead of \bangCopy/. Here is what that proof tree would look like:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{*}}
+  
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{* a}}
+  \infer2[\bangDer/$^{a}$]{\nd{A}^{*}}
+
+  \infer2[\bangWeak/]{\nd{A}^{*}}
+\end{prooftree*}
+
+\noindent
+Whether we use \bangCopy/ or \bangDer/, we end up proving the same hypothetical judgment:
+
+\begin{equation*}
+  \bang/\nd{\context/}^{*}, \bang/\nd{A}^{*} \ndturnstile/ \nd{A}^{*}
+\end{equation*}
+
+\noindent
+The assumptions are ``$\bang/\nd{\context/}^{*}$'' and ``$\bang/\nd{A}^{*}$,'' which go on the left side of the turnstile, and the conclusion is ``$\nd{A}^{*}$,'' which goes on the right side of the turnstile.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Fully general translation}
+
+The proof translation we just worked out is more general than the translation we worked out first. In the first case, we didn't have any context. We simply translated this:
+
+\begin{equation*}
+  \nd{A} \ndturnstile/ \nd{A}
+\end{equation*}
+
+\noindent
+Then, we added a context into the mix, at which point we still translated the same thing (we translated the proof that ``$\nd{A}$'' follows from ``$\nd{A}$''), but our proof tree included a context:
+
+\begin{equation*}
+  \nd{\context/}, \nd{A} \ndturnstile/ \nd{A}
+\end{equation*}
+
+\noindent
+The thing I want to point out is that this more general version can handle the simpler case. We simply let ``$\nd{\context/}$'' be empty. That is, we let ``$\nd{\context/}$ = $\emptyassumptions/$'':
+
+\begin{equation*}
+  \emptyassumptions/, \nd{A} \ndturnstile/ \nd{A}
+\end{equation*} 
+
+\noindent
+And that is the same as this:
+
+\begin{equation*}
+  \nd{A} \ndturnstile/ \nd{A}
+\end{equation*} 
+
+\noindent
+So the more general version (when we include a context) actually allows us to handle the simpler case (when there is no context) too.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The general translation}
+
+Here is the fully general translation of a minimal logic proof tree where the last step uses the \startrule/ rule:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}}
+  \infer[no rule]2{}
+\end{prooftree}
+\hskip 1cm \rightsquigarrow \hskip 1cm
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{*}}
+  \infer1[\bangCopy/]{\nd{A}^{*}}
+  \infer2[\bangWeak/]{\nd{A}^{*}}
+\end{prooftree}
+$$
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+In this chapter, we discussed how to translate a proof of 
+
+\begin{equation*}
+\nd{\context/}, \nd{A} \ndturnstile/ \nd{A}
+\end{equation*}
+
+\noindent
+from minimal logic into a proof of the equivalent formulation in linear logic: 
+
+\begin{equation*}
+\bang/\nd{\context/}^{*}, \bang/\nd{A}^{*} \ndturnstile/ \nd{A}^{*}
+\end{equation*}
+
+\noindent
+In minimal logic, to build the last proof step, we simply use the \startrule/ rule to introduce the relevant assumption, and then we're done. In linear logic, we use the \startrule/ rule to introduce the assumption too, but because linear logic makes us control the usage of our assumptions so much more explicitly, we need to do some extra steps: we need to use \bangCopy/ (or \bangDer/) along with \bangWeak/ to produce the desired conclusion.
+
+
+\end{document}

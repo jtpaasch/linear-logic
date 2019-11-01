@@ -1,0 +1,202 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{The multiplicative fragment}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Joining distinct branches}
+
+At this point, all of the linear logic connectives we have discussed have one thing in common: they are built by combining distinct, non-overlapping branches in a proof tree. Think about tensor introduction:
+
+\begin{prooftree*}
+  \hypo{\Proof/_{1}}
+  \ellipsis{}{}
+  \infer[no rule]1{A}
+  \hypo{\Proof/_{2}}
+  \ellipsis{}{}
+  \infer[no rule]1{B}
+  \infer2[\tensorIntro/]{A \tensor/ B}
+\end{prooftree*}
+
+\noindent
+There is a left branch and a right branch on this tree, and they are distinct. They do not overlap each other in any way. The tensor introduction rule joins these two branches into a single conclusion: ``$A \tensor/ B$.''
+
+Likewise, think about lolli elimination: 
+
+\begin{prooftree*}
+  \hypo{\Proof/_{1}}
+  \ellipsis{}{}
+  \infer[no rule]1{A \lolli/ B}
+  \hypo{\Proof/_{2}}
+  \ellipsis{}{}
+  \infer[no rule]1{A}
+  \infer2[\lolliElim/]{B}
+\end{prooftree*}
+
+\noindent
+Again, you have a branch on the left side, and a distinct branch on the right side. The lolli elimination rule joins these two branches into one conculusion: ``$B$.''
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The multiplicative fragment}
+
+These connectives are called the \vocab{multiplicative} connectives. The key distinguishing feature of the multiplicative connectives is that the branches which grow upwards from them are distinct, non-overlapping branches.
+
+The logic we get when we include just these connectives is likewise called the \vocab{multiplicative fragment} of linear logic. And, to be even more precise, it is called the multiplicative fragment of \vocab{intuitionistic} linear logic.
+
+Let us list out the full set of natural deduction rules for the multiplicative fragment of (intuitionistic) linear logic. The rules for unit are these:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \infer1[\unitIntro/]{\unit/ :: true}
+\end{prooftree}
+\hskip 3cm
+\begin{prooftree}
+  \hypo{}
+  \ellipsis{}{\unit/ :: true}
+  \hypo{}
+  \ellipsis{}{A :: true}
+  \infer2[\unitElim/]{A :: true}
+\end{prooftree}
+$$
+
+\noindent
+The rules for tensor are these:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A}
+  \hypo{}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{B}
+  \infer2[\tensorIntro/]{A \tensor/ B}
+\end{prooftree}
+\hskip 3cm
+\begin{prooftree}
+  \hypo{A \tensor/ B}
+  \hypo{}
+  \infer1[\startrule/]{A^{a}}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{B^{b}}
+  \ellipsis{}{}
+  \infer2{C}
+  \infer2[\tensorElim/$^{a,b}$]{C}
+\end{prooftree}
+$$
+
+\noindent
+The rules for lolli (linear implication) are these:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \infer1[start]{A^{x}}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{B}
+  \infer1[\lolliIntro/$^{x}$]{A \lolli/ B}
+\end{prooftree}
+\hskip 3cm
+\begin{prooftree}
+  \hypo{}
+  \ellipsis{}{}
+  \infer[no rule]1{A \lolli/ B}
+  \hypo{}
+  \ellipsis{}{}
+  \infer[no rule]1{A}
+  \infer2[\lolliElim/]{B}
+\end{prooftree}
+$$
+
+\noindent
+Finally, the rules for the bang are these:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \ellipsis{}{A}
+  \infer1[\bangIntro/]{!A}
+\end{prooftree}
+\hskip 2cm
+\begin{prooftree}
+  \hypo{}
+  \ellipsis{}{!A}  
+  \hypo{}
+  \infer1[\startrule/]{A^{x}}
+  \ellipsis{}{$B$}
+  \infer2[\bangDer/$^{x}$]{B}
+\end{prooftree}
+\hskip 2cm
+\begin{prooftree}
+  \hypo{}
+  \infer1[\startrule/]{!A}
+  \infer1[\bangCopy/]{A}
+\end{prooftree}
+$$
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \ellipsis{}{!A}
+  \hypo{}
+  \ellipsis{}{B}
+  \infer2[\bangWeak/]{B}
+\end{prooftree}
+\hskip 3cm
+\begin{prooftree}
+  \hypo{}
+  \ellipsis{}{\bang/A_{1}}
+  \hypo{}
+  \infer[no rule]1{\ldots}
+  \hypo{}
+  \ellipsis{}{\bang/A_{n}}
+  \hypo{}
+  \infer1[\startrule/]{\bang/A_{1}^{x_{1}}}
+  \hypo{\ldots}
+  \infer[no rule]1{}
+  \hypo{}
+  \infer1[\startrule/]{\bang/A_{n}^{x_{n}}}
+  \infer[no rule]3{}
+  \ellipsis{}{B}
+  \infer4[\bangProm/$^{x_{1}, \ldots, x_{n}}$]{\bang/B}
+\end{prooftree}
+$$
+
+\noindent
+There is also a contraction rule for bangs, which we didn't cover.
+
+All together, these rules comprise the natural deduction rules for multiplicative (intuitionistic) linear logic.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The additive fragment}
+
+The multiplicative fragment of linear logic handles only those connectives that join distinct, non-overlapping branches. It is also possible to consider connectives that can happen under a shared branch. 
+
+For example, suppose that from some assumptions $\context/$ you can derive ``$A$,'' or, if you use the assumptions in a slightly different way, you can derive ``$B$'' instead. Well, then we might want to say that, from the same branch, we can derive ``$A$'' or ``$B$'' (but not both). 
+
+There is a connective for this, which we write as an ampersand. So we could say that the conclusion is this: ``$A \& B$.'' Read this as ``$A$ with $B$.'' In the literature, there are a variety of names for this particular connective. Some call it \vocab{alternative conjunction}, or \vocab{internal choice}.
+
+Connectives like this are called the \vocab{additive} connectives. They are separate from the multiplicative connectives, because while the multiplicative connectives join propositions from separate branches, the additive connectives join propositions from the same branch. 
+
+If you add the additive connectives to the multiplicative fragment of (intuitionistic) linear logic, you end up with what is called the \vocab{additive fragment} of (intuitionistic) linear logic. We will not cover the additive fragment here.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+In this chapter, we pointed out that the linear connectives we have covered so far are all multiplicative. Thus, we have learned the multiplicative fragment of (intuitionistic) linear logic. There is another fragment of linear logic, which adds additive connectives.
+
+
+\end{document}

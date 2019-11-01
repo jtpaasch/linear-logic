@@ -1,0 +1,271 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Tensor elimination}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Using a tensor}
+
+Suppose you have a tensor of the form ``$A \tensor/ B$.'' What can you do with it? Well, suppose you know independently that if you assume ``$A$'' and ``$B$,'' you can infer some further proposition ``$C$.'' Since you have an ``$A$'' and a ``$B$'' in the tensor, this means that you can go ahead and infer ``$C$.''
+
+Let us work through an example. I will omit the ``$:: true$'' annotations for brevity, but remember: it is always implied. 
+
+First, let us derive a tensor. Suppose that I have squash in my basket, and suppose that I can trade squash for potatoes:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Now use the \tensorIntro/ rule to combine them into a tensor:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \infer2[\startrule/]{b(s) \tensor/ t(s, p)}
+\end{prooftree*}
+
+\noindent
+Now we have derived the tensor ``$b(s) \tensor/ t(s, p)$,'' which says that having squash in my basket and being able to trade squash for potatoes are both true, simultaneously.
+
+Next, let us show independently that if we assume ``$b(s)$'' and ``$t(s, p)$,'' then we can derive ``$b(p)$.'' That is, let us show that if we assume that I have squash in my basket and I can trade squash for potatoes, then I can get potatoes in my basket.
+
+First, then,  let us assume ``$b(s)$'' and ``$t(s, p)$''. We can assume these over on the side, to the right of what we already have in the proof tree:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \infer2[\tensorIntro/]{b(s) \tensor/ t(s, p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \infer[no rule]2{}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Let's also mark these with superscripted labels ``$a$'' and ``$b$,'' to show that we are assuming these only as hypothetical possibilities (we will discharge them in a moment):
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \infer2[\tensorIntro/]{b(s) \tensor/ t(s, p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(s)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)^{b}}
+  \infer[no rule]2{}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Now we can use the trade rule, to derive ``$b(p)$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \infer2[\tensorIntro/]{b(s) \tensor/ t(s, p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(s)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)^{b}}
+  \infer2[\traderule/]{b(p)}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Here, over on the right side of the tree, we have shown that \emph{if} we assume ``$b(s)$'' and ``$t(s, p)$,'' \emph{then} we can conclude that ``$b(p)$.''
+
+But of course, we \emph{do} know that ``$b(s)$'' and ``$t(s, p)$'' are true, given the active assumptions of this proof tree. Indeed, we have the tensor on the left which says precisely that both are true simultaneously. So, we can take the two pieces of the tensor on the left, and plug them in, in place of the assumptions on the right, like this:
+
+\begin{diagram}
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{}
+      \infer1[\startrule/]{b(s)}
+      \hypo{}
+      \infer1[\startrule/]{t(s, p)}
+      \infer2[\tensorIntro/]{\fbox{$b(s)$} \tensor/ \fbox{$t(s, p)$}}
+      \hypo{}
+      \infer1[\startrule/]{\fbox{$b(s)^{a}$}}
+      \hypo{}
+      \infer1[\startrule/]{\fbox{$t(s, p)^{b}$}}
+      \infer2[\traderule/]{b(p)}
+      \infer[no rule]2{}
+    \end{prooftree}
+  };
+
+  \draw[spaced-arrows,->] 
+      (-3.6, -0.7) -- (-3.6, -1.75) -- (-0.35, -1.75) -- (-0.35, 1.5) -- (0.4, 1.5) -- (0.4, 0.75);
+  \draw[spaced-arrows,->] 
+      (-2.2, -0.7) -- (-2.2, -1.5) -- (-0.55, -1.5) -- (-0.55, 1.85) -- (2.75, 1.85) -- (2.75, 0.75);
+
+\end{diagram}
+
+\noindent
+That is, given the tensor \emph{and} the path from ``$b(s)$'' and ``$t(s, p)$'' to ``$b(p)$,'' we can infer that ``$b(p)$'' must be true. Let's draw an inference line under the whole thing, and write ``$b(p)$'' underneath it:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \infer2[\tensorIntro/]{b(s) \tensor/ t(s, p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(s)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)^{b}}
+  \infer2[\traderule/]{b(p)}
+  
+  \infer2{b(p)}
+\end{prooftree*}
+
+\noindent
+We need a name for the move we just made, and of course this is what we call the tensor elimination rule. We'll write it like this: \tensorElim/ (that's a tensor symbol followed by a capital ``E'', the first letter of the word ``Elimination''). Let's put that symbol next to the bottom inference line, to show that we used it:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \infer2[\tensorIntro/]{b(s) \tensor/ t(s, p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(s)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)^{b}}
+  \infer2[\traderule/]{b(p)}
+  
+  \infer2[\tensorElim/]{b(p)}
+\end{prooftree*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The elimination rule}
+
+Now that we have walked through an example of the tensor elimination rule, let us write out the rule in full, as a template. Here is how we will write it:
+
+\begin{prooftree*}
+  \hypo{A \tensor/ B :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{A :: true^{a}}
+  \ellipsis{}{}
+  
+  \hypo{}
+  \infer1[\startrule/]{B :: true^{b}}
+  \ellipsis{}{}
+
+  \infer2{~~~~~~~~C :: true~~~~~~~~~~}
+
+  \infer2[\tensorElim/$^{a,b}$]{C :: true}
+\end{prooftree*}
+
+\noindent
+This says: if we know ``$A \tensor/ B :: true$'' (where ``$A$'' and ``$B$'' are placeholders for any proposition), and we can show independently that the \emph{pieces} of ``$A \tensor/ B$'' together lead to ``$C :: true$,'' then we can infer that ``$C :: true$.'' 
+
+So tensor elimination requires two things: a tensor ``$A \tensor/ B$,'' and a proof that the pieces of ``$A \tensor/ B$'' lead to ``$C$.'' As already noted, we call this rule the \vocab{tensor elimination rule}, and as a shorthand, we write it as \tensorElim/.
+
+It is called an ``elimination'' rule, because it tells us how to remove a tensor from a proof tree. Notice in the rule that the tensor gets used up, so to speak. It no longer appears below the inference line. This is also true of the other premises. They get used up too. After we apply this elimination rule, the only thing left is ``$C :: true$.''
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Hypothetical judgments}
+
+Consider this proof again:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \infer2[\tensorIntro/]{b(s) \tensor/ t(s, p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(s)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)^{b}}
+  \infer2[\traderule/]{b(p)}
+  
+  \infer2[\tensorElim/$^{a, b}$]{b(p)}
+\end{prooftree*}
+
+\noindent
+What hypothetical judgment does this prove? As usual, we can figure that out by identifying the active assumptions and the conclusion. Here they are:
+
+\begin{diagram}
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{}
+      \infer1[\startrule/]{b(s)}
+      \hypo{}
+      \infer1[\startrule/]{t(s, p)}
+      \infer2[\tensorIntro/]{b(s) \tensor/ t(s, p)}
+      \hypo{}
+      \infer1[\startrule/]{b(s)^{a}}
+      \hypo{}
+      \infer1[\startrule/]{t(s, p)^{b}}
+      \infer2[\traderule/]{b(p)}
+      \infer2[\tensorElim/$^{a, b}$]{b(p)}
+    \end{prooftree}
+  };
+
+  \draw (-1.5, -0.75) -- (-1.5, -1) -- (-0.25, -1) -- (-0.25, -0.75);
+  \draw[spaced-arrows,->] (-0.9, -1.75) -- (-0.9, -1);
+  \node (c_1_l) [label=below:{conclusion}] at (-0.9, -1.65) {};
+
+  \draw (-4.35, 0.85) -- (-4.35, 1.1) -- (-2.65, 1.1) -- (-2.65, 0.85);
+  \draw[spaced-arrows,->] (-4, 1.85) -- (-3.5, 1.1);
+  \node (a_1_l) [label=below:{assumption}] at (-4, 2.45) {};
+
+  \draw (-2.35, 0.85) -- (-2.35, 1.1) -- (-0.35, 1.1) -- (-0.35, 0.85);
+  \draw[spaced-arrows,->] (-0.75, 1.85) -- (-1.25, 1.1);
+  \node (a_2_l) [label=below:{assumption}] at (-0.75, 2.45) {};
+
+\end{diagram}
+
+\noindent
+Note that the assumptions on the right side of the tree are discharged, so they are not active assumptions. The hypothetical judgment that this proves is thus the following:
+
+\begin{equation*}
+  b(s) :: true, t(s, p) :: true \ndturnstile/ b(p) :: true
+\end{equation*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+The tensor elimination rule requires two things: a tensor of the form ``$A \tensor/ B :: true$,'' and a proof that the pieces of the tensor (namely, ``$A :: true$'' and ``$B :: true$'') lead to ``$C :: true$.'' If we have both of those things, we can infer that ``$C :: true$.'' The tensor elimination rule encodes this inference. 
+
+
+\end{document}

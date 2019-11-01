@@ -1,0 +1,595 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Local soundness}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The strategy}
+
+As with lolli elimination, we want to verify that the tensor elimination rule works in harmony with the tensor introduction rule. And to do that, we need to check that it is locally sound, and locally complete.
+
+In this chapter, we will check that it is locally sound. To do that, we will use the same strategy that we used before, with lolli elimination. That strategy was this: 
+
+\begin{itemize}
+  \item{Introduce the connective}
+  \item{Immediately eliminate it} 
+  \item{Check to see if the elimination goes through a useless detour}
+\end{itemize}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduce it}
+
+First, then, let us introduce the connective. We want to be general, so we will use $A$ and $B$ as placeholders that can stand for any proposition. Here is a tensor:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer[no rule]1[]{A \tensor/ B}
+\end{prooftree*}
+
+\noindent
+If we look at the \tensorIntro/ rule, we can see that in order to introduce this tensor, we need an ``$A$'' and a ``$B$'' as premises:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer[no rule]1{A}
+
+  \hypo{}
+  \infer[no rule]1{B}
+
+  \infer2[\tensorIntro/]{A \tensor/ B}
+\end{prooftree*}
+
+\noindent
+How do we derive the ``$A$'' and the ``$B$''?
+
+\begin{prooftree*}
+  \hypo{??}
+  \ellipsis{}{}
+  \infer[no rule]1{A}
+
+  \hypo{??}
+  \ellipsis{}{}
+  \infer[no rule]1{B}
+
+  \infer2[\tensorIntro/]{A \tensor/ B}
+\end{prooftree*}
+
+\noindent
+We want to be general here. It could be that ``$A$'' and ``$B$'' are introduced by the \startrule/. Like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{~~A~~}
+
+  \hypo{}
+  \infer1[\startrule/]{~~B~~}
+
+  \infer2[\tensorIntro/]{A \tensor/ B}
+\end{prooftree*}
+
+\noindent
+Or it could be that we derive these through some other steps:
+
+\begin{prooftree*}
+  \hypo{\text{Other steps}}
+  \ellipsis{}{}
+  \infer[no rule]1{A}
+
+  \hypo{\text{Other steps}}
+  \ellipsis{}{}
+  \infer[no rule]1{B}
+
+  \infer2[\tensorIntro/]{A \tensor/ B}
+\end{prooftree*}
+
+\noindent
+To capture all these possibilities, let us use ``$\Proof/_{1}$'' and ``$\Proof/_{2}$'' as placeholders that can stand for any proof:
+
+\begin{prooftree*}
+  \hypo{\Proof/_{1}}
+  \ellipsis{}{}
+  \infer[no rule]1{A}
+
+  \hypo{\Proof/_{2}}
+  \ellipsis{}{}
+  \infer[no rule]1{B}
+
+  \infer2[\tensorIntro/]{A \tensor/ B}
+\end{prooftree*}
+
+\noindent
+Now we have a general proof tree which represents how we introduce any and every tensor.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Eliminate it}
+
+The next step is to immediately eliminate the tensor. If we look at the \tensorElim/ rule, we can see that in order to eliminate a tensor, we need to assume ``$A$'' and ``$B$'' over on the right, as hypothetical possibilities:
+
+\begin{prooftree*}
+  \hypo{\Proof/_{1}}
+  \ellipsis{}{}
+  \infer[no rule]1{A}
+
+  \hypo{\Proof/_{2}}
+  \ellipsis{}{}
+  \infer[no rule]1{B}
+
+  \infer2[\tensorIntro/]{A \tensor/ B}
+  
+  \hypo{}
+  \infer1[\startrule/]{~~A^{a}~~}
+
+  \hypo{}
+  \infer1[\startrule/]{~~B^{b}~~}
+
+  \infer[no rule]2{}
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then the \tensorElim/ rule says that we need to derive some further conclusion ``$C$'' from ``$A^{a}$'' and ``$B^{b}$.'' We want to be general, so this conclusion could be anything. Let us use ``$C$'' as a placeholder to stand for any conclusion we might draw:
+
+\begin{prooftree*}
+  \hypo{\Proof/_{1}}
+  \ellipsis{}{}
+  \infer[no rule]1{A}
+
+  \hypo{\Proof/_{2}}
+  \ellipsis{}{}
+  \infer[no rule]1{B}
+
+  \infer2[\tensorIntro/]{A \tensor/ B}
+  
+  \hypo{}
+  \infer1[\startrule/]{~~A^{a}~~}
+  \ellipsis{}{}
+
+  \hypo{}
+  \infer1[\startrule/]{~~B^{b}~~}
+  \ellipsis{}{}
+
+  \infer2{~~~~~~~~~~C~~~~~~~~~~~~~}
+
+  \infer[no rule]2{}
+
+\end{prooftree*}
+
+\noindent
+Now we can apply the \tensorElim/ rule:
+
+\begin{prooftree*}
+  \hypo{\Proof/_{1}}
+  \ellipsis{}{}
+  \infer[no rule]1{A}
+
+  \hypo{\Proof/_{2}}
+  \ellipsis{}{}
+  \infer[no rule]1{B}
+
+  \infer2[\tensorIntro/]{A \tensor/ B}
+  
+  \hypo{}
+  \infer1[\startrule/]{~~A^{a}~~}
+  \ellipsis{}{}
+
+  \hypo{}
+  \infer1[\startrule/]{~~B^{b}~~}
+  \ellipsis{}{}
+
+  \infer2{~~~~~~~~~~C~~~~~~~~~~~~~}
+
+  \infer2[\tensorElim/$^{a,b}$]{C}
+
+\end{prooftree*}
+
+\noindent
+At this point, we have a very general proof tree which first introduces a tensor, and then it immediately eliminates it.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Check for a detour}
+
+The last step is to check if the elimination takes us through a useless detour. To do that, we want to see if we can derive the same conclusion that the elimination rule gives us, before we use the elimination rule. What is the conclusion that the elimination rule produces? It is ``$C$'':
+
+\begin{prooftree*}
+  \hypo{\Proof/_{1}}
+  \ellipsis{}{}
+  \infer[no rule]1{A}
+
+  \hypo{\Proof/_{2}}
+  \ellipsis{}{}
+  \infer[no rule]1{B}
+
+  \infer2[\tensorIntro/]{A \tensor/ B}
+  
+  \hypo{}
+  \infer1[\startrule/]{~~A^{a}~~}
+  \ellipsis{}{}
+
+  \hypo{}
+  \infer1[\startrule/]{~~B^{b}~~}
+  \ellipsis{}{}
+
+  \infer2{~~~~~~~~~~C~~~~~~~~~~~~~}
+
+  \infer2[\tensorElim/$^{a,b}$]{\fbox{$C$}}
+
+\end{prooftree*}
+
+\noindent
+So the question is: can we derive this conclusion from the same assumptions, before we use the elimination rule?
+
+Let's cross off the use of the elimination rule at the bottom of the tree, so we can focus on the tree before we use the elimination rule:
+
+\begin{diagram}
+
+  \draw[densely dotted,fill=grey80] 
+      (-3.25, -0.6) -- (3.25, -0.6) -- (3.25, -1.25) -- (-3.25, -1.25) -- (-3.25, -0.6); 
+
+  \draw[] (-3.35, -1.35) -- (3.35, -0.6);
+  \draw[] (-3.35, -0.6) -- (3.35, -1.35);
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{\Proof/_{1}}
+      \ellipsis{}{}
+      \infer[no rule]1{A}
+      \hypo{\Proof/_{2}}
+      \ellipsis{}{}
+      \infer[no rule]1{B}
+      \infer2[\tensorIntro/]{A \tensor/ B}
+      \hypo{}
+      \infer1[\startrule/]{~~A^{a}~~}
+      \ellipsis{}{}
+      \hypo{}
+      \infer1[\startrule/]{~~B^{b}~~}
+      \ellipsis{}{}
+      \infer2{~~~~~~~~~~C~~~~~~~~~~~~~}
+      \infer2[\tensorElim/$^{a,b}$]{C}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+If we remove the crossed out section, that leaves us with this:
+
+\begin{prooftree*}
+  \hypo{\Proof/_{1}}
+  \ellipsis{}{}
+  \infer[no rule]1{A}
+
+  \hypo{\Proof/_{2}}
+  \ellipsis{}{}
+  \infer[no rule]1{B}
+
+  \infer2[\tensorIntro/]{A \tensor/ B}
+  
+  \hypo{}
+  \infer1[\startrule/]{~~A^{a}~~}
+  \ellipsis{}{}
+
+  \hypo{}
+  \infer1[\startrule/]{~~B^{b}~~}
+  \ellipsis{}{}
+
+  \infer2{~~~~~~~~~~C~~~~~~~~~~~~~}
+
+  \infer[no rule]2{}
+
+\end{prooftree*}
+
+\noindent
+Now the question is, can we derive ``$C$'' with this much? Look at the right side of the tree. There it says: \emph{if} we have an ``$A$'' and a ``$B$,'' \emph{then} we can derive a ``$C$.'' Here it is highlighted:
+
+\begin{diagram}
+
+  \draw[densely dotted,fill=grey80]
+      (-1, 1) -- (3.35, 1) -- (3.35, -1.25) -- (-1, -1.25) -- (-1, 1);
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{\Proof/_{1}}
+      \ellipsis{}{}
+      \infer[no rule]1{A}
+      \hypo{\Proof/_{2}}
+      \ellipsis{}{}
+      \infer[no rule]1{B}
+      \infer2[\tensorIntro/]{A \tensor/ B}
+      \hypo{}
+      \infer1[\startrule/]{~~A^{a}~~}
+      \ellipsis{}{}
+      \hypo{}
+      \infer1[\startrule/]{~~B^{b}~~}
+      \ellipsis{}{}
+      \infer2{~~~~~~~~~~C~~~~~~~~~~~~~}
+      \infer[no rule]2{}
+    \end{prooftree}  };
+
+\end{diagram}
+
+\noindent
+So we know that we can derive a ``$C$'' if we can get an ``$A$'' and a ``$B$.'' Can we derive an ``$A$'' and a ``$B$'' with the information we have in this proof tree? 
+
+\begin{diagram}
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{\Proof/_{1}}
+      \ellipsis{}{}
+      \infer[no rule]1{A}
+      \hypo{\Proof/_{2}}
+      \ellipsis{}{}
+      \infer[no rule]1{B}
+      \infer2[\tensorIntro/]{A \tensor/ B}
+      \hypo{}
+      \infer1[\startrule/]{~~\fbox{$A^{a}$}~~}
+      \ellipsis{}{}
+      \hypo{}
+      \infer1[\startrule/]{~~\fbox{$B^{b}$}~~}
+      \ellipsis{}{}
+      \infer2{~~~~~~~~~~C~~~~~~~~~~~~~}
+      \infer[no rule]2{}
+    \end{prooftree}  };
+
+  \draw[spaced-arrows,->] (-0.45, 2) -- (-0.45, 1);
+  \node (l_1) [] at (-0.45, 2.25) {??};
+  \draw[spaced-arrows,->] (2, 2) -- (2, 1);
+  \node (l_2) [] at (2, 2.25) {??};
+  
+\end{diagram}
+
+\noindent
+Yes. Look on the left side of the tree. We can see that ``$\Proof/_{1}$'' is a proof of ``$A$,'' and ``$\Proof/_{2}$'' is a proof of ``$B$.'' Here they are, highlighted:
+
+\begin{diagram}
+
+  \draw[densely dotted,fill=grey80]
+      (-3.35, 1) -- (-2.7, 1) -- (-2.7, -0.5) -- (-3.35, -0.5) -- (-3.35, 1);
+  \draw[densely dotted,fill=grey80]
+      (-2.5, 1) -- (-1.7, 1) -- (-1.7, -0.5) -- (-2.5, -0.5) -- (-2.5, 1);
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{\Proof/_{1}}
+      \ellipsis{}{}
+      \infer[no rule]1{A}
+      \hypo{\Proof/_{2}}
+      \ellipsis{}{}
+      \infer[no rule]1{B}
+      \infer2[\tensorIntro/]{A \tensor/ B}
+      \hypo{}
+      \infer1[\startrule/]{~~A^{a}~~}
+      \ellipsis{}{}
+      \hypo{}
+      \infer1[\startrule/]{~~B^{b}~~}
+      \ellipsis{}{}
+      \infer2{~~~~~~~~~~C~~~~~~~~~~~~~}
+      \infer[no rule]2{}
+    \end{prooftree}  };
+
+\end{diagram}
+
+\noindent
+So we can take the proven ``$A$'' and ``$B$,'' and plug them in for the assumed ``$A^{a}$'' and ``$B^{b}$'':
+
+\begin{diagram}
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{\Proof/_{1}}
+      \ellipsis{}{}
+      \infer[no rule]1{\fbox{$A$}}
+      \hypo{\Proof/_{2}}
+      \ellipsis{}{}
+      \infer[no rule]1{\fbox{$B$}}
+      \infer2[\tensorIntro/]{A \tensor/ B}
+      \hypo{}
+      \infer1[\startrule/]{~~\fbox{$A^{a}$}~~}
+      \ellipsis{}{}
+      \hypo{}
+      \infer1[\startrule/]{~~\fbox{$B^{b}$}~~}
+      \ellipsis{}{}
+      \infer2{~~~~~~~~~~C~~~~~~~~~~~~~}
+      \infer[no rule]2{}
+    \end{prooftree}  };
+
+  \draw[spaced-arrows,->] 
+      (-3.55, -0.2) -- (-3.85, -0.2) -- (-3.85, -1.75) -- (-1.1, -1.75) -- (-1.1, 1.5) -- (-0.25, 1.5) -- (-0.25, 0.75);
+  \draw[spaced-arrows,->] 
+      (-2.05, -0.2) -- (-1.5, -0.2) -- (-1.5, 1.85) -- (2.15, 1.85) -- (2.15, 0.75);
+
+\end{diagram}
+
+\noindent
+Let's move the proofs on the left directly above the assumptions on the right:
+
+\begin{diagram}
+
+  \draw[densely dotted,fill=grey80]
+      (-3.55, 0.95) -- (-2.95, 0.95) -- (-2.95, -0.55) -- (-3.55, -0.55) -- (-3.55, 0.95);
+  \draw[densely dotted,fill=grey80]
+      (-2.65, 0.95) -- (-1.95, 0.95) -- (-1.95, -0.55) -- (-2.65, -0.55) -- (-2.65, 0.95);
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{\Proof/_{1}}
+      \ellipsis{}{}
+      \infer[no rule]1{A}
+      \hypo{\Proof/_{2}}
+      \ellipsis{}{}
+      \infer[no rule]1{B}
+      \infer2[\tensorIntro/]{A \tensor/ B}
+      \hypo{}
+      \infer1[\startrule/]{~~\fbox{$A^{a}$}~~}
+      \ellipsis{}{}
+      \hypo{}
+      \infer1[\startrule/]{~~\fbox{$B^{b}$}~~}
+      \ellipsis{}{}
+      \infer2{~~~~~~~~~~C~~~~~~~~~~~~~}
+      \infer[no rule]2{}
+    \end{prooftree}  };
+
+  \draw[spaced-arrows,->] (-0.45, 2) -- (-0.45, 1);
+  \node (l_1) [] at (-0.45, 2.75) {
+    \begin{prooftree}
+      \hypo{\Proof/_{1}}
+      \ellipsis{}{}
+      \infer[no rule]1{\fbox{$A$}}    
+    \end{prooftree}
+  };
+  \draw[spaced-arrows,->] (2, 2) -- (2, 1);
+  \node (l_2) [] at (2, 2.75) {
+    \begin{prooftree}
+      \hypo{\Proof/_{2}}
+      \ellipsis{}{}
+      \infer[no rule]1{\fbox{$B$}}
+    \end{prooftree}
+  };
+
+  \draw[spaced-arrows,->] 
+      (-3.25, 0.95) -- (-3.25, 4.25) -- (-0.5, 4.25) -- (-0.5, 3.75);
+  \draw[spaced-arrows,->] 
+      (-2.25, 0.95) -- (-2.25, 4.5) -- (2, 4.5) -- (2, 3.75);
+
+  \draw (-3.65, 1.1) -- (-1.85, -0.95); 
+  \draw (-3.65, -0.95) -- (-1.85, 1.1); 
+  
+\end{diagram}
+
+\noindent
+Now we can see exactly how the proofs on the left connect with the proofs on the right. Let's push the proofs of ``$A$'' and ``$B$'' down, to show that we plug them in, for the assumed ``$A^{a}$'' and ``$B^{b}$'':
+
+\begin{diagram}
+
+  \draw[densely dotted,fill=grey80]
+      (-3.2, 0.65) -- (-2.5, 0.65) -- (-2.5, -0.85) -- (-3.2, -0.85) -- (-3.2, 0.65);
+  \draw[densely dotted,fill=grey80]
+      (-2.25, 0.65) -- (-1.55, 0.65) -- (-1.55, -0.85) -- (-2.25, -0.85) -- (-2.25, 0.65);
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{\Proof/_{1}}
+      \ellipsis{}{}
+      \infer[no rule]1{A}
+      \hypo{\Proof/_{2}}
+      \ellipsis{}{}
+      \infer[no rule]1{B}
+      \infer2[\tensorIntro/]{A \tensor/ B}
+      
+      \hypo{\Proof/_{1}}
+      \ellipsis{}{}
+      \infer[no rule]1{~~~~~~~~\fbox{$A$}~~~~~~~~}
+      \ellipsis{}{}
+      \hypo{\Proof/_{2}}
+      \ellipsis{}{}
+      \infer[no rule]1{\fbox{$B$}}
+      \ellipsis{}{}
+      \infer2{~~~~~~~~~~C~~~~~~~~~~~~~}
+      \infer[no rule]2{}
+    \end{prooftree}
+  };
+
+  \draw[spaced-arrows,->] 
+      (-2.85, 0.65) -- (-2.85, 2.25) -- (0.5, 2.25) -- (0.5, 1.5);
+  \draw[spaced-arrows,->] 
+      (-1.9, 0.65) -- (-1.9, 2.5) -- (2.45, 2.5) -- (2.45, 1.5);
+
+  \draw (-3.35, 0.8) -- (-1.35, -1.25); 
+  \draw (-3.35, -1.25) -- (-1.35, 0.8); 
+  
+\end{diagram}
+
+\noindent
+Let's delete the fragment of the tree that's left on the left, since it's no longer used. That leaves us with this:
+
+\begin{prooftree*}
+  \hypo{\Proof/_{1}}
+  \ellipsis{}{}
+  \infer[no rule]1{~~~~~~~~\fbox{$A$}~~~~~~~~}
+  \ellipsis{}{}
+  \hypo{\Proof/_{2}}
+  \ellipsis{}{}
+  \infer[no rule]1{\fbox{$B$}}
+  \ellipsis{}{}
+  \infer2{~~~~~~~~~~C~~~~~~~~~~~~~}
+\end{prooftree*}
+
+\noindent
+We can remove the boxes too:
+
+
+\begin{prooftree*}
+  \hypo{\Proof/_{1}}
+  \ellipsis{}{}
+  \infer[no rule]1{~~~~~~~~A~~~~~~~~}
+  \ellipsis{}{}
+  \hypo{\Proof/_{2}}
+  \ellipsis{}{}
+  \infer[no rule]1{B}
+  \ellipsis{}{}
+  \infer2{~~~~~~~~~~C~~~~~~~~~~~~~}
+\end{prooftree*}
+
+\noindent
+And with that, we have shown that we can get to the conclusion ``$C$'' without going through the elimination rule. So, we have shown that the \tensorElim/ rule is locally sound.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Proof reduction}
+
+Again, we have proved that an elimination rule is locally sound with a proof reduction (synonym: beta-reduction). We can write out the transformation as before, so that it looks like this:
+
+$$
+\begin{prooftree}
+  \hypo{\Proof/_{1}}
+  \ellipsis{}{}
+  \infer[no rule]1{A}
+  \hypo{\Proof/_{2}}
+  \ellipsis{}{}
+  \infer[no rule]1{B}
+  \infer2[\tensorIntro/]{A \tensor/ B}
+  \hypo{}
+  \infer1[\startrule/]{~~A^{a}~~}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{~~B^{b}~~}
+  \ellipsis{}{}
+  \infer2{~~~~~~~~~~C~~~~~~~~~~~~~}
+  \infer2[\tensorElim/$^{a,b}$]{C}
+\end{prooftree}
+\hskip 1cm\rightsquigarrow_{\beta}\hskip 1cm
+\begin{prooftree}
+  \hypo{\Proof/_{1}}
+  \ellipsis{}{}
+  \infer[no rule]1{~~~~~A~~~~}
+  \ellipsis{}{}
+  \hypo{\Proof/_{2}}
+  \ellipsis{}{}
+  \infer[no rule]1{B}
+  \ellipsis{}{}
+  \infer2{~~~~~~C~~~~~~~~}
+\end{prooftree}
+$$
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+In this chapter, we proved that the \tensorElim/ rule is locally sound. We did this by constructing a proof reduction which shows that, if we start with a tree where we introduce a tensor and then immediately eliminate it, we can reduce that to a tree where we get to the same conclusion without going through the \tensorElim/ rule.
+
+
+\end{document}

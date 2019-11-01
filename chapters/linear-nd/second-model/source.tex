@@ -1,0 +1,379 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Model checking again}
+
+Recall that we wanted to prove this hypothetical judgment:
+
+\begin{equation*}
+  b(p) :: true, t(p, s) :: true, t(s, z) :: true \ndturnstile/ b(z) :: true
+\end{equation*}
+
+\noindent
+That is, we wanted to prove that I will end up with zucchini in my basket, provided that (i) I start with potatoes in my basket, (ii) I can trade potatoes for squash, and (iii) I can trade squash for zucchini.
+
+The proof we put together was this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(p, s) :: true}
+  \infer2[trade]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, z) :: true}
+  \infer2[trade]{b(z) :: true}
+\end{prooftree*}
+
+\noindent
+Let's model this situation, to confirm that our proof reflects the situation correctly.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Modeling the start state}
+
+As before, we want to model all the assumptions in the start state. Let's first draw a box and label it $S_{0}$:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+\end{diagram}
+
+\noindent
+Then we take each assumption from the hypothetical judgment, and we model it in $S_{0}$. In this case, we have three assumptions: ``$b(p) :: true$,'' ``$t(p, s) :: true$,'' and ``$t(s, z) :: true$.'' The objects involved are potatoes ($p$), squash ($s$), and zucchini ($z$). We can draw a dot for each of them:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+  
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 0.5) {};
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, -0.15) {};
+    \node[o-point] (z) [label=above:{$z$}] at (0.75, 1.15) {};
+    
+\end{diagram}
+
+\noindent
+One of the assumptions --- namely, ``$b(p) :: true$'' --- says that potatoes are in my basket, so I can mark the ``$p$'' dot with a boxed \fbox{$b$} to represent this:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+  
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 0.5) {};
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, -0.15) {};
+    \node[o-point] (z) [label=above:{$z$}] at (0.75, 1.15) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 0.5);
+    
+\end{diagram}
+
+\noindent
+The next assumption --- namely ``$t(p, s) :: true$'' --- says that I can trade potatoes for squash. To represent this, I can draw an arrow from the ``$p$'' dot to the ``$s$'' dot and label it with a ``$t$'':
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 0.5) {};
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, -0.15) {};
+    \node[o-point] (z) [label=above:{$z$}] at (0.75, 1.15) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 0.5);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (s);
+
+\end{diagram}
+
+\noindent
+The third assumption --- namely ``$t(s, z) :: true$'' --- says that I can trade squash for zuchini. To represent this, I can draw an arrow from the ``$s$'' dot to the ``$z$'' dot too:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 0.5) {};
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, -0.15) {};
+    \node[o-point] (z) [label=above:{$z$}] at (0.75, 1.15) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 0.5);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (s);
+    \draw[spaced-arrows,->] (s) to node [fill=white] {$t$} (z);
+
+\end{diagram}
+
+
+\noindent
+Now we have modeled the assumptions in our starting state. There are potatoes, squash, and zucchini. The potatoes are in my basket, but I can trade potatoes for squash, and I can trade squash for zucchini.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The next state}
+
+Next we want to model the other states. To do this, we work down the proof tree, one inference line at a time. 
+
+The next inference line from the start is the first \rulename{trade} line. Does this inference line represent a change in state? Yes, because my basket gets new vegetables in it. So we add a new state to our diagram:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 0.5) {};
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, -0.15) {};
+    \node[o-point] (z) [label=above:{$z$}] at (0.75, 1.15) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 0.5);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (s);
+    \draw[spaced-arrows,->] (s) to node [fill=white] {$t$} (z);
+
+  % State 1
+  \draw[spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+\end{diagram}
+
+\noindent
+I'll initially copy over all the same things to this new state:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 0.5) {};
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, -0.15) {};
+    \node[o-point] (z) [label=above:{$z$}] at (0.75, 1.15) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 0.5);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (s);
+    \draw[spaced-arrows,->] (s) to node [fill=white] {$t$} (z);
+
+  % State 1
+  \draw[spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (p_1) [label=below:{$p$}] at (2.75, 0.5) {};
+    \node[o-point] (s_1) [label=below:{$s$}] at (4, -0.15) {};
+    \node[o-point] (z_1) [label=above:{$z$}] at (4, 1.15) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (2.75, 0.5);
+    \draw[spaced-arrows,->] (p_1) to node [fill=white] {$t$} (s_1);
+    \draw[spaced-arrows,->] (s_1) to node [fill=white] {$t$} (z_1);
+
+\end{diagram}
+
+\noindent
+Then I'll update it to reflect what I see in the conclusion of the first \rulename{trade} inference line. In that conclusion --- namely, ``$b(s) :: true$'' --- I have squash in my basket, and I've used up my option to trade potatoes for squash. So I'll delete the arrow from the ``$p$'' dot to the ``$s$'' dot, I'll remove the ``$p$'' dot, and I'll move the boxed \fbox{$b$} over to the ``$s$'' dot:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 0.5) {};
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, -0.15) {};
+    \node[o-point] (z) [label=above:{$z$}] at (0.75, 1.15) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 0.5);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (s);
+    \draw[spaced-arrows,->] (s) to node [fill=white] {$t$} (z);
+
+  % State 1
+  \draw[spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (s_1) [label=below:{$s$}] at (4, -0.15) {};
+    \node[o-point] (z_1) [label=above:{$z$}] at (4, 1.15) {};
+
+    \coordinate[label=left:{\fbox{$b$}}] (b) at (3.9, -0.15);
+    \draw[spaced-arrows,->] (s_1) to node [fill=white] {$t$} (z_1);
+
+\end{diagram}
+
+\noindent
+Now state $S_{1}$ fully represents the result of the first \rulename{trade} inference: I have squash in my basket, but I can still trade squash for zucchini.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The third state}
+
+Now we move down to the next inference line, which is the second \rulename{trade} inference. Does this inference represent a change in state? Again the answer is yes, because my basket ends up with new vegetables in it. So we can draw a new state:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 0.5) {};
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, -0.15) {};
+    \node[o-point] (z) [label=above:{$z$}] at (0.75, 1.15) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 0.5);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (s);
+    \draw[spaced-arrows,->] (s) to node [fill=white] {$t$} (z);
+
+  % State 1
+  \draw[spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (s_1) [label=below:{$s$}] at (4, -0.15) {};
+    \node[o-point] (z_1) [label=above:{$z$}] at (4, 1.15) {};
+
+    \coordinate[label=left:{\fbox{$b$}}] (b) at (3.9, -0.15);
+    \draw[spaced-arrows,->] (s_1) to node [fill=white] {$t$} (z_1);
+    
+  % State 2
+  \draw[spaced-arrows,->] (4.5, 0.5) -- (5.5, 0.5);
+  \draw (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+\end{diagram}
+
+\noindent
+Initially, I'll populate this new state with the same things from $S_{1}$:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 0.5) {};
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, -0.15) {};
+    \node[o-point] (z) [label=above:{$z$}] at (0.75, 1.15) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 0.5);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (s);
+    \draw[spaced-arrows,->] (s) to node [fill=white] {$t$} (z);
+
+  % State 1
+  \draw[spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (s_1) [label=below:{$s$}] at (4, -0.15) {};
+    \node[o-point] (z_1) [label=above:{$z$}] at (4, 1.15) {};
+
+    \coordinate[label=left:{\fbox{$b$}}] (b) at (3.9, -0.15);
+    \draw[spaced-arrows,->] (s_1) to node [fill=white] {$t$} (z_1);
+    
+  % State 2
+  \draw[spaced-arrows,->] (4.5, 0.5) -- (5.5, 0.5);
+  \draw (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+    \node[o-point] (s_2) [label=below:{$s$}] at (7.25, -0.15) {};
+    \node[o-point] (z_2) [label=above:{$z$}] at (7.25, 1.15) {};
+
+    \coordinate[label=left:{\fbox{$b$}}] (b) at (7.1, -0.15);
+    \draw[spaced-arrows,->] (s_2) to node [fill=white] {$t$} (z_2);
+
+\end{diagram}
+
+\noindent
+Then I'll update it to reflect the conclusion underneath the second \rulename{trade} inference line. The conclusion there is this: ``$b(z) :: true$.'' This says that zucchini is in my basket, so I can move the boxed \fbox{$b$} up to the ``$z$'' dot, to represent that the zucchini is in my basket, rather than the squash. I can also delete the ``$s$'' dot and the arrow, since I've used up my option to trade squash for zucchini.
+
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 0.5) {};
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, -0.15) {};
+    \node[o-point] (z) [label=above:{$z$}] at (0.75, 1.15) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 0.5);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (s);
+    \draw[spaced-arrows,->] (s) to node [fill=white] {$t$} (z);
+
+  % State 1
+  \draw[spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (s_1) [label=below:{$s$}] at (4, -0.15) {};
+    \node[o-point] (z_1) [label=above:{$z$}] at (4, 1.15) {};
+
+    \coordinate[label=left:{\fbox{$b$}}] (b) at (3.9, -0.15);
+    \draw[spaced-arrows,->] (s_1) to node [fill=white] {$t$} (z_1);
+    
+  % State 2
+  \draw[spaced-arrows,->] (4.5, 0.5) -- (5.5, 0.5);
+  \draw (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+    \node[o-point] (z_2) [label=above:{$z$}] at (7.25, 1.15) {};
+
+    \coordinate[label=left:{\fbox{$b$}}] (b) at (7.1, 1.15);
+
+\end{diagram}
+
+\noindent
+We've now reached the bottom of our proof tree, so our transition system is complete. We've fully depicted the situation represented by the proof tree.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Check linearity}
+
+Finally, we can check our model to make sure that our proof is linear. We should see that all of the assumptions in the hypothetical judgment hold true in the start state $S_{0}$, but not in the end state $S_{2}$:
+
+\begin{itemize}
+  \item{$b(p) :: true$ --- Is it true that I have potatoes in my basket, in $S_{0}$? Yes. If you look at the diagram of $S_{0}$, you can see that there is a boxed \fbox{$b$} next to the ``$p$'' dot, and that represents that the potatoes are in my basket.}
+  \item{$t(p, s) :: true$ --- Is it true that I can trade potatoes for squash, in $S_{0}$? Yes. If you look at the diagram of $S_{0}$, you can see an arrow from the ``$p$'' dot to the ``$s$'' dot which is labeled with a ``$t$,'' and that represents that I can trade potatoes for squash.}
+  \item{$t(s, z) :: true$ --- Is it true that I can trade squash for zucchini, in $S_{0}$? Yes. If you look at the diagram of $S_{0}$, you can see an arrow from the ``$s$'' dot to the ``$z$'' dot which is labeled with a ``$t$,'' and that represents that I can trade squash for zucchini.}
+\end{itemize}
+
+\noindent
+Now let's check that the conclusion is true in the final state, $S_{2}$:
+
+\begin{itemize}
+  \item{$b(z) :: true$ --- Is it true that I have zucchini in my basket, in the final state $S_{1}$? Yes. If you look at the diagram of $S_{1}$, you can see that there is a boxed \fbox{$b$} next to the ``$z$'' dot, and that represents that the zucchini is in my basket.}
+\end{itemize}
+
+\noindent
+Finally, let's make sure that none of the assumptions are true in the end state:
+
+\begin{itemize}
+  \item{$b(p) :: true$ --- Is it true that I have potatoes in my basket, in $S_{2}$? No. If you look at the diagram of $S_{2}$, you'll see that the boxed \fbox{$b$} is next to the ``$z$'' dot, and that represents that zucchini is in my basket, not potatoes.}
+  \item{$t(p, s) :: true$ --- is it true that I can trade potatoes for squash, in the end state $S_{2}$? No. If you look at the diagram of $S_{2}$, you'll see that there are no trade arrows anywhere.}
+  \item{$t(s, z) :: true$ --- is it true that I can trade squash for zucchini, in the end state $S_{2}$? No. If you look at the diagram of $S_{2}$, you'll again see that there are no trade arrows.}
+\end{itemize}
+
+\noindent
+So the checks are good. We can see all the assumptions present in the start state, and we can see that they've all been used up by the end state.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+In this chapter, we modeled our second proof about the farmer's market. We followed the same procedure as before, and although this proof has one more step than the first proof did, the same techniques apply here. We were also able to confirm that we used up all the assumptions, as a sanity check to make sure our proof is linear.
+
+\end{document}

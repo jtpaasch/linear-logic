@@ -1,0 +1,304 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Modeling local completeness}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The expansion}
+
+Recall that we proved local completeness by showing that if we eliminate a tensor, we can get back enough pieces to re-introduce the tensor. Here is the expansion we worked out:
+
+$$
+\begin{prooftree}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[no rule]1[]{A \tensor/ B}
+\end{prooftree}
+\hskip 1cm\rightsquigarrow_{\eta}\hskip 1cm
+\begin{prooftree}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[no rule]1[]{A \tensor/ B}
+  \hypo{}
+  \infer1[\startrule/]{~~A^{a}~~}
+  \hypo{}
+  \infer1[\startrule/]{~~B^{b}~~}
+  \infer2[\tensorIntro/]{A \tensor/ B}
+  \infer2[\tensorElim/]{A \tensor/ B}
+\end{prooftree}
+$$
+
+Let's model this, as a way to provide another view into why the expansion works the way it does.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Setting up}
+
+First, let's model the initial tree:
+
+\begin{prooftree*}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[no rule]1[]{A \tensor/ B}
+\end{prooftree*}
+
+\noindent
+Let us first represent ``$\Proof/$'' like this:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \coordinate[label={$\Proof/$}] (p) at (0.15, 0.25);
+
+\end{diagram}
+
+\noindent
+Then, let us show that this transitions to a new state, where both ``$A$'' and ``$B$'' are present:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \coordinate[label={$\Proof/$}] (p) at (0.15, 0.25);
+
+  % State 1
+  \draw[spaced-arrows, ->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \coordinate[label={$A$}] (a) at (3, 0.75);
+    \coordinate[label={$B$}] (b) at (3.75, -0.25);
+
+\end{diagram}
+
+\noindent
+Notice that $S_{1}$ models ``$A \tensor/ B$.'' The tensor ``$A \tensor/ B$'' means precisely that ``$A$'' and ``$B$'' are both true simultaneously, so we can represent that with both ``$A$'' and ``$B$'' being true in the same state.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Eliminate it}
+
+Next, on the right side of the proof tree, we assume ``$A$'' and ``$B$'' as hypothetical possibilities. To model this, let's draw a new state over on the right, using dotted lines to show that it is a hypothetical possibility:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \coordinate[label={$\Proof/$}] (p) at (0.15, 0.25);
+
+  % State 1
+  \draw[spaced-arrows, ->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \coordinate[label={$A$}] (a) at (3, 0.75);
+    \coordinate[label={$B$}] (b) at (3.75, -0.25);
+
+  % State 2
+  \draw[densely dotted] (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+\end{diagram}
+
+\noindent
+Let's put ``$A$'' and ``$B$'' in this new state, since we are assuming both of them:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \coordinate[label={$\Proof/$}] (p) at (0.15, 0.25);
+
+  % State 1
+  \draw[spaced-arrows, ->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \coordinate[label={$A$}] (a) at (3, 0.75);
+    \coordinate[label={$B$}] (b) at (3.75, -0.25);
+
+  % State 2
+  \draw[densely dotted] (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+    \coordinate[label={$A$}] (a_2) at (6.25, 0.75);
+    \coordinate[label={$B$}] (b_2) at (7, -0.25);
+
+\end{diagram}
+
+\noindent
+Next, the proof tree takes the assumed ``$A$'' and ``$B$,'' and it combines them into ``$A \tensor/ B$.'' To model that, we remove the assumed ``$A$'' and ``$B$'' (to signify that we have used up the assumptions):
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \coordinate[label={$\Proof/$}] (p) at (0.15, 0.25);
+
+  % State 1
+  \draw[spaced-arrows, ->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \coordinate[label={$A$}] (a) at (3, 0.75);
+    \coordinate[label={$B$}] (b) at (3.75, -0.25);
+
+  % State 2
+  \draw[densely dotted] (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+\end{diagram}
+
+\noindent
+And then we put them right back in (to signify that we have constructed a tensor from them):
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \coordinate[label={$\Proof/$}] (p) at (0.15, 0.25);
+
+  % State 1
+  \draw[spaced-arrows, ->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \coordinate[label={$A$}] (a) at (3, 0.75);
+    \coordinate[label={$B$}] (b) at (3.75, -0.25);
+
+  % State 2
+  \draw[densely dotted] (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+    \coordinate[label={$A$}] (a_2) at (6.25, 0.75);
+    \coordinate[label={$B$}] (b_2) at (7, -0.25);
+
+\end{diagram}
+
+\noindent
+Next, the proof tree applies the \tensorElim/ rule, to derive the conclusion ``$A \tensor/ B$.'' In effect, we take the pieces of the tensor from the left side of the proof tree, and we plug them into the right side of the assumptions on the right side of the proof tree. 
+
+We can see how this will work in our model, since we can see that $S_{1}$ looks exactly like $S_{2}$. It has the same pieces:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \coordinate[label={$\Proof/$}] (p) at (0.15, 0.25);
+
+  % State 1
+  \draw[spaced-arrows, ->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \coordinate[label={$A$}] (a) at (3, 0.75);
+    \coordinate[label={$B$}] (b) at (3.75, -0.25);
+
+  % State 2
+  \draw[densely dotted] (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+    \coordinate[label={$A$}] (a_2) at (6.25, 0.75);
+    \coordinate[label={$B$}] (b_2) at (7, -0.25);
+
+    \draw[spaced-arrows,->] (3.25, 1) -- (6, 1);
+    \draw[spaced-arrows,->] (4, 0) -- (6.75, 0);
+
+\end{diagram}
+
+\noindent
+So we can plug $S_{1}$ right into $S_{2}$:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \coordinate[label={$\Proof/$}] (p) at (0.15, 0.25);
+
+  % State 1
+  \draw[spaced-arrows, ->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \coordinate[label={$A$}] (a) at (3, 0.75);
+    \coordinate[label={$B$}] (b) at (3.75, -0.25);
+
+  % State 2
+  \draw[spaced-arrows,->] (4.5, 0.5) -- (5.5, 0.5);
+  \draw[densely dotted] (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+    \coordinate[label={$A$}] (a_2) at (6.25, 0.75);
+    \coordinate[label={$B$}] (b_2) at (7, -0.25);
+
+\end{diagram}
+
+\noindent
+To represent that, we can push $S_{1}$ over the top of $S_{2}$:
+
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \coordinate[label={$\Proof/$}] (p) at (0.15, 0.25);
+
+  % State 1
+  \draw[spaced-arrows, ->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$/\textbf{S}$_{2}$}] (s_1) at (3.5, -0.75);
+
+    \coordinate[label={$A$}] (a) at (3, 0.75);
+    \coordinate[label={$B$}] (b) at (3.75, -0.25);
+
+\end{diagram}
+
+\noindent
+At this point, the proof tree has reached the conclusion: ``$A \tensor/ B$.'' We can see that this is also true in our model: both ``$A$'' and ``$B$'' are present in our model, in state $S_{1}/S_{2}$. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Reintroduce it}
+
+The last step is to reintroduce the original connective, which in our case is the tensor ``$A \tensor/ B$.'' The idea is to show that the elimination rule delivers enough pieces that we can re-introduce the connective. 
+
+To confirm this, we can look at the model, and we ask: is there enough information in the last state to re-introduce the connective? The answer is yes. In $S_{1}/S_{2}$, there is both an ``$A$'' and a ``$B$,'' which is precisely what constitutes a tensor.
+
+So modeling the expansion shows us too that if we eliminate a tensor, the elimination leaves us with enough information to re-introduce the connective.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+In this chapter, we modeled the process of proving that the \tensorElim/ rule is locally complete. We saw that, if you eliminate a tensor, we can end up with enough pieces to re-introduce a tensor. This confirms what our eta-expansion proved, namely that the elimination rule is strong enough: it does not deliver too little information.
+
+
+\end{document}

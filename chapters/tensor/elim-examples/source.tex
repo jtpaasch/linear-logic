@@ -1,0 +1,514 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Examples}
+
+In these examples, I will omit the ``$:: true$'' annotation for the sake of brevity. But as always, remember that it is implied on every judgment.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Simple examples}
+
+Here is a hypothetical judgment:
+
+\begin{equation*}
+  b(s), t(s, p) \ndturnstile/ b(p)
+\end{equation*}
+
+\noindent
+To build a proof tree for this, we first introduce the assumptions:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \infer[rule style=no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then we use the \tensorIntro/ rule to combine them into a tensor:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \infer2[\tensorIntro/]{b(p) \tensor/ t(s, p)}
+\end{prooftree*}
+
+\noindent
+Next, we assume the pieces of the tensor:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \infer2[\tensorIntro/]{b(p) \tensor/ t(s, p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(s)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)^{b}}
+  
+  \infer[no rule]2{}
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then we use the \traderule/ to derive ``$b(p)$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \infer2[\tensorIntro/]{b(p) \tensor/ t(s, p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(s)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)^{b}}
+  
+  \infer2[\traderule/]{b(p)}
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then we can use the \tensorElim/ rule to derive that same conclusion:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \infer2[\tensorIntro/]{b(p) \tensor/ t(s, p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(s)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)^{b}}
+  
+  \infer2[\traderule/]{b(p)}
+  \infer2[\tensorElim/$^{a, b}$]{b(p)}
+\end{prooftree*}
+
+\noindent
+Here is another hypothetical judgment, with an entirely similar structure:
+
+\begin{equation*}
+  b(z), t(z, c) \ndturnstile/ b(c)
+\end{equation*}
+
+\noindent
+And here is the proof tree for it (notice that it has the same structure as the last one, it's just that the judgments are different):
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(z)}
+  \hypo{}
+  \infer1[\startrule/]{t(z, c)}
+  \infer2[\tensorIntro/]{b(z) \tensor/ t(z, c)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(z)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{t(z, c)^{b}}
+  
+  \infer2[\traderule/]{b(c)}
+  \infer2[\tensorElim/$^{a, b}$]{b(c)}
+\end{prooftree*}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Longer derivations}
+
+If you look at the \tensorElim/ rule template, you can see that in the right side of the tree, we derive some arbitrary conclusion ``$C$'' from the pieces of the tensor on the left side of the tree.
+
+In the two above examples, we derived that conclusion with a single step. In each of the above two examples, we applied the \traderule/ rule to get to our desired ``$C$.''
+
+But of course, there can be more steps before you get ``$C$.'' Consider this hypothetical judgment:
+
+\begin{equation*}
+  b(s), t(s, p), t(p, z) \ndturnstile/ b(z)
+\end{equation*}
+
+\noindent
+To build a proof tree for this, we first introduce the assumptions:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \hypo{}
+  \infer1[\startrule/]{t(p, z)}
+  \infer[rule style=no rule]3{}
+\end{prooftree*}
+
+\noindent
+Then we use the \tensorIntro/ rule to combine the first two into a tensor:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \infer2[\tensorIntro/]{b(p) \tensor/ t(s, p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, z)}
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Next, we assume the pieces of the tensor:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \infer2[\tensorIntro/]{b(p) \tensor/ t(s, p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(s)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)^{b}}
+
+  \hypo{}
+  \infer1[\startrule/]{t(p, z)}
+  
+  \infer[no rule]3{}
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then we use the \traderule/ with those two assumed pieces to derive ``$b(p)$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \infer2[\tensorIntro/]{b(p) \tensor/ t(s, p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(s)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)^{b}}
+  
+  \infer2[\traderule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, z)}  
+  \infer[no rule]3{}
+\end{prooftree*}
+
+\noindent
+Now we use the \traderule/ with ``$b(p)$'' and ``$t(p, z)$'' to derive ``$b(z)$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \infer2[\tensorIntro/]{b(p) \tensor/ t(s, p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(s)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)^{b}}
+  
+  \infer2[\traderule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, z)}
+  \infer2[\traderule/]{b(z)}
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+And finally, now we can use the \tensorElim/ rule to derive the desired conclusion:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \infer2[\tensorIntro/]{b(p) \tensor/ t(s, p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(s)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)^{b}}
+  
+  \infer2[\traderule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, z)}
+  \infer2[\traderule/]{b(z)}
+
+  \infer2[\tensorElim/$^{a, b}$]{b(z)}
+\end{prooftree*}
+
+\noindent
+Notice that we have three live assumptions: ``$b(s)$,'' ``$t(s, p)$,'' and ``$t(p, z)$,'' just as we have in the original hypothetical judgment we set out to prove. The other two assumptions (``$b(s)^{a}$'' and ``$t(s, p)^{b}$'') have been discharged.
+
+Here is another hypothetical judgment, with an entirely similar structure to the last one:
+
+\begin{equation*}
+  b(c), t(c, s), t(s, p) \ndturnstile/ b(p)
+\end{equation*}
+
+\noindent
+And here is the proof tree (note how it is exactly like the last one, but with different judgments):
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(c)}
+  \hypo{}
+  \infer1[\startrule/]{t(c, s)}
+  \infer2[\tensorIntro/]{b(c) \tensor/ t(c, s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(c)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{t(c, s)^{b}}
+  
+  \infer2[\traderule/]{b(s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \infer2[\traderule/]{b(p)}
+
+  \infer2[\tensorElim/$^{a, b}$]{b(p)}
+\end{prooftree*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Tensors and lollis}
+
+We can use tensors and lollis in the same proof. Consider this hypothetical judgment:
+
+\begin{equation*}
+  b(z)  \ndturnstile/ t(z, c) \lolli/ b(c)
+\end{equation*}
+
+\noindent
+To build the proof for this, we use ``$b(z)$'' and ``$t(z, c)$'' as assumptions, and we derive ``$b(c)$,'' just as we did in the second example above:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(z)}
+  \hypo{}
+  \infer1[\startrule/]{t(z, c)}
+  \infer2[\tensorIntro/]{b(z) \tensor/ t(z, c)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(z)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{t(z, c)^{b}}
+  
+  \infer2[\traderule/]{b(c)}
+  \infer2[\tensorElim/$^{a, b}$]{b(c)}
+\end{prooftree*}
+
+\noindent
+Then we introduce the lolli ``$t(z, c) \lolli/ b(p)$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(z)}
+  \hypo{}
+  \infer1[\startrule/]{t(z, c)^{c}}
+  \infer2[\tensorIntro/]{b(z) \tensor/ t(z, c)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(z)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{t(z, c)^{b}}
+  
+  \infer2[\traderule/]{b(c)}
+  \infer2[\tensorElim/$^{a, b}$]{b(c)}
+  \infer1[\lolliIntro/$^{c}$]{t(z, c) \lolli/ b(c)}
+\end{prooftree*}
+
+\noindent
+We could equally well prove this hypothetical judgment:
+
+\begin{equation*}
+  t(z, c) \ndturnstile/ b(z) \lolli/ b(c)
+\end{equation*}
+
+\noindent
+Here is the proof tree:
+
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(z)^{c}}
+  \hypo{}
+  \infer1[\startrule/]{t(z, c)}
+  \infer2[\tensorIntro/]{b(z) \tensor/ t(z, c)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(z)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{t(z, c)^{b}}
+  
+  \infer2[\traderule/]{b(c)}
+  \infer2[\tensorElim/$^{a, b}$]{b(c)}
+  \infer1[\lolliIntro/$^{c}$]{b(z) \lolli/ b(c)}
+\end{prooftree*}
+
+\noindent
+The same sorts of moves can be used for bigger trees. Consider this hypothetical judgment:
+
+\begin{equation*}
+  b(c), t(c, s) \ndturnstile/ t(s, p) \lolli/ b(p)
+\end{equation*}
+
+\noindent
+And here is the proof tree:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(c)}
+  \hypo{}
+  \infer1[\startrule/]{t(c, s)}
+  \infer2[\tensorIntro/]{b(c) \tensor/ t(c, s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(c)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{t(c, s)^{b}}
+  
+  \infer2[\traderule/]{b(s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)^{c}}
+  \infer2[\traderule/]{b(p)}
+
+  \infer2[\tensorElim/$^{a, b}$]{b(p)}
+  \infer1[\lolliIntro/$^{c}$]{t(s, p) \lolli/ b(p)}
+\end{prooftree*}
+
+\noindent
+Here is a slight variation on the previous hypothetical judgment:
+
+\begin{equation*}
+  b(c), t(s, p) \ndturnstile/ t(c, s) \lolli/ b(p)
+\end{equation*}
+
+\noindent
+And here is the proof tree:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(c)}
+  \hypo{}
+  \infer1[\startrule/]{t(c, s)^{c}}
+  \infer2[\tensorIntro/]{b(c) \tensor/ t(c, s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(c)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{t(c, s)^{b}}
+  
+  \infer2[\traderule/]{b(s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  \infer2[\traderule/]{b(p)}
+
+  \infer2[\tensorElim/$^{a, b}$]{b(p)}
+  \infer1[\lolliIntro/$^{c}$]{t(c, s) \lolli/ b(p)}
+\end{prooftree*}
+
+\noindent
+We can introduce more lollis too. Consider this judgment:
+
+\begin{equation*}
+  b(c) \ndturnstile/ t(s, p) \lolli/ (t(c, s) \lolli/ b(p))
+\end{equation*}
+
+\noindent
+Here is the proof tree:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(c)}
+  \hypo{}
+  \infer1[\startrule/]{t(c, s)^{c}}
+  \infer2[\tensorIntro/]{b(c) \tensor/ t(c, s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(c)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{t(c, s)^{b}}
+  
+  \infer2[\traderule/]{b(s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)^{d}}
+  \infer2[\traderule/]{b(p)}
+
+  \infer2[\tensorElim/$^{a, b}$]{b(p)}
+  \infer1[\lolliIntro/$^{c}$]{t(c, s) \lolli/ b(p)}
+  \infer1[\lolliIntro/$^{d}$]{t(s, p) \lolli/ (t(c, s) \lolli/ b(p))}
+\end{prooftree*}
+
+\noindent
+We can even make a categorical judgment from this:
+
+\begin{equation*}
+  \ndturnstile/ b(c) \lolli/ (t(s, p) \lolli/ (t(c, s) \lolli/ b(p)))
+\end{equation*}
+
+\noindent
+Here is the proof tree:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(c)^{e}}
+  \hypo{}
+  \infer1[\startrule/]{t(c, s)^{c}}
+  \infer2[\tensorIntro/]{b(c) \tensor/ t(c, s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(c)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{t(c, s)^{b}}
+  
+  \infer2[\traderule/]{b(s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)^{d}}
+  \infer2[\traderule/]{b(p)}
+
+  \infer2[\tensorElim/$^{a, b}$]{b(p)}
+  \infer1[\lolliIntro/$^{c}$]{t(c, s) \lolli/ b(p)}
+  \infer1[\lolliIntro/$^{d}$]{t(s, p) \lolli/ (t(c, s) \lolli/ b(p))}
+  \infer1[\lolliIntro/$^{e}$]{b(c) \lolli/ (t(s, p) \lolli/ (t(c, s) \lolli/ b(p)))}
+\end{prooftree*}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+The \tensorIntro/ rule can be used to combine any two assumptions we like. We can also use the \tensorIntro/ rule over and over, to put together multiple tensors.
+
+
+\end{document}

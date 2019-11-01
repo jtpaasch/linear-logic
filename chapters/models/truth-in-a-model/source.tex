@@ -1,0 +1,252 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Truth in a model}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Constructing sentences}
+
+With a model, we can formulate sentences which express facts about the situation being modeled.
+
+To construct such sentences, take any of the predicates in the model, and replace the $x$s, $y$s, and $z$s with objects from the model.
+
+Then you can check if those sentences are true in the model, by checking if they describe a fact that truly holds in the model.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Situation 1}
+
+Recall from situation 1 that X23a is a part of J14, and X23b is too:
+
+\begin{diagram}
+
+  \node[o-point] (x23a) [label=left:{X23a}] at (-3, -1) {};
+  \node[o-point] (j14) [label=above:{J14}] at (0, 1) {};
+  \node[o-point] (x23b) [label=right:{X23b}] at (3, -1) {};
+
+  \draw[spaced-arrows,->] 
+    (x23a) to (-1.5, 0)
+    to node [near start, fill=white] {part of} (-1.5, 0)
+    to (j14);
+    
+  \draw[spaced-arrows,->]
+    (x23b) to (1.5, 0)
+    to node [near start, fill=white] {part of} (1.5, 0)
+    to (j14);
+
+\end{diagram}
+
+\noindent
+Written out compactly:
+
+\begin{model}
+  \modelobjects{X23a, X23b, J14}
+  \modelrelations{
+    \item{$x$ is a part of $y$: (X23a, J14), (X23b, J14)}
+  }
+\end{model}
+
+\noindent
+To construct statements about this model, we take the predicate ``$x$ is a part of $y$,'' and we replace $x$ and $y$ with the names of objects from the model. Some of these sentences will be true (in this model), and some will be false.
+
+Here are some statements that are true in this model:
+
+\begin{itemize}
+  \item{X23a is a part of J14}
+  \item{X23b is a part of J14}
+\end{itemize}
+
+\noindent
+Here are some statements that are false in this model:
+
+\begin{itemize}
+  \item{J14 is a part of X23a}
+  \item{J14 is a part of X23b}
+  \item{X23a is a part of X23b}
+  \item{X23b is a part of X23a}
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Situation 2}
+
+Recall that $H20$ is composed of $H$ atoms and $O$ atoms, and $CO2$ is composed of $C$ atoms and $O$ atoms.
+
+\begin{diagram}
+
+  \node[o-point] (o) [label=below:{O}] at (0, -1) {};
+  \node[o-point] (h) [label=below:{H}] at (-3, -1) {};
+  \node[o-point] (c) [label=below:{C}] at (3, -1) {};
+
+  \node[o-point] (h2o) [label=above:{H20}] at (-1.5, 1) {};
+  \node[o-point] (co2) [label=above:{CO2}] at (1.5, 1) {};
+
+  \draw
+    (h2o) to node [fill=white] {composed of} (-1.5, 0);
+  \draw[spaced-arrows,->] (-1.5, 0) to (h);
+  \draw[spaced-arrows,->] (-1.5, 0) to (o);
+
+  \draw
+    (co2) to node [fill=white] {composed of} (1.5, 0);
+  \draw[spaced-arrows,->] (1.5, 0) to (o);
+  \draw[spaced-arrows,->] (1.5, 0) to (c);
+
+\end{diagram}
+
+\noindent
+Written down compactly:
+
+\begin{model}
+  \modelobjects{H, O, C, H20, CO2}
+  \modelrelations{
+    \item{$x$ is composed of $y$ and $z$: (H20, H, O), (CO2, O, C)}
+  }
+\end{model}
+
+\noindent
+To construct statements about this model, we take the predicate ``$x$ is a composed of $y$,'' and we replace $x$, $y$, and $z$ with the names of objects from the model. Some of these sentences will be true (in this model), and some will be false.
+
+Here are some statements that are true in this model:
+
+\begin{itemize}
+  \item{H20 is composed of H and O.}
+  \item{CO2 is composed of O and C.}
+\end{itemize}
+
+\noindent
+Here are some statements that are false in this model:
+
+\begin{itemize}
+  \item{H is composed of H20 and O.}
+  \item{O is composed of C and H20.}
+  \item{H20 is composed of C and H.}
+  \item{CO2 is composed of H20 and C.}
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Situation 3}
+
+Recall the vegetarians and vegan (with their one meat-eater friend).
+
+\begin{diagram}
+
+  \node[o-point] (s) [label=below:{Sheila}] at (0, 0) {};
+  \node[o-point] (h) [label=below:{Hanover}] at (-3, -1) {};
+  \node[o-point] (j) [label=below:{Jorge}] at (3, -1) {};
+  \node[o-point] (d) [label=above:{Debby}] at (-1.5, 1) {};
+  \node[o-point] (c) [label=above:{Camilla}] at (1.5, 1) {};
+
+  \coordinate[label=above:{\fbox{vegetarian}}] (s_vegt) at (0, 0);
+  \coordinate[label=above right:{\fbox{vegetarian}}] (h_vegt) at (-3, -1);
+
+  \coordinate[label=above left:{\fbox{vegan}}] (j_vegn) at (3, -1);
+  \coordinate[label=below right:{\fbox{vegan}}] (c_vegn) at (1.5, 1);
+
+  \coordinate[label=below left:{\fbox{meat}}] (d_meat) at (-1.5, 1);
+  
+\end{diagram}
+
+\noindent
+Written down compactly: 
+
+\begin{model}
+  \modelobjects{Sheila, Hanover, Jorge, Camilla, Debby}
+  \modelrelations{
+    \item{$x$ is a vegetarian: Sheila, Hanover}
+    \item{$x$ is a vegan: Jorge, Camilla}
+    \item{$x$ is a meat eater: Debby}
+  }
+\end{model}
+
+\noindent
+To construct statements about this model, we take the predicates ``$x$ is a vegetarian,'' ``$x$ is a vegan,'' and $x$ is a meat eater,'' and we replace $x$ with the names of objects from the model. Some of these sentences will be true (in this model), and some will be false.
+
+Here are some statements that are true in this model:
+
+\begin{itemize}
+  \item{Sheila is a vegetarion.}
+  \item{Jorge is a vegan.}
+  \item{Debby is a meat eater.}
+\end{itemize}
+
+\noindent
+Here are some statements that are false in this model:
+
+\begin{itemize}
+  \item{Hanover is a vegan.}
+  \item{Camilla is a meat eater.}
+  \item{Sheila is a vegan.}
+  \item{Debby is a vegetarion.}
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Situation 4}
+
+Recall how Keven and Jay work for Thecla, while Bea and Jo are self-employed:
+
+\begin{diagram}
+
+  \node[o-point] (j) [label=below:{Jay}] at (0, -1) {};
+  \node[o-point] (k) [label=below:{Kevin}] at (-3, -1) {};
+  \node[o-point] (b) [label=below:{Bea}] at (3, -1) {};
+  \node[o-point] (t) [label=above:{Thecla}] at (-1.5, 1) {};
+  \node[o-point] (l) [label=above:{Jo}] at (1.5, 1) {};
+
+  \draw[spaced-arrows,->] (t) to (k);
+  \draw[spaced-arrows,->] (t) to (j);
+  
+  \path[spaced-arrows,->] (l) edge[loop below, out=0, looseness=40] (l);
+  \path[spaced-arrows,->] (b) edge[loop above, out=180, looseness=40] (b);
+
+\end{diagram}
+
+\noindent
+Written out compactly:
+
+\begin{model}
+  \modelobjects{Kevin, Jay, Thecla, Bea, Jo}
+  \modelrelations{
+    \item{$x$ employs $y$: (Thecla, Kevin), (Thecla, Jay), (Bea, Bea), (Jo, Jo)}
+  }
+\end{model}
+
+\noindent
+To construct statements about this model, we take the predicate ``$x$ employs $y$,'' and we replace $x$ and $y$ with the names of objects from the model. Some of these sentences will be true (in this model), and some will be false.
+
+Here are some statements that are true in this model:
+
+\begin{itemize}
+  \item{Thecla employs Kevin.}
+  \item{Thecla employs Jay.}
+  \item{Bea employs Bea.}
+\end{itemize}
+
+\noindent
+Here are some statements that are false in this model:
+
+\begin{itemize}
+  \item{Kevin employs Kevin.}
+  \item{Thecla employs Bea.}
+  \item{Bea employs Jo.}
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+With a model, we can construct sentences that express facts about the situation being modeled. To construct such sentences, take any of the predicates in the model and replace the $x$s, $y$s, and $z$s with names of objects in the model. Then you can check if those statements are true or false in the situation being modeled.
+
+
+\end{document}

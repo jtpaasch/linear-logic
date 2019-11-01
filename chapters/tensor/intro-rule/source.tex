@@ -1,0 +1,245 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Tensor introduction}
+
+We discussed the lolli connective extensively. But of course, there are other connectives. In this part, we will look at another connective called the ``tensor,'' just so we can see a second example. In this and the following chapters, we will learn about the introduction and elimination rules for the tensor, and we will prove that the elimination rules are in harmony with the introduction rules.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Meaning}
+
+Another way we can put two propositions together is to put them into ``both--simultaneously'' relationship. That is, both are true at the same time. We will write that like this (where $A$ and $B$ are propositions):
+
+\begin{center}
+  $A \tensor/ B$
+\end{center}
+
+\noindent
+This means that $A$ and $B$ are true simultaneously.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Formation}
+
+Here is the rule we use to formulate such a proposition:
+
+\begin{prooftree*}
+  \hypo{A :: prop}
+  \hypo{B :: prop}
+  \infer2{A \tensor/ B :: prop}
+\end{prooftree*}
+
+\noindent
+This says that if $A$ is a proposition, and also if $B$ is a proposition, then we can put them together to form $A \tensor/ B$, which is also a proposition.
+
+The ``$\tensor/$'' symbol is called a \vocab{tensor} symbol. We pronounce ``$A \tensor/ B$'' as ``$A$ tensor $B$.''
+
+We will often refer to the whole proposition ``$A \tensor/ B$'' as ``a tensor.'' Strictly speaking, the tensor is really just the symbol that connects $A$ and $B$, but it is much easier to say ``the tensor'' than it is to say ``the proposition formed with a tensor.''
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Example}
+
+Suppose we have introduced two assumptions, for example something like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p) :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, s) :: true}
+  
+  \infer[rule style=no rule]2{}
+\end{prooftree*}
+
+\noindent
+Notice that we have two propositions that are both true in this proof tree:
+
+\begin{diagram}
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{}
+      \infer1[\startrule/]{\fbox{$b(p)$} :: true}
+      \hypo{}
+      \infer1[\startrule/]{\fbox{$t(p, s)$} :: true}
+      \infer[rule style=no rule]2{}
+    \end{prooftree}
+  };
+
+  \draw[spaced-arrows,->] (-2.75, -1.5) -- (-2.75, -0.35);
+  \node (l_1) [fill=white] at (-2.75, -1.5) {prop};
+
+  \draw[spaced-arrows,->] (0.75, -1.5) -- (0.75, -0.35);
+  \node (l_2) [fill=white] at (0.75, -1.5) {prop};
+
+\end{diagram}
+
+\noindent
+These two can be combined into a tensor:
+
+\begin{diagram}
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{}
+      \infer1[\startrule/]{\fbox{$b(p)$} :: true}
+      \hypo{}
+      \infer1[\startrule/]{\fbox{$t(p, s)$} :: true}
+      \infer[rule style=no rule]2{}
+    \end{prooftree}
+  };
+
+  \draw[] (-2.75, -1.5) -- (-2.75, -0.35);
+  \node (l_1) [fill=white] at (-2.75, -1.5) {prop};
+
+  \draw[] (0.75, -1.5) -- (0.75, -0.35);
+  \node (l_2) [fill=white] at (0.75, -1.5) {prop};
+
+  \draw[] (-2.75, -1.75) -- (-2.75, -2.25) -- (0.75, -2.25) -- (0.75, -1.75);
+  \draw[spaced-arrows,->] (-1, -2.25) -- (-1, -3);
+  \node (l_2) [fill=white] at (-1, -3.4) {\fbox{$b(p) \tensor/ t(p, s) :: true$}};
+
+\end{diagram}
+
+\noindent
+So we can remove the arrows and simply introduce the tensor as the next inference:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p) :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, s) :: true}
+  
+  \infer2{b(p) \tensor/ t(p, s) :: true}
+\end{prooftree*}
+
+\noindent
+To do this, we need to write the rule we used to introduce the tensor. We call it the ``tensor introduction rule,'' and we write it like this: \tensorIntro/. That's a tensor symbol, followed by a capital ``I,'' the first letter of ``Introduction.'' So let's write that in:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p) :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, s) :: true}
+  
+  \infer2[\tensorIntro/]{b(p) \tensor/ t(p, s) :: true}
+\end{prooftree*}
+
+\noindent
+Again, the proof that this is a valid inference is precisely the fact that the two parts of the tensor --- ``$b(p)$'' and ``$t(p, s)$'' --- are both true one step above the inference line:
+
+\begin{diagram}
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{}
+      \infer1[\startrule/]{\fbox{$b(p)$} :: true}
+      \hypo{}
+      \infer1[\startrule/]{\fbox{$t(p, s)$} :: true}
+      \infer2[\tensorIntro/]{\fbox{$b(p)$} \tensor/ \fbox{$t(p, s)$} :: true}
+    \end{prooftree}
+  };
+
+  \draw[spaced-arrows,->] (-3.25, 0.25) -- (-3.75, 0.25) -- (-3.75, -1.5) -- (-1.7, -1.5) -- (-1.7, -0.85);
+
+  \draw[spaced-arrows,->] (2.5, 0.25) -- (3.25, 0.25) -- (3.25, -1.5) -- (-0.25, -1.5) -- (-0.25, -0.85);
+
+\end{diagram}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The introduction rule}
+
+Let us write out the tensor introduction rule as a template. We will let $A$ and $B$ be placeholders for any propositions. Then we can write the rule like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A :: true}
+
+  \hypo{}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{B :: true}
+
+  \infer2[\tensorIntro/]{A \tensor/ B :: true}
+\end{prooftree*}
+
+\noindent
+The vertical dots above ``$A :: true$ indicate that $A :: true$ has been derived by some legitimate inference rule in the proof tree. The same goes for the vertical dots above ``$B :: true$.'' The idea is that, however it is that we have derived ``$A :: true$'' and ``$B :: true$,'' once we have derived them, we can use the \tensorIntro/ rule to combine them into a single tensor.
+
+There is one point to note here. Remember that we are working with linear principles, so we care about how many times things get used.  And here, when we use the \tensorIntro/ rule to introduce a tensor into the proof tree, we \emph{use up} the individual ``$A :: true$'' and ``$B :: true$'' in the process of producing the tensor. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Hypothetical judgments}
+
+Consider the proof we just worked out:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p) :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, s) :: true}
+  
+  \infer2[\tensorIntro/]{b(p) \tensor/ t(p, s) :: true}
+\end{prooftree*}
+
+\noindent
+What is the hypothetical judgment that this proof tree proves? As usual, we can work that out simply by looking at the assumptions at the top of the tree, and looking at the conclusion at the bottom of the tree:
+
+\begin{diagram}
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{}
+      \infer1[\startrule/]{b(p) :: true}
+      \hypo{}
+      \infer1[\startrule/]{t(p, s) :: true}
+      \infer2[\tensorIntro/]{b(p) \tensor/ t(p, s) :: true}
+    \end{prooftree}
+  };
+
+  \draw (-2.35, -0.75) -- (-2.35, -1) -- (1.35, -1) -- (1.35, -0.75);
+  \draw[spaced-arrows,->] (-0.5, -1.75) -- (-0.5, -1);
+  \node (c_1_l) [label=below:{conclusion}] at (-0.5, -1.65) {};
+
+  \draw (-3.25, 0.85) -- (-3.25, 1.1) -- (-0.35, 1.1) -- (-0.35, 0.85);
+  \draw[spaced-arrows,->] (-2, 1.85) -- (-2, 1.1);
+  \node (a_1_l) [label=below:{assumption}] at (-2, 2.45) {};
+
+  \draw (0, 0.85) -- (0, 1.1) -- (3, 1.1) -- (3, 0.85);
+  \draw[spaced-arrows,->] (1.5, 1.85) -- (1.5, 1.1);
+  \node (a_2_l) [label=below:{assumption}] at (1.5, 2.45) {};
+
+\end{diagram}
+
+\noindent
+So this proof tree proves the following hypothetical judgment:
+
+\begin{equation*}
+  b(p) :: true, t(p, s) :: true \ndturnstile/ b(p) \tensor/ t(p, s) :: true
+\end{equation*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+The \tensorIntro/ rule says: if you know that ``$A$'' is true, and you also know that ``$B$'' is true, then you can conclude that ``$A \tensor/ B$'' is true, i.e., you can conclude that both are true simultaneously.
+
+
+\end{document}

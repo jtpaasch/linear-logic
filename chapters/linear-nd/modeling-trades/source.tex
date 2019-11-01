@@ -1,0 +1,301 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Modeling trades}
+
+
+As I go through any given Saturday at the farmer's market, I can progress through a variety of states. We can model any of these states, using the objects and predicates listed in the last chapter.
+
+I can represent the vegetables as dots. For example, suppose potatoes, squash, and zucchini are available:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{n}$}] (s_0) at (0.175, -0.75);
+  
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, 0) {};
+    \node[o-point] (z) [label=above:{$z$}] at (0.75, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 0.5) {};
+    
+\end{diagram}
+
+\noindent
+If one of these is in my basket, I can mark it with a boxed \fbox{$b$}. For example, if potatoes are in my basket:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{n}$}] (s_0) at (0.175, -0.75);
+  
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, 0) {};
+    \node[o-point] (z) [label=above:{$z$}] at (0.75, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 0.5) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 0.5);
+    
+\end{diagram}
+
+\noindent
+If I can trade one vegetable for another, I can mark that with an arrow labeled by a ``$t$.'' For instance, if I can trade potatoes for squash, then I draw an arrow from the ``$p$'' dot to the ``$s$'' dot:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{n}$}] (s_0) at (0.175, -0.75);
+  
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, 0) {};
+    \node[o-point] (z) [label=above:{$z$}] at (0.75, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 0.5) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 0.5);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (s);
+
+\end{diagram}
+
+\noindent
+And if I can trade potatoes for zucchini, then I draw an arrow from the ``$p$'' dot to the ``$z$'' dot:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{n}$}] (s_0) at (0.175, -0.75);
+  
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, 0) {};
+    \node[o-point] (z) [label=above:{$z$}] at (0.75, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 0.5) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 0.5);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (s);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (z);
+
+\end{diagram}
+
+\noindent
+If I actually go through with a trade, then I enter into a new state. For example, if I trade potatoes for squash, then I get rid of my potatoes, and I end up with squash in my basket. 
+
+To represent this, I can first draw a new box to represent a transition:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{n}$}] (s_0) at (0.175, -0.75);
+  
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, 0) {};
+    \node[o-point] (z) [label=above:{$z$}] at (0.75, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 0.5) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 0.5);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (s);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (z);
+    
+  % State 1
+  \draw[spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{n + 1}$}] (s_1) at (3.5, -0.75);
+
+\end{diagram}
+
+\noindent
+At first, I fill it with the same objects, boxes, and arrows:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{n}$}] (s_0) at (0.175, -0.75);
+  
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, 0) {};
+    \node[o-point] (z) [label=above:{$z$}] at (0.75, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 0.5) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 0.5);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (s);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (z);
+
+  % State 1
+  \draw[spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{n + 1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (s_1) [label=below:{$s$}] at (4, 0) {};
+    \node[o-point] (z_1) [label=above:{$z$}] at (4, 1) {};
+    \node[o-point] (p_1) [label=below:{$p$}] at (2.75, 0.5) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (2.75, 0.5);    
+    \draw[spaced-arrows,->] (p_1) to node [fill=white] {$t$} (s_1);
+    \draw[spaced-arrows,->] (p_1) to node [fill=white] {$t$} (z_1);
+
+\end{diagram}
+
+But then I want to adjust things in this new state, to reflect what's changed. First I move the boxed \fbox{$b$} marker over to the squash, to indicate that the squash is now in my basket, not the potatoes:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{n}$}] (s_0) at (0.175, -0.75);
+  
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, 0) {};
+    \node[o-point] (z) [label=above:{$z$}] at (0.75, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 0.5) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 0.5);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (s);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (z);
+    
+  % State 1
+  \draw[spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{n + 1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (s_1) [label=below:{$s$}] at (4, 0) {};
+    \node[o-point] (z_1) [label=above:{$z$}] at (4, 1) {};
+    \node[o-point] (p_1) [label=below:{$p$}] at (2.75, 0.5) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (4, 0);    
+    \draw[spaced-arrows,->] (p_1) to node [fill=white] {$t$} (s_1);
+    \draw[spaced-arrows,->] (p_1) to node [fill=white] {$t$} (z_1);
+
+\end{diagram}
+
+\noindent
+Since I've traded my potatoes for squash, I've now used up my option to trade potatoes for squash. So I need to remove the arrow from the ``$p$'' dot to the ``$s$'' dot:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{n}$}] (s_0) at (0.175, -0.75);
+  
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, 0) {};
+    \node[o-point] (z) [label=above:{$z$}] at (0.75, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 0.5) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 0.5);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (s);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (z);
+    
+  % State 1
+  \draw[spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{n + 1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (s_1) [label=below:{$s$}] at (4, 0) {};
+    \node[o-point] (z_1) [label=above:{$z$}] at (4, 1) {};
+    \node[o-point] (p_1) [label=below:{$p$}] at (2.75, 0.5) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (4, 0);    
+    \draw[spaced-arrows,->] (p_1) to node [fill=white] {$t$} (z_1);
+
+\end{diagram}
+
+\noindent
+Also, I have traded away my potatoes, so I can remove the ``$p$'' dot too:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{n}$}] (s_0) at (0.175, -0.75);
+  
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, 0) {};
+    \node[o-point] (z) [label=above:{$z$}] at (0.75, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 0.5) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 0.5);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (s);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (z);
+    
+  % State 1
+  \draw[spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{n + 1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (s_1) [label=below:{$s$}] at (4, 0) {};
+    \node[o-point] (z_1) [label=above:{$z$}] at (4, 1) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (4, 0);    
+    \draw[spaced-arrows,->] (p_1) to node [fill=white] {$t$} (z_1);
+
+\end{diagram}
+
+\noindent
+Now the arrow pointing to the ``$z$'' dot makes no sense, since I no longer have potatoes to trade. Let's remove that arrow too:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{n}$}] (s_0) at (0.175, -0.75);
+  
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, 0) {};
+    \node[o-point] (z) [label=above:{$z$}] at (0.75, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 0.5) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 0.5);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (s);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (z);
+    
+  % State 1
+  \draw[spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{n + 1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (s_1) [label=below:{$s$}] at (4, 0) {};
+    \node[o-point] (z_1) [label=above:{$z$}] at (4, 1) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (4, 0);    
+
+\end{diagram}
+
+\noindent
+And finally, it makes no sense to have a ``$z$'' dot in state $S_{n + 1}$, since I can't get zucchini anymore in that state. So I can remove the ``$z$'' dot as well:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{n}$}] (s_0) at (0.175, -0.75);
+  
+    \node[o-point] (s) [label=below:{$s$}] at (0.75, 0) {};
+    \node[o-point] (z) [label=above:{$z$}] at (0.75, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (-0.5, 0.5) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 0.5);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (s);
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (z);
+    
+  % State 1
+  \draw[spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{n + 1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (s_1) [label=below:{$s$}] at (4, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (4, 0);    
+
+\end{diagram}
+
+\noindent
+This gives us a complete model of the transaction. In the first state, I have potatoes in my basket, and I have the option to trade potatoes for squash, or for zucchini. When I trade for squash, I end up with squash in my basket, and no other trading options.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+To model a trade that happens in our imagined farmer's market, we draw separate states for the ``before'' and ``after'' moments of a trade. 
+
+In the ``before'' state, we represent the vegetables available with dots, and we represent the trades available with arrows. We also mark the vegetable that's in my basket with a boxed \fbox{$b$}.
+
+In the ``after'' state, we move the boxed \fbox{$b$} marker to the new vegetable that I have acquired, and we remove any other arrows or objects that are no longer accessible.
+
+\end{document}

@@ -1,0 +1,160 @@
+\documentclass[../../../main.tex]{subfiles}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Translation completeness}
+
+At this point, we know how to translate proofs from minimal logic into proofs of linear logic. The last question is this: is this translation scheme sound and complete? That is, does it deliver only accurate results (so it delivers no false positives), and does it deliver all possible results and not miss anything? The answer is yes, and we can prove it. In this chapter, we will prove that our translation scheme is complete.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Completeness}
+
+To say that our translation scheme is complete is to say that we can prove everything in the translated system that we can prove in the original system. The translation scheme doesn't miss anything.
+
+If you think about, it is conceivable that although our translated system might be able to prove some of the things that the original system can, it might not be strong enough to get everything. There might be some things that we can prove in minimal logic, which our translated system is not able to handle. 
+
+If that were so, then our translation scheme would not be \vocab{complete}, because it would not deliver a proof for \emph{everything} that minimal logic can prove.
+
+How do we tell if our translation scheme has missed anything? Well, we look at every possible provable judgment in minimal logic, and then we check to see if the translation of it can be proved in linear logic. 
+
+Let us write this down as a theorem that we intend to prove, like this:
+
+\begin{theorem}[Completeness]
+Let $``\nd{\Gamma} \ndturnstile/ \nd{A} :: true''$ stand for any judgment in minimal logic, and let $``\bang/\nd{\Gamma}^{*} \ndturnstile/ \nd{A}^{*} :: true''$ stand for the translation of that judgment into linear logic. If $``\nd{\Gamma} \ndturnstile/ \nd{A} :: true''$ is provable in minimal logic, then $``\bang/\nd{\Gamma}^{*} \ndturnstile/ \nd{A}^{*} :: true''$ is provable in linear logic.
+\end{theorem}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Proving completeness}
+
+To prove completeness, we can simply point back to our translation scheme. In the last few chapters, we showed how to systematically translate a proof from minimal logic into an equivalent proof in linear logic. We did this by considering every possible kind of last step that can occur in a minimal logic proof, and showing how we can translate it into an equivalent form in linear logic.
+
+An entire proof tree can be converted by translating each step in the tree, starting from the bottom and working up. Since each translation step preserves the same (translated) assumptions and (translated) conclusion, we will always end up with a translated proof of the equivalent judgment --- i.e., a proof of the same conclusion (though translated into linear logic), under the same assumptions (though translated into linear logic and banged).  
+
+So, we've done the proof already. At this point, we can simply restate the work we did in the last chapters, so that we have the reasoning all contained in one place. Here it is.
+
+\begin{proof}
+For every proof of a judgment in minimal logic, we can convert the last step of the proof into an equivalent version in linear logic. We can translate the last step in such a way that we do not alter the translated assumptions or translated conclusion of the tree. We show this by showing that this is so for each possible inference rule that the last step of a minimal logic proof tree can be comprised of.
+
+\begin{enumerate}
+
+\item If a proof ends with a use of the \startrule/, the last step can be translated like this:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}}
+  \infer[no rule]2{}
+\end{prooftree}
+\hskip 1cm \rightsquigarrow \hskip 1cm
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{*}}
+  \infer1[\bangCopy/]{\nd{A}^{*}}
+  \infer2[\bangWeak/]{\nd{A}^{*}}
+\end{prooftree}
+$$
+
+\noindent
+This translation preserves the translated assumptions and the translated conclusion.
+
+\item If a proof ends with a use of the \implIntro/ rule, the last step can be translated like this:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{a}}
+  \ellipsis{}{}
+  \infer[no rule]2{}
+  \ellipsis{}{\nd{B}}
+  \infer1[\implIntro/$^{a}$]{\nd{A} \impl/ \nd{B}}
+\end{prooftree}
+\hskip 1cm \rightsquigarrow \hskip 1cm
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{* a}}
+  \infer1[\bangCopy/]{\nd{A}^{*}}
+  \ellipsis{}{}
+  \infer[no rule]2{}
+  \ellipsis{}{\nd{B}^{*}}
+  \infer1[\lolliIntro/$^{a}$]{\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}}
+\end{prooftree}
+$$
+
+\noindent
+This translation preserves the translated assumptions and the translated conclusion.
+
+\item If a proof ends with a use of the \implElim/ rule, the last step can be translated like this:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{\Proof/_{1}}
+  \ellipsis{}{\nd{A} \impl/ \nd{B}}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{\Proof/_{2}}
+  \ellipsis{}{\nd{A}}
+  \infer2[\implElim/]{\nd{B}}
+\end{prooftree}
+\hskip 1cm \rightsquigarrow \hskip 1cm
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/_{1}}
+  \ellipsis{}{\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{* a}}
+  \ellipsis{}{\Proof/_{2}}
+  \ellipsis{}{\nd{A}^{*}}
+  \infer2[\bangProm/$^{a}$]{\bang/\nd{A}^{*}}
+
+  \infer2[\lolliElim/]{\nd{B}^{*}}
+\end{prooftree}
+$$
+
+\noindent
+This translation preserves the translated assumptions and the translated conclusion.
+
+\end{enumerate}
+
+\noindent
+Moreover, we can translate an entire proof tree by using the above translations to translate each step in the proof tree, starting at the bottom and working up. Since each step preserves the same translated assumptions and the same translated conclusion, the final proof tree will also have the same translated assumptions and the same translated conclusion. Hence, it will be a proof of the equivalent translated judgment in linear logic --- i.e., it will be a judgment with the same assumptions (translated into linear logic) and the same conclusion (translated into linear logic).
+
+Thus, any provable judgment in minimal logic has an equivalent judgment in linear logic that is also provable. There are no provable judgments in minimal logic that do not have a provable equivalent judgment in linear logic. Nothing is missed.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+In this chapter, we showed that our translation scheme is complete, by showing that for any provable judgment in minimal logic, there is an equivalent provable judgment in linear logic. We proved this by showing that we can translate every possible step of a minimal logic proof tree into an equivalent form in a linear logic proof tree, in such a way that we don't alter the translated assumptions or conclusion.
+
+
+\end{document}

@@ -1,0 +1,385 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Examples}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Situation 1}
+
+Consider the following situation:
+
+\begin{quote}
+  To fix the broken assembly unit J14, we need two new parts: we need part X23a, and part X23b. Both of these parts are essential pieces of J14. It won't work without them.
+\end{quote}
+
+\noindent
+Draw the objects involved:
+
+\begin{diagram}
+
+  \node[o-point] (x23a) [label=left:{X23a}] at (-2, 0) {};
+  \node[o-point] (j14) [label=above:{J14}] at (0, 1) {};
+  \node[o-point] (x23b) [label=right:{X23b}] at (2, 0) {};
+
+\end{diagram}
+
+\noindent
+We know that x23a is a part of J14, so draw that connection:
+
+\begin{diagram}
+
+  \node[o-point] (x23a) [label=left:{X23a}] at (-3, -1) {};
+  \node[o-point] (j14) [label=above:{J14}] at (0, 1) {};
+  \node[o-point] (x23b) [label=right:{X23b}] at (3, -1) {};
+
+  \draw[spaced-arrows,->] 
+    (x23a) to (-1.5, 0)
+    to node [near start, fill=white] {part of} (-1.5, 0)
+    to (j14);
+
+\end{diagram}
+
+\noindent
+And we know that x23b is also a part of J14, so we can draw that connection too:
+
+\begin{diagram}
+
+  \node[o-point] (x23a) [label=left:{X23a}] at (-3, -1) {};
+  \node[o-point] (j14) [label=above:{J14}] at (0, 1) {};
+  \node[o-point] (x23b) [label=right:{X23b}] at (3, -1) {};
+
+  \draw[spaced-arrows,->] 
+    (x23a) to (-1.5, 0)
+    to node [near start, fill=white] {part of} (-1.5, 0)
+    to (j14);
+    
+  \draw[spaced-arrows,->]
+    (x23b) to (1.5, 0)
+    to node [near start, fill=white] {part of} (1.5, 0)
+    to (j14);
+
+\end{diagram}
+
+\noindent
+We can write the whole thing out, compactly.
+
+\begin{model}
+  \modelobjects{X23a, X23b, J14}
+  \modelrelations{
+    \item{$x$ is a part of $y$: (X23a, J14), (X23b, J14)}
+  }
+\end{model}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Situation 2}
+
+Consider this situation:
+
+\begin{quote}
+  Molecules are composed of atoms. For example, $H20$ is composed of $H$ and $O$ atoms, while $CO2$ is composed of $C$ and $O$ atoms.
+\end{quote}
+
+\noindent
+Which objects are involved? There are atoms (namely, there are $O$, $H$, and $C$ atoms):
+
+\begin{diagram}
+
+  \node[o-point] (o) [label=below:{O}] at (0, -1) {};
+  \node[o-point] (h) [label=below:{H}] at (-3, -1) {};
+  \node[o-point] (c) [label=below:{C}] at (3, -1) {};
+
+\end{diagram}
+
+\noindent
+But there are also molecules ($H20$ and $CO2$ molecules). So we need to add them to the diagram too:
+
+\begin{diagram}
+
+  \node[o-point] (o) [label=below:{O}] at (0, -1) {};
+  \node[o-point] (h) [label=below:{H}] at (-3, -1) {};
+  \node[o-point] (c) [label=below:{C}] at (3, -1) {};
+
+  \node[o-point] (h2o) [label=above:{H20}] at (-1.5, 1) {};
+  \node[o-point] (co2) [label=above:{CO2}] at (1.5, 1) {};
+
+\end{diagram}
+
+\noindent
+How are these objects related? Each molecule is composed of two different kinds of atoms. So, we could describe the relation like this: ``$x$ is composed of $y$ and $z$.'' $H2O$ satisfies this description when we replace $x$ with $H20$ and $y$ and $z$ with $H$ and $O$. Similarly, $CO2$ satisfies this description when we replace $x$ with $CO2$ and $y$ and $z$ with $O$ and $C$. 
+
+In our previous examples, relations held between two objects at a time. Here though, the relation is between three. To fill in ``$x$ is composed of $y$ and $z$,'' we have to fill in \emph{three} slots: we have to put something in place of $x$, something in place of $y$, and something in place of $z$.
+
+To reflect this, let's draw the arrow from $H2O$ so that it splits and goes to both $H$ and $O$:
+
+\begin{diagram}
+
+  \node[o-point] (o) [label=below:{O}] at (0, -1) {};
+  \node[o-point] (h) [label=below:{H}] at (-3, -1) {};
+  \node[o-point] (c) [label=below:{C}] at (3, -1) {};
+
+  \node[o-point] (h2o) [label=above:{H20}] at (-1.5, 1) {};
+  \node[o-point] (co2) [label=above:{CO2}] at (1.5, 1) {};
+
+  \draw
+    (h2o) to node [fill=white] {composed of} (-1.5, 0);
+  \draw[spaced-arrows,->] (-1.5, 0) to (h);
+  \draw[spaced-arrows,->] (-1.5, 0) to (o);
+
+\end{diagram}
+
+\noindent
+We can do the same for $CO2$:
+
+\begin{diagram}
+
+  \node[o-point] (o) [label=below:{O}] at (0, -1) {};
+  \node[o-point] (h) [label=below:{H}] at (-3, -1) {};
+  \node[o-point] (c) [label=below:{C}] at (3, -1) {};
+
+  \node[o-point] (h2o) [label=above:{H20}] at (-1.5, 1) {};
+  \node[o-point] (co2) [label=above:{CO2}] at (1.5, 1) {};
+
+  \draw
+    (h2o) to node [fill=white] {composed of} (-1.5, 0);
+  \draw[spaced-arrows,->] (-1.5, 0) to (h);
+  \draw[spaced-arrows,->] (-1.5, 0) to (o);
+
+  \draw
+    (co2) to node [fill=white] {composed of} (1.5, 0);
+  \draw[spaced-arrows,->] (1.5, 0) to (o);
+  \draw[spaced-arrows,->] (1.5, 0) to (c);
+
+\end{diagram}
+
+\noindent
+We can write this model down in a compact form too. However, when we list the values for ``$x$ is composed of $y$ and $z$,'' we need to list triples rather than pairs, since ``$x$ is composed of $y$ and $z$'' is a three-part relation rather than a two-part relation.
+
+\begin{model}
+  \modelobjects{H, O, C, H20, CO2}
+  \modelrelations{
+    \item{$x$ is composed of $y$ and $z$: (H20, H, O), (CO2, O, C)}
+  }
+\end{model}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Situation 3}
+
+As we saw, relations can be two-part relations or three-part relations. In fact, there can be any number of parts to a relation. There could be 4-part relations, or 5-part relations. 
+
+There can also be one-part relations. Consider this situation:
+
+\begin{quote}
+  Sheila and Hanover are vegetarians, Jorge and Camilla are vegans, and Debby is a meat eater.
+\end{quote}
+
+\noindent
+Draw the objects involved:
+
+\begin{diagram}
+
+  \node[o-point] (s) [label=below:{Sheila}] at (0, 0) {};
+  \node[o-point] (h) [label=below:{Hanover}] at (-3, -1) {};
+  \node[o-point] (j) [label=below:{Jorge}] at (3, -1) {};
+  \node[o-point] (d) [label=above:{Debby}] at (-1.5, 1) {};
+  \node[o-point] (c) [label=above:{Camilla}] at (1.5, 1) {};
+
+\end{diagram}
+
+\noindent
+Now for the relations. First, we have some vegetarians. We can describe this relation like so: ``$x$ is a vegetarian.'' This is a one-part relation because we have to fill in one slot to make sense of it: we have to replace $x$ with a name.
+
+To draw a one-part relation on our diagram, we can simply label each object that satisfies it. Let's put the label ``vegetarian'' by Shelia and Hanover:
+
+\begin{diagram}
+
+  \node[o-point] (s) [label=below:{Sheila}] at (0, 0) {};
+  \node[o-point] (h) [label=below:{Hanover}] at (-3, -1) {};
+  \node[o-point] (j) [label=below:{Jorge}] at (3, -1) {};
+  \node[o-point] (d) [label=above:{Debby}] at (-1.5, 1) {};
+  \node[o-point] (c) [label=above:{Camilla}] at (1.5, 1) {};
+
+  \coordinate[label=above:{\fbox{vegetarian}}] (s_v) at (0, 0);
+  \coordinate[label=above right:{\fbox{vegetarian}}] (h_v) at (-3, -1);
+
+\end{diagram}
+
+\noindent
+Next there are vegans. This relation can be described as ``$x$ is a vegan.'' This too is a one-part relation, because we have to fill in one slot to make sense of it: we have to replace $x$ with a name. 
+
+Let's draw this relation just as we drew the vegetarian relation. We'll just add labels to Jorge and Camila to indicate that they each satisfy ``$x$ is a vegan'':
+
+\begin{diagram}
+
+  \node[o-point] (s) [label=below:{Sheila}] at (0, 0) {};
+  \node[o-point] (h) [label=below:{Hanover}] at (-3, -1) {};
+  \node[o-point] (j) [label=below:{Jorge}] at (3, -1) {};
+  \node[o-point] (d) [label=above:{Debby}] at (-1.5, 1) {};
+  \node[o-point] (c) [label=above:{Camilla}] at (1.5, 1) {};
+
+  \coordinate[label=above:{\fbox{vegetarian}}] (s_vegt) at (0, 0);
+  \coordinate[label=above right:{\fbox{vegetarian}}] (h_vegt) at (-3, -1);
+
+  \coordinate[label=above left:{\fbox{vegan}}] (j_vegn) at (3, -1);
+  \coordinate[label=below right:{\fbox{vegan}}] (c_vegn) at (1.5, 1);
+  
+\end{diagram}
+
+\noindent
+Finally, there is the relation ``$x$ is a meat eater,'' which is satisfied only by Debby. Label the meat eater:
+
+\begin{diagram}
+
+  \node[o-point] (s) [label=below:{Sheila}] at (0, 0) {};
+  \node[o-point] (h) [label=below:{Hanover}] at (-3, -1) {};
+  \node[o-point] (j) [label=below:{Jorge}] at (3, -1) {};
+  \node[o-point] (d) [label=above:{Debby}] at (-1.5, 1) {};
+  \node[o-point] (c) [label=above:{Camilla}] at (1.5, 1) {};
+
+  \coordinate[label=above:{\fbox{vegetarian}}] (s_vegt) at (0, 0);
+  \coordinate[label=above right:{\fbox{vegetarian}}] (h_vegt) at (-3, -1);
+
+  \coordinate[label=above left:{\fbox{vegan}}] (j_vegn) at (3, -1);
+  \coordinate[label=below right:{\fbox{vegan}}] (c_vegn) at (1.5, 1);
+
+  \coordinate[label=below left:{\fbox{meat}}] (d_meat) at (-1.5, 1);
+  
+\end{diagram}
+
+\noindent
+We can write this model down in our compact form too. The difference this time around is that when we list the relations, we list only single objects, instead of pairs or triples, since these relations are all one-part relations. 
+
+\begin{model}
+  \modelobjects{Sheila, Hanover, Jorge, Camilla, Debby}
+  \modelrelations{
+    \item{$x$ is a vegetarian: Sheila, Hanover}
+    \item{$x$ is a vegan: Jorge, Camilla}
+    \item{$x$ is a meat eater: Debby}
+  }
+\end{model}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Situation 4}
+
+Objects can be related to themselves too (for instance, if someone loves themselves, or pats themselves on the back, and so on). Such relations are called \vocab{reflexive} relations. These are not one-part relations, but rather two-part relations where the some object fills in both slots.
+
+Consider this situation:
+
+\begin{quote}
+  Jay and Kevin work for Thecla, but Bea and Jo are self employed.
+\end{quote}
+
+\noindent
+First, write down the objects involved:
+
+\begin{diagram}
+
+  \node[o-point] (j) [label=below:{Jay}] at (0, -1) {};
+  \node[o-point] (k) [label=below:{Kevin}] at (-3, -1) {};
+  \node[o-point] (b) [label=below:{Bea}] at (3, -1) {};
+  \node[o-point] (t) [label=above:{Thecla}] at (-1.5, 1) {};
+  \node[o-point] (l) [label=above:{Jo}] at (1.5, 1) {};
+
+\end{diagram}
+
+\noindent
+Next, let's draw the relations. We really have one relation here: ``$x$ employs $y$.'' So who employs who here? Well, Thecla employs Kevin:
+
+\begin{diagram}
+
+  \node[o-point] (j) [label=below:{Jay}] at (0, -1) {};
+  \node[o-point] (k) [label=below:{Kevin}] at (-3, -1) {};
+  \node[o-point] (b) [label=below:{Bea}] at (3, -1) {};
+  \node[o-point] (t) [label=above:{Thecla}] at (-1.5, 1) {};
+  \node[o-point] (l) [label=above:{Jo}] at (1.5, 1) {};
+
+  \draw[spaced-arrows,->] (t) to (k);
+
+\end{diagram}
+
+\noindent
+And Thecla also employs Jay:
+
+\begin{diagram}
+
+  \node[o-point] (j) [label=below:{Jay}] at (0, -1) {};
+  \node[o-point] (k) [label=below:{Kevin}] at (-3, -1) {};
+  \node[o-point] (b) [label=below:{Bea}] at (3, -1) {};
+  \node[o-point] (t) [label=above:{Thecla}] at (-1.5, 1) {};
+  \node[o-point] (l) [label=above:{Jo}] at (1.5, 1) {};
+
+  \draw[spaced-arrows,->] (t) to (k);
+  \draw[spaced-arrows,->] (t) to (j);
+  
+\end{diagram}
+
+\noindent
+What about Jo? Jo satisfies ``$x$ employs $y$,'' if we put ``Jo'' in the place of both $x$ and $y$. That yields ``Jo employs Jo,'' which is just what we want.
+
+To draw this, we can draw an arrow coming out of Jo, and then looping back to her:
+
+\begin{diagram}
+
+  \node[o-point] (j) [label=below:{Jay}] at (0, -1) {};
+  \node[o-point] (k) [label=below:{Kevin}] at (-3, -1) {};
+  \node[o-point] (b) [label=below:{Bea}] at (3, -1) {};
+  \node[o-point] (t) [label=above:{Thecla}] at (-1.5, 1) {};
+  \node[o-point] (l) [label=above:{Jo}] at (1.5, 1) {};
+
+  \draw[spaced-arrows,->] (t) to (k);
+  \draw[spaced-arrows,->] (t) to (j);
+  
+  \path[spaced-arrows,->] (l) edge[loop below, out=0, looseness=40] (l);
+\end{diagram}
+
+\noindent
+The same goes for Bea, since she employs herself too:
+
+\begin{diagram}
+
+  \node[o-point] (j) [label=below:{Jay}] at (0, -1) {};
+  \node[o-point] (k) [label=below:{Kevin}] at (-3, -1) {};
+  \node[o-point] (b) [label=below:{Bea}] at (3, -1) {};
+  \node[o-point] (t) [label=above:{Thecla}] at (-1.5, 1) {};
+  \node[o-point] (l) [label=above:{Jo}] at (1.5, 1) {};
+
+  \draw[spaced-arrows,->] (t) to (k);
+  \draw[spaced-arrows,->] (t) to (j);
+  
+  \path[spaced-arrows,->] (l) edge[loop below, out=0, looseness=40] (l);
+  \path[spaced-arrows,->] (b) edge[loop above, out=180, looseness=40] (b);
+
+\end{diagram}
+
+\noindent
+We can write this out in compact form too. The difference here is that for some of the employer-employee pairs, the same name will be both employer and employee:
+
+\begin{model}
+  \modelobjects{Kevin, Jay, Thecla, Bea, Jo}
+  \modelrelations{
+    \item{$x$ employs $y$: (Thecla, Kevin), (Thecla, Jay), (Bea, Bea), (Jo, Jo)}
+  }
+\end{model}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+Relations can be one-part relations, two-part relations, three-part relations, and so on. We can model any of these with the techniques we've learned so far.
+
+When we draw such relations in diagrams, sometimes we have to think about exactly how we want to draw the arrows to convey the relation correctly. For example, in our example of a three-part relation, we decided to split the arrow. With our example of a one-part relation, we decided to simply add a label to the dots. 
+
+One-place relations are not the same as reflexive relations, where a reflexive relation is an arrow that loops back on itself. Reflexive relations are two-part relations, not one-part relations.
+
+\end{document}

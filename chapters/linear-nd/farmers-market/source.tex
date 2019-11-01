@@ -1,0 +1,72 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{The farmer's market}
+
+
+Let's turn to a style of logic called \vocab{linear natural deduction}. To learn the basics, we will work through some examples in detail. So to begin, let's set up a scenario that we can use to construct examples.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The scenario}
+
+Here is a description of the scenario we will reason about:
+
+\begin{quote}
+  About 40 miles from my home, there is a tiny little farmer's market that runs every Saturday morning. Each vendor sells some particular vegetable that they have grown at home, and each vendor sells something that no other vendor sells. I go every Saturday, and play a little game. I always take a basket, but before I go, I fill my basket to the brim with some vegetable. I might put potatoes in my basket, or cucumbers, or whatever. When I get to the farmer's market, I then go around to all the vendors, and I try to trade what's in my basket for a basket full of whatever they're selling. My goal is to trade as many times as I can, and see what I end up with at the end, when the market closes down. Of course, all of the vendors know me by now. On any given week, only some vendors are willing to trade something with me. The others are simply not willing to put up with me throwing around phrases like ``You call this a bazaar?!''; ``You shan't out haggle me, madam!''; and ``eXtreme bartering.'' So who will trade what turns out to be different each week. One thing is constant though: all of the vendors have a strict no trade-back policy. If a vendor is willing to entertain me on a particular day, they'll only do it once for the entire day.
+\end{quote}
+
+\noindent
+There a few things to notice about this scenario:
+
+\begin{itemize}
+  \item{My basket will always only have one type of thing in it, at any given time. This is clear because I always trade everything in my basket for a basket full of whatever the vendor is willing to exchange with me.}
+  \item{I can only trade with any given vendor once per day. So there cannot be any loops or repeats. It is not possible to trade potatoes for cucumbers, then trade those cucumbers back for potatoes, and then go on like that for several iterations.}
+    \item{No two vendors sell the same thing, so it will never be possible for me to get, say, cucumbers twice on a given day. As we just noted, I cannot repeat a trade with a single cucumber vendor, so I can't get cucumbers twice from a single vendor. But nor can I get one basket of cucumbers from one vendor, and then get another basket of cucumbers from another vendor, because no two vendors sell the same thing.}
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Objects and predicates}
+
+The objects that are involved in this scenario are different kinds of vegetables. Instead of writing out the full names of different vegetables, let's use the following abbreviations:
+
+\begin{itemize}
+  \item{$p$: potatoes}
+  \item{$c$: cucumbers}
+  \item{$s$: squash}
+  \item{$z$: zucchini} 
+\end{itemize}
+
+\noindent
+There are two relations that matter here. The first is what's in my basket, and the second is what a vendor is willing to trade. 
+
+\begin{itemize}
+  \item{To say that I have something in my basket, we will use the predicate ``$x$ is/are in my basket,'' where $x$ is a placeholder that should be replaced with the first letter abbreviation of any of the above named vegetables. As a shorthand, we could write ``$basket(x)$,'' but we will abbreviate even that: we will write ``$b(x)$.''}
+  \item{To say that I can trade one type of vegetable for another, we will use the predicate ``I can trade $x$ for $y$,'' where $x$ and $y$ are placeholders that should be replaced with the first letter abbreviation of any of the above named vegetables. As a shorthand, we could write ``$trade(x, y)$, but we will abbreviate that too: we will write ``$t(x, y)$.''}
+\end{itemize}
+
+\noindent
+Here are some examples of the sentences we can formulate to describe this scenario:
+
+\begin{itemize}
+  \item{$b(p)$: this is short for ``potatoes are in my basket.''}
+  \item{$b(c)$: this is short for ``cucumbers are in my basket.''}
+  \item{$t(p, c)$: this is short for ``I can trade potatoes for cucumbers.''}
+  \item{$t(s, z)$: this is short for ``I can trade squash for zucchini.''}
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+In this chapter, we introduced a farmer's market scenario that we can use to build examples in the next chapters. In this scenario, I start with some vegetable in my basket, and I can trade it for various other vegetables.
+
+
+\end{document}

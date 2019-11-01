@@ -1,0 +1,405 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{More complexities}
+
+A system of states can have any number of loops and branches. And this means that transition systems can get fairly complex. Here are some examples of some other complexities.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Two paths to the same endpoint}
+
+Suppose that if Jo has nothing in her hand, she can pick up either the first or third nickel. Like this:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+    \node[o-point] (jo_1) [label=below:{Jo}] at (6, -0.25) {};
+    \node[o-point] (n_1_1) [label=above:{$n_{1}$}] at (4.75, 1) {};
+    \node[o-point] (n_2_1) [label=above:{$n_{2}$}] at (6, 1.25) {};
+    \node[o-point] (n_3_1) [label=above:{$n_{3}$}] at (7.25, 1) {};
+  
+    \draw[spaced-arrows,->] (jo_1) to node [fill=white] {holds} (n_1_1);
+
+  % State 2
+  \draw[spaced-arrows,->] (1, -1) -- (1, -2);
+  \draw (-2, -5) -- (2, -5) -- (2, -2) -- (-2, -2) -- (-2, -5);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (0, -5);
+
+    \node[o-point] (jo_2) [label=below:{Jo}] at (0, -4.25) {};
+    \node[o-point] (n_1_2) [label=above:{$n_{1}$}] at (-1.25, -3) {};
+    \node[o-point] (n_2_2) [label=above:{$n_{2}$}] at (0, -2.75) {};
+    \node[o-point] (n_3_2) [label=above:{$n_{3}$}] at (1.25, -3) {};
+  
+    \draw[spaced-arrows,->] (jo_2) to node [fill=white] {holds} (n_3_2);
+
+\end{diagram}
+
+\noindent
+Now suppose that if Jo is in state $S_{1}$ (i.e., if she's picked up the third nickel), then she can pick up the first nickel as well. Then she'll have two nickels in her hand:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+    \node[o-point] (jo_1) [label=below:{Jo}] at (6, -0.25) {};
+    \node[o-point] (n_1_1) [label=above:{$n_{1}$}] at (4.75, 1) {};
+    \node[o-point] (n_2_1) [label=above:{$n_{2}$}] at (6, 1.25) {};
+    \node[o-point] (n_3_1) [label=above:{$n_{3}$}] at (7.25, 1) {};
+  
+    \draw[spaced-arrows,->] (jo_1) to node [fill=white] {holds} (n_1_1);
+
+  % State 2
+  \draw[spaced-arrows,->] (1, -1) -- (1, -2);
+  \draw (-2, -5) -- (2, -5) -- (2, -2) -- (-2, -2) -- (-2, -5);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (0, -5);
+
+    \node[o-point] (jo_2) [label=below:{Jo}] at (0, -4.25) {};
+    \node[o-point] (n_1_2) [label=above:{$n_{1}$}] at (-1.25, -3) {};
+    \node[o-point] (n_2_2) [label=above:{$n_{2}$}] at (0, -2.75) {};
+    \node[o-point] (n_3_2) [label=above:{$n_{3}$}] at (1.25, -3) {};
+  
+    \draw[spaced-arrows,->] (jo_2) to node [fill=white] {holds} (n_3_2);
+
+  % State 3
+  \draw[spaced-arrows,->] (7, -1) -- (7, -2);
+  \draw (4, -5) -- (8, -5) -- (8, -2) -- (4, -2) -- (4, -5);
+  \coordinate[label=below:{\textbf{S}$_{3}$}] (s_3) at (6, -5);
+
+    \node[o-point] (jo_3) [label=below:{Jo}] at (6, -4.25) {};
+    \node[o-point] (n_1_3) [label=above:{$n_{1}$}] at (4.75, -3) {};
+    \node[o-point] (n_2_3) [label=above:{$n_{2}$}] at (6, -2.75) {};
+    \node[o-point] (n_3_3) [label=above:{$n_{3}$}] at (7.25, -3) {};
+
+    \draw[spaced-arrows,->] (jo_3) to node [fill=white] {holds} (n_1_3);
+    \draw[spaced-arrows,->] (jo_3) to node [fill=white] {holds} (n_3_3);
+
+\end{diagram}
+
+\noindent
+Alternatively, let us suppose that if Jo is in state $S_{2}$ (i.e., she has nickel three in her hand), she can pick up the first nickel. Then she would have two nickels in her hand as well: the first and third nickel. This is exactly $S_{3}$, so we can draw an arrow from $S_{2}$ to $S_{3}$:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+    \node[o-point] (jo_1) [label=below:{Jo}] at (6, -0.25) {};
+    \node[o-point] (n_1_1) [label=above:{$n_{1}$}] at (4.75, 1) {};
+    \node[o-point] (n_2_1) [label=above:{$n_{2}$}] at (6, 1.25) {};
+    \node[o-point] (n_3_1) [label=above:{$n_{3}$}] at (7.25, 1) {};
+  
+    \draw[spaced-arrows,->] (jo_1) to node [fill=white] {holds} (n_1_1);
+
+  % State 2
+  \draw[spaced-arrows,->] (1, -1) -- (1, -2);
+  \draw (-2, -5) -- (2, -5) -- (2, -2) -- (-2, -2) -- (-2, -5);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (0, -5);
+
+    \node[o-point] (jo_2) [label=below:{Jo}] at (0, -4.25) {};
+    \node[o-point] (n_1_2) [label=above:{$n_{1}$}] at (-1.25, -3) {};
+    \node[o-point] (n_2_2) [label=above:{$n_{2}$}] at (0, -2.75) {};
+    \node[o-point] (n_3_2) [label=above:{$n_{3}$}] at (1.25, -3) {};
+  
+    \draw[spaced-arrows,->] (jo_2) to node [fill=white] {holds} (n_3_2);
+
+  % State 3
+  \draw[spaced-arrows,->] (2, -3.5) -- (4, -3.5);
+  \draw[spaced-arrows,->] (7, -1) -- (7, -2);
+  \draw (4, -5) -- (8, -5) -- (8, -2) -- (4, -2) -- (4, -5);
+  \coordinate[label=below:{\textbf{S}$_{3}$}] (s_3) at (6, -5);
+
+    \node[o-point] (jo_3) [label=below:{Jo}] at (6, -4.25) {};
+    \node[o-point] (n_1_3) [label=above:{$n_{1}$}] at (4.75, -3) {};
+    \node[o-point] (n_2_3) [label=above:{$n_{2}$}] at (6, -2.75) {};
+    \node[o-point] (n_3_3) [label=above:{$n_{3}$}] at (7.25, -3) {};
+
+    \draw[spaced-arrows,->] (jo_3) to node [fill=white] {holds} (n_1_3);
+    \draw[spaced-arrows,->] (jo_3) to node [fill=white] {holds} (n_3_3);
+
+\end{diagram}
+
+\noindent
+This diagram shows that Jo can start with no nickels, and she can end up holding both $n_{1}$ and $n_{3}$. To get there, she can take two paths: she can pick up $n_{1}$ first, or she can pick up $n_{3}$ first.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Adding loops}
+
+Suppose now that after Jo has picked up both nickels, she can drop them. To diagram this, we can draw an arrow from $S_{3}$ back to $S_{0}$:
+
+\begin{diagram}
+
+  % State 0
+  \draw[spaced-arrows,->] (4, -2) -- (2, -1);
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+    \node[o-point] (jo_1) [label=below:{Jo}] at (6, -0.25) {};
+    \node[o-point] (n_1_1) [label=above:{$n_{1}$}] at (4.75, 1) {};
+    \node[o-point] (n_2_1) [label=above:{$n_{2}$}] at (6, 1.25) {};
+    \node[o-point] (n_3_1) [label=above:{$n_{3}$}] at (7.25, 1) {};
+  
+    \draw[spaced-arrows,->] (jo_1) to node [fill=white] {holds} (n_1_1);
+
+  % State 2
+  \draw[spaced-arrows,->] (1, -1) -- (1, -2);
+  \draw (-2, -5) -- (2, -5) -- (2, -2) -- (-2, -2) -- (-2, -5);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (0, -5);
+
+    \node[o-point] (jo_2) [label=below:{Jo}] at (0, -4.25) {};
+    \node[o-point] (n_1_2) [label=above:{$n_{1}$}] at (-1.25, -3) {};
+    \node[o-point] (n_2_2) [label=above:{$n_{2}$}] at (0, -2.75) {};
+    \node[o-point] (n_3_2) [label=above:{$n_{3}$}] at (1.25, -3) {};
+  
+    \draw[spaced-arrows,->] (jo_2) to node [fill=white] {holds} (n_3_2);
+
+  % State 3
+  \draw[spaced-arrows,->] (2, -3.5) -- (4, -3.5);
+  \draw[spaced-arrows,->] (7, -1) -- (7, -2);
+  \draw (4, -5) -- (8, -5) -- (8, -2) -- (4, -2) -- (4, -5);
+  \coordinate[label=below:{\textbf{S}$_{3}$}] (s_3) at (6, -5);
+
+    \node[o-point] (jo_3) [label=below:{Jo}] at (6, -4.25) {};
+    \node[o-point] (n_1_3) [label=above:{$n_{1}$}] at (4.75, -3) {};
+    \node[o-point] (n_2_3) [label=above:{$n_{2}$}] at (6, -2.75) {};
+    \node[o-point] (n_3_3) [label=above:{$n_{3}$}] at (7.25, -3) {};
+
+    \draw[spaced-arrows,->] (jo_3) to node [fill=white] {holds} (n_1_3);
+    \draw[spaced-arrows,->] (jo_3) to node [fill=white] {holds} (n_3_3);
+
+\end{diagram}
+
+\noindent
+We can add more loops. Suppose that after Jo picks up the first nickel, she can put it down (and so return to state $S_{0}$). To diagram that, we can draw an arrow from $S_{1}$ back to $S_{0}$.
+
+\begin{diagram}
+
+  % State 0
+  \draw[spaced-arrows,->] (4, 0) -- (2, 0);
+  \draw[spaced-arrows,->] (4, -2) -- (2, -1);
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+    \node[o-point] (jo_1) [label=below:{Jo}] at (6, -0.25) {};
+    \node[o-point] (n_1_1) [label=above:{$n_{1}$}] at (4.75, 1) {};
+    \node[o-point] (n_2_1) [label=above:{$n_{2}$}] at (6, 1.25) {};
+    \node[o-point] (n_3_1) [label=above:{$n_{3}$}] at (7.25, 1) {};
+  
+    \draw[spaced-arrows,->] (jo_1) to node [fill=white] {holds} (n_1_1);
+
+  % State 2
+  \draw[spaced-arrows,->] (1, -1) -- (1, -2);
+  \draw (-2, -5) -- (2, -5) -- (2, -2) -- (-2, -2) -- (-2, -5);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (0, -5);
+
+    \node[o-point] (jo_2) [label=below:{Jo}] at (0, -4.25) {};
+    \node[o-point] (n_1_2) [label=above:{$n_{1}$}] at (-1.25, -3) {};
+    \node[o-point] (n_2_2) [label=above:{$n_{2}$}] at (0, -2.75) {};
+    \node[o-point] (n_3_2) [label=above:{$n_{3}$}] at (1.25, -3) {};
+  
+    \draw[spaced-arrows,->] (jo_2) to node [fill=white] {holds} (n_3_2);
+
+  % State 3
+  \draw[spaced-arrows,->] (2, -3.5) -- (4, -3.5);
+  \draw[spaced-arrows,->] (7, -1) -- (7, -2);
+  \draw (4, -5) -- (8, -5) -- (8, -2) -- (4, -2) -- (4, -5);
+  \coordinate[label=below:{\textbf{S}$_{3}$}] (s_3) at (6, -5);
+
+    \node[o-point] (jo_3) [label=below:{Jo}] at (6, -4.25) {};
+    \node[o-point] (n_1_3) [label=above:{$n_{1}$}] at (4.75, -3) {};
+    \node[o-point] (n_2_3) [label=above:{$n_{2}$}] at (6, -2.75) {};
+    \node[o-point] (n_3_3) [label=above:{$n_{3}$}] at (7.25, -3) {};
+
+    \draw[spaced-arrows,->] (jo_3) to node [fill=white] {holds} (n_1_3);
+    \draw[spaced-arrows,->] (jo_3) to node [fill=white] {holds} (n_3_3);
+
+\end{diagram}
+
+\noindent
+Also, suppose that after Jo picks up the third nickel, she can put it down (and so return back to state $S_{0}$). To diagram that, we can add an arrow from $S_{2}$ back to $S_{0}$:
+
+\begin{diagram}
+
+  % State 0
+  \draw[spaced-arrows,<-] (-1, -1) -- (-1, -2);
+  \draw[spaced-arrows,->] (4, 0) -- (2, 0);
+  \draw[spaced-arrows,->] (4, -2) -- (2, -1);
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+    \node[o-point] (jo_1) [label=below:{Jo}] at (6, -0.25) {};
+    \node[o-point] (n_1_1) [label=above:{$n_{1}$}] at (4.75, 1) {};
+    \node[o-point] (n_2_1) [label=above:{$n_{2}$}] at (6, 1.25) {};
+    \node[o-point] (n_3_1) [label=above:{$n_{3}$}] at (7.25, 1) {};
+  
+    \draw[spaced-arrows,->] (jo_1) to node [fill=white] {holds} (n_1_1);
+
+  % State 2
+  \draw[spaced-arrows,->] (1, -1) -- (1, -2);
+  \draw (-2, -5) -- (2, -5) -- (2, -2) -- (-2, -2) -- (-2, -5);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (0, -5);
+
+    \node[o-point] (jo_2) [label=below:{Jo}] at (0, -4.25) {};
+    \node[o-point] (n_1_2) [label=above:{$n_{1}$}] at (-1.25, -3) {};
+    \node[o-point] (n_2_2) [label=above:{$n_{2}$}] at (0, -2.75) {};
+    \node[o-point] (n_3_2) [label=above:{$n_{3}$}] at (1.25, -3) {};
+  
+    \draw[spaced-arrows,->] (jo_2) to node [fill=white] {holds} (n_3_2);
+
+  % State 3
+  \draw[spaced-arrows,->] (2, -3.5) -- (4, -3.5);
+  \draw[spaced-arrows,->] (7, -1) -- (7, -2);
+  \draw (4, -5) -- (8, -5) -- (8, -2) -- (4, -2) -- (4, -5);
+  \coordinate[label=below:{\textbf{S}$_{3}$}] (s_3) at (6, -5);
+
+    \node[o-point] (jo_3) [label=below:{Jo}] at (6, -4.25) {};
+    \node[o-point] (n_1_3) [label=above:{$n_{1}$}] at (4.75, -3) {};
+    \node[o-point] (n_2_3) [label=above:{$n_{2}$}] at (6, -2.75) {};
+    \node[o-point] (n_3_3) [label=above:{$n_{3}$}] at (7.25, -3) {};
+
+    \draw[spaced-arrows,->] (jo_3) to node [fill=white] {holds} (n_1_3);
+    \draw[spaced-arrows,->] (jo_3) to node [fill=white] {holds} (n_3_3);
+
+\end{diagram}
+
+\noindent
+Likewise, suppose that after Jo picks up both nickels, she can put one down (and so return to state $S_{1}$ or $_{2}$). We can add arrows to show that too:
+
+
+\begin{diagram}
+
+  % State 0
+  \draw[spaced-arrows,<-] (-1, -1) -- (-1, -2);
+  \draw[spaced-arrows,->] (4, 0) -- (2, 0);
+  \draw[spaced-arrows,->] (4, -2) -- (2, -1);
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,<-] (5, -1) -- (5, -2);
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+    \node[o-point] (jo_1) [label=below:{Jo}] at (6, -0.25) {};
+    \node[o-point] (n_1_1) [label=above:{$n_{1}$}] at (4.75, 1) {};
+    \node[o-point] (n_2_1) [label=above:{$n_{2}$}] at (6, 1.25) {};
+    \node[o-point] (n_3_1) [label=above:{$n_{3}$}] at (7.25, 1) {};
+  
+    \draw[spaced-arrows,->] (jo_1) to node [fill=white] {holds} (n_1_1);
+
+  % State 2
+  \draw[spaced-arrows,<-] (2, -4) -- (4, -4);
+  \draw[spaced-arrows,->] (1, -1) -- (1, -2);
+  \draw (-2, -5) -- (2, -5) -- (2, -2) -- (-2, -2) -- (-2, -5);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (0, -5);
+
+    \node[o-point] (jo_2) [label=below:{Jo}] at (0, -4.25) {};
+    \node[o-point] (n_1_2) [label=above:{$n_{1}$}] at (-1.25, -3) {};
+    \node[o-point] (n_2_2) [label=above:{$n_{2}$}] at (0, -2.75) {};
+    \node[o-point] (n_3_2) [label=above:{$n_{3}$}] at (1.25, -3) {};
+  
+    \draw[spaced-arrows,->] (jo_2) to node [fill=white] {holds} (n_3_2);
+
+  % State 3
+  \draw[spaced-arrows,->] (2, -3.5) -- (4, -3.5);
+  \draw[spaced-arrows,->] (7, -1) -- (7, -2);
+  \draw (4, -5) -- (8, -5) -- (8, -2) -- (4, -2) -- (4, -5);
+  \coordinate[label=below:{\textbf{S}$_{3}$}] (s_3) at (6, -5);
+
+    \node[o-point] (jo_3) [label=below:{Jo}] at (6, -4.25) {};
+    \node[o-point] (n_1_3) [label=above:{$n_{1}$}] at (4.75, -3) {};
+    \node[o-point] (n_2_3) [label=above:{$n_{2}$}] at (6, -2.75) {};
+    \node[o-point] (n_3_3) [label=above:{$n_{3}$}] at (7.25, -3) {};
+
+    \draw[spaced-arrows,->] (jo_3) to node [fill=white] {holds} (n_1_3);
+    \draw[spaced-arrows,->] (jo_3) to node [fill=white] {holds} (n_3_3);
+
+\end{diagram}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+Transition systems can be modeled with any level of complexity. Even in a simple system like we have modeled here, loops and branches can depict various complexities of the system.
+
+
+\end{document}

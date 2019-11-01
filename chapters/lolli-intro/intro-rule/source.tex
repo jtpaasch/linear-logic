@@ -1,0 +1,448 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Introduction rule}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Meaning}
+
+One of the ways we can put together two propositions is by putting them into an ``if---then'' relationship. That is, we can say: if we have the one, then we also have the other. 
+
+We will write that like this (where $A$ and $B$ are propositions):
+
+\begin{equation*}
+  A \lolli/ B
+\end{equation*}
+
+\noindent
+This means that, if $A$ is true, then it will cease to be true, and $B$ will become true. It is an ``if $A$ then $B$'' sort of thing, but there is a crucial point here: the $A$ gets used up in the process of bringing about $B$. 
+
+We might informally describe ``$A \lolli/ B$'' as meaning this: ``if you give me an $A$, I'll use up that $A$, and give you back a $B$.'' 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Formation}
+
+Here is the rule we use to formulate a lolli proposition:
+
+\begin{prooftree*}
+  \hypo{A :: prop}
+  \hypo{B :: prop}
+  \infer2{A \lolli/ B :: prop}
+\end{prooftree*}
+
+\noindent
+This says that if $A$ is a proposition, and also if $B$ is a proposition, then we can put them together to form $A \lolli/ B$, which is also a proposition.
+
+The ``$\lolli/$'' symbol is called a \vocab{lolli} symbol, because it looks like a lollipop. We can also call it the \vocab{linear implication} symbol. We pronounce ``$A \lolli/ B$'' as ``$A$ lolli $B$,'' or ``$A$ linearly implies $B$.'' 
+
+The proposition on the left of the lolli symbol is called the \vocab{antecedent} of the lolli, and the proposition on the right of the lolli symbol is called the \vocab{consequent} of the lolli. So, ``$A$'' is the antecedent, and ``$B$'' is the consequent.
+
+We will often refer to the whole proposition ``$A \lolli/ B$'' as ``a lolli.'' Strictly speaking, the lolli is really just the symbol that connects $A$ and $B$, but it is much shorter to just say ``the lolli'' instead of saying ``the proposition formed from the lolli.''
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{An example proof}
+
+Recall the farmer's market scenario. Suppose I have squash in my basket, and hence: 
+
+\begin{equation*}
+b(s) :: true
+\end{equation*}
+
+\noindent
+Suppose also that I can trade squash for potatoes, and hence: 
+
+\begin{equation*}
+  t(s, p) :: true
+\end{equation*}
+
+\noindent  
+Using these assumptions, we can prove that I can get potatoes. That is, we can prove this hypothetical judgment:
+
+\begin{equation*}
+  b(s) :: true, t(s, p) :: true \ndturnstile/ b(p) :: true
+\end{equation*}
+
+\noindent
+To build this proof, we first introduce the assumptions, using the \startrule/ rule.
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}
+  \infer[rule style=no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then we use the \rulename{trade} rule, to derive $b(p) :: true$:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}
+  \infer2[\rulename{trade}]{b(p) :: true}
+\end{prooftree*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{An ``if---then'' relationship}
+
+Look now at how ``$t(s, p) :: true$'' is related to ``$b(p) :: true$.'' We can see from this proof tree that ``$t(s, p) :: true$'' leads to ``$b(p) :: true$.'' The proof tree shows that if you feed a ``$t(s, p) :: true$'' into the farmer's market proof system, the system will use it up and spit out a ``$b(p) :: true$'' (provided that we have assumed ``$b(s) :: true$'').
+
+Let's draw a dotted line around the part of the tree that goes from ``$t(s, p) :: true$'' down to ``$b(p) :: true$,'' just so we can highlight it visually: 
+
+\begin{diagram}
+
+  \draw[draw=black, densely dotted] 
+      (-1.5, 0) -- (-1.5, -0.75) -- (0.5, -0.75) -- (0.5, -0.5) -- (3.1, -0.5) -- 
+      (3.1, 0.85) -- (-0.15, 0.85) -- (-0.15, 0) -- (-1.5, 0);
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{} 
+      \infer1[\startrule/]{b(s) :: true}
+      \hypo{}
+      \infer1[\startrule/]{t(s, p) :: true}
+      \infer2[\rulename{trade}]{b(p) :: true}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+This part of the tree represents an ``if---then'' relationship: it represents that if you give the system a ``$t(s, p) :: true$,'' it'll give you back a ``$b(p) :: true$.'' But that's exactly the kind of thing we can express with a lolli:
+
+\begin{equation*}
+  t(s, p) \lolli/ b(p) :: true
+\end{equation*}
+
+\noindent
+Graphically, it's something like this:
+
+\begin{diagram}
+
+  \draw[draw=black, densely dotted]
+      (-1.5, 0) -- (-1.5, -0.75) -- (0.5, -0.75) -- (0.5, -0.5) -- (3.1, -0.5) -- 
+      (3.1, 0.85) -- (-0.15, 0.85) -- (-0.15, 0) -- (-1.5, 0);
+  \draw[spaced-arrows,->] (3.1, 0.25) -- (3.85, 0.25);
+  \node (l) [label=right:{$t(s, p) \lolli/ b(p) :: true$}] at (3.85, 0.25) {};
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{} 
+      \infer1[\startrule/]{b(s) :: true}
+      \hypo{}
+      \infer1[\startrule/]{t(s, p) :: true}
+      \infer2[\rulename{trade}]{b(p) :: true}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+The outlined part of the proof tells us this: if we wanted to introduce the lolli statement into our proof tree, we would be justified in doing so. The highlighted part of the proof tree is evidence or \emph{proof} that the lolli is true.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introducing the lolli}
+
+To introduce the lolli into the proof tree, what we want to do is take the outlined part of the tree and pull it out of the tree. Then we can put it down at the bottom of the tree, in the form of the lolli. Like this:
+
+\begin{diagram}
+
+  \draw[draw=black, densely dotted, fill=grey80]
+      (-1.5, 0.3) -- (-1.5, -0.5) -- (0.5, -0.5) -- (0.5, -0.15) -- (3.1, -0.15) -- 
+      (3.1, 1.15) -- (-0.15, 1.15) -- (-0.15, 0.3) -- (-1.5, 0.3);
+  \draw[spaced-arrows,->] (3.1, 0.5) -- (3.85, 0.5) -- (3.85, -0.75) -- (1.75, -0.75);
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{} 
+      \infer1[\startrule/]{b(s) :: true}
+      \hypo{}
+      \infer1[\startrule/]{t(s, p) :: true}
+      \infer2[\rulename{trade}]{b(p) :: true}
+      \infer1{t(s, p) \lolli/ b(p) :: true}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+I've greyed out the part of the tree that we pulled out, to indicate that it's been deactivated.
+
+We can encode this move as an inference rule. We call it the \vocab{lolli introduction} rule. It is called an \emph{introduction} rule because it lets us introduce a lolli judgment into our proof tree.
+
+We will write out the full rule in a moment. Before we do that though, we need to add a few more labels and markings to the proof tree, so that the full notation of the lolli introduction rule will make sense.
+
+First, we need a label for the rule. We will label the rule like this: ``\lolliIntro/.'' That's a lolli symbol, followed by a capital ``I'' --- the first letter of the word ``Introduction.''. 
+
+Since we've just used it to introduce a lolli in our proof tree, we should write it in. That is, we should write ``\lolliIntro/'' next to the bottom inference line, to indicate that we have used this very rule to introduce the lolli that we see under it. Here it is, with a box drawn around it so it's easy to see:
+
+\begin{diagram}
+
+  \draw[draw=black, densely dotted, fill=grey80]
+      (-1.5, 0.3) -- (-1.5, -0.5) -- (0.5, -0.5) -- (0.5, -0.15) -- (3.1, -0.15) -- 
+      (3.1, 1.15) -- (-0.15, 1.15) -- (-0.15, 0.3) -- (-1.5, 0.3);
+  \draw[spaced-arrows,->] (3.1, 0.5) -- (3.85, 0.5) -- (3.85, -0.75) -- (1.75, -0.75);
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{} 
+      \infer1[\startrule/]{b(s) :: true}
+      \hypo{}
+      \infer1[\startrule/]{t(s, p) :: true}
+      \infer2[\rulename{trade}]{b(p) :: true}
+      \infer1[\fbox{\lolliIntro/}]{t(s, p) \lolli/ b(p) :: true}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+Also, instead of drawing lines around the part of the proof tree that we've derived the lolli from, we use a simple notation trick. We look at the part of the tree that we've deactivated, and we go to the very top premise of that branch (the one introduced with the \startrule/ rule). In our case, it is ``$t(s, p) :: true$.'' Then we put a little superscripted label on it. The label can be anything, so long as it is unique. We'll use a lower case letter, like ``$a$''. Here it is, with a box drawn around it, again so it is easy to see:
+
+\begin{diagram}
+
+  \draw[draw=black, densely dotted, fill=grey80]
+      (-1.5, 0.3) -- (-1.5, -0.5) -- (0.5, -0.5) -- (0.5, -0.15) -- (3.1, -0.15) -- 
+      (3.1, 1.15) -- (-0.15, 1.15) -- (-0.15, 0.3) -- (-1.5, 0.3);
+  \draw[spaced-arrows,->] (3.1, 0.5) -- (3.85, 0.5) -- (3.85, -0.75) -- (1.75, -0.75);
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{} 
+      \infer1[\startrule/]{b(s) :: true}
+      \hypo{}
+      \infer1[\startrule/]{t(s, p) :: true\fbox{$^{a}$}}
+      \infer2[\rulename{trade}]{b(p) :: true}
+      \infer1[\lolliIntro/]{t(s, p) \lolli/ b(p) :: true}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+Then we add the same superscripted letter to the ``\lolliIntro/'' label. Like this (again with a box):
+
+\begin{diagram}
+
+  \draw[draw=black, densely dotted, fill=grey80]
+      (-1.5, 0.3) -- (-1.5, -0.5) -- (0.5, -0.5) -- (0.5, -0.15) -- (3.1, -0.15) -- 
+      (3.1, 1.15) -- (-0.15, 1.15) -- (-0.15, 0.3) -- (-1.5, 0.3);
+  \draw[spaced-arrows,->] (3.1, 0.5) -- (3.85, 0.5) -- (3.85, -0.75) -- (1.75, -0.75);
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{} 
+      \infer1[\startrule/]{b(s) :: true}
+      \hypo{}
+      \infer1[\startrule/]{t(s, p) :: true^{a}}
+      \infer2[\rulename{trade}]{b(p) :: true}
+      \infer1[\lolliIntro/\fbox{$^{a}$}]{t(s, p) \lolli/ b(p) :: true}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+Now we don't need to draw the dotted lines around the part of the proof tree we've derived the lolli from. The superscripted ``$a$'' tells us where it starts, and we know that it goes from that start point all the way down to the ``\lolliIntro/'' with the same superscripted ``$a$'':
+
+\begin{diagram}
+
+  \draw[spaced-arrows,->] (2.2, 0.5) -- (3.85, 0.5) -- (3.85, -0.45) -- (2.25, -0.45);
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{} 
+      \infer1[\startrule/]{b(s) :: true}
+      \hypo{}
+      \infer1[\startrule/]{t(s, p) :: true\fbox{$^{a}$}}
+      \infer2[\rulename{trade}]{b(p) :: true}
+      \infer1[\lolliIntro/\fbox{$^{a}$}]{t(s, p) \lolli/ b(p) :: true}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+Since the superscripted labels tell us everything we need to know about where the deactivated part starts and stops, we can remove the dotted lines and arrows altogether:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true^{a}}
+  \infer2[\rulename{trade}]{b(p) :: true}
+  \infer1[\lolliIntro/$^{a}$]{t(s, p) \lolli/ b(p) :: true}
+\end{prooftree*}
+
+\noindent
+With that, we have added all the labels and markings necessary to introduce a lolli.
+
+In this example, we used a lowercase letter (namely, the letter ``$a$'') for the label that tells us where the deactivated part of the proof tree begins and ends. In other books and articles about natural deduction, you might see numbers instead of letters for the superscripted labels. For example, we could use the number ``1,'' like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true^{1}}
+  \infer2[\rulename{trade}]{b(p) :: true}
+  \infer1[\lolliIntro/$^{1}$]{t(s, p) \lolli/ b(p) :: true}
+\end{prooftree*}
+
+\noindent
+It does not matter which we use. Here we will use lowercase letters, rather than numbers.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The intro rule}
+
+We have just seen an example of how we use the lolli introduction rule. Let us write down the full \lolliIntro/ rule template. It is this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[start]{A :: true^{x}}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{B :: true}
+  \infer1[\lolliIntro/$^{x}$]{A \lolli/ B :: true}
+\end{prooftree*}
+
+\noindent
+This says: if you have a judgment of the form ``$A :: true$'' at the top of a branch in a proof tree, and then if there's a ``$B :: true$'' judgment somewhere farther down the branch, then we can use the lolli introduction rule to introduce the judgment ``$A \lolli/ B :: true$'' on the next line (where ``$A$'' and ``$B$'' can be any proposition). Once we've introduced that new lolli, we must mark the top ``$A :: true$'' judgment with a unique label, and we must also mark ``\lolliIntro/'' with that same label too, so that we know which part of the proof tree we used to derive the new lolli.
+
+One point about terminology. When we mark an assumption with a superscripted label like this, we say that we \vocab{discharge} it. We can also say that we have \vocab{closed} it off. It is no longer an \vocab{open} assumption.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Hypothetical judgments}
+
+Let's look at the proof tree we originally started with, before we introduced the lolli:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}
+  \infer2[\rulename{trade}]{b(p) :: true}
+\end{prooftree*}
+
+\noindent
+What is the hypothetical judgment that this proof tree proves? The assumptions are always at the tips of the branches, and the conclusion is always at the bottom:
+
+\begin{diagram}
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{} 
+      \infer1[\startrule/]{b(s) :: true}
+      \hypo{}
+      \infer1[\startrule/]{t(s, p) :: true}
+      \infer2[\rulename{trade}]{b(p) :: true}
+    \end{prooftree}
+  };
+
+  \draw (-1.5, -0.6) -- (-1.5, -0.85) -- (0.5, -0.85) -- (0.5, -0.6);
+  \draw[spaced-arrows,->] (-0.5, -1.75) -- (-0.5, -0.85);
+  \node (c_1_l) [label=below:{conclusion}] at (-0.5, -1.65) {};
+
+  \draw (-3.25, 0.85) -- (-3.25, 1.1) -- (-0.35, 1.1) -- (-0.35, 0.85);
+  \draw[spaced-arrows,->] (-2, 1.85) -- (-2, 1.1);
+  \node (a_1_l) [label=below:{assumption}] at (-2, 2.45) {};
+
+  \draw (-0.1, 0.85) -- (-0.1, 1.1) -- (2.95, 1.1) -- (2.95, 0.85);
+  \draw[spaced-arrows,->] (1.5, 1.85) -- (1.5, 1.1);
+  \node (a_2_l) [label=below:{assumption}] at (1.5, 2.45) {};
+
+\end{diagram}
+
+\noindent
+So that tree is a proof for this hypothetical judgment:
+
+\begin{equation*}
+  b(s) :: true, t(s, p) :: true \ndturnstile/ b(p) :: true
+\end{equation*}
+
+\noindent
+After we applied the \lolliIntro/ rule, the proof tree got transformed to this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true^{a}}
+  \infer2[\rulename{trade}]{b(p) :: true}
+  \infer1[\lolliIntro/$^{a}$]{t(s, p) \lolli/ b(p) :: true}
+\end{prooftree*}
+
+\noindent
+When we introduced the lolli, we deactivated part of the tree. In particular, we discharged the assumption ``$t(s, p) :: true$.'' So what hypothetical judgment does this new proof tree prove? 
+
+Well, remember that the grey part of the tree has been deactivated/cancelled out. So we have one assumption left in the tree, and of course we have a new conclusion:
+
+\begin{diagram}
+
+  \draw[draw=black, densely dotted, fill=grey80] 
+      (-1.5, 0.3) -- (-1.5, -0.5) -- (0.5, -0.5) -- (0.5, -0.15) -- (3.1, -0.15) -- 
+      (3.1, 1.15) -- (-0.15, 1.15) -- (-0.15, 0.3) -- (-1.5, 0.3);
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{} 
+      \infer1[\startrule/]{b(s) :: true}
+      \hypo{}
+      \infer1[\startrule/]{t(s, p) :: true^{x}}
+      \infer2[\rulename{trade}]{b(p) :: true}
+      \infer1[\lolliIntro/$^{x}$]{t(s, p) \lolli/ b(p) :: true}
+    \end{prooftree}
+  };
+
+  \draw (-2.35, -0.75) -- (-2.35, -1) -- (1.35, -1) -- (1.35, -0.75);
+  \draw[spaced-arrows,->] (-0.5, -1.75) -- (-0.5, -1);
+  \node (c_1_l) [label=below:{conclusion}] at (-0.5, -1.65) {};
+
+  \draw (-3.25, 0.85) -- (-3.25, 1.1) -- (-0.35, 1.1) -- (-0.35, 0.85);
+  \draw[spaced-arrows,->] (-2, 1.85) -- (-2, 1.1);
+  \node (a_1_l) [label=below:{assumption}] at (-2, 2.45) {};
+  
+\end{diagram}
+
+\noindent
+The hypothetical judgment we have proven is thus made up from that one assumption and that conclusion:
+
+\begin{equation*}
+  b(s) :: true \ndturnstile/ t(s, p) \lolli/ b(p) :: true
+\end{equation*}
+
+\noindent
+This says: it is true that, if I can trade squash for potatoes then I can use that trade to get potatoes --- i.e., ``$t(s, p) \lolli/ b(p) :: true$'' --- provided that we assume that I have squash in my basket --- i.e., provided that we assume ``$b(s) :: true$.'' 
+
+When we look at a proof tree and read off the assumptions that are involved, we read off every assumption that is introduced by a \startrule/ rule, except for those that have discharge labels on them. After all, the label indicates that they have been discharged.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+The lolli introduction rule says: if we assume ``$A :: true$'' (where ``$A$'' can be any proposition), and then from that we can derive farther down the tree ``$B :: true$'' (where ``$B$'' can be any proposition), then we can introduce the lolli ``$A \lolli/ B :: true$.'' 
+
+However, we need to pull the part of the tree that goes from ``$A :: true$'' to ``$B :: true$'' out of the tree, because we've now moved it into the lolli. To indicate that we've discharged that part of the tree, we mark the assumption ``$A :: true$'' with a unique superscripted label, and we also mark ``\lolliIntro/'' with the same superscript.
+
+
+\end{document}

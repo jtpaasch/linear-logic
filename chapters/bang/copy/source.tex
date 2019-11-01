@@ -1,0 +1,349 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{The copy rule}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A simpler dereliction rule}
+
+The dereliction rule leads to proof trees that are large and complex. There is a simpler version of a dereliction rule, which can be found in G. M. Bierman's doctoral thesis. We will call it the \vocab{bang copy} rule. The template looks like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{!A :: true}  
+  \infer1[\bangCopy/]{A :: true}
+\end{prooftree*}
+ 
+\noindent
+This rule simply says that if you start with a bang, you can get a copy of it.
+
+The usage instructions are these: each time you need a copy of a bang, first introduce the bang with the \startrule/ rule, then use the \bangCopy/ rule to extract a copy.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Example}
+
+Look at the proof tree we built in the last chapter: 
+
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)^{a}}
+  
+  \infer2[\traderule/]{b(s)}
+  \infer2[\bangDer/$^{a}$]{b(s)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}  
+  
+  \infer2[\traderule/]{b(p)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)^{b}}
+  
+  \infer2[\traderule/]{b(s)}
+
+  \infer2[\bangDer/$^{b}$]{b(s)}
+\end{prooftree*}
+
+\noindent
+If we use the simpler \bangCopy/ rule, we can re-write the tree like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+  \infer1[\bangCopy/]{t(p, s)}
+  
+  \infer2[\traderule/]{b(s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  
+  \infer2[\traderule/]{b(p)}
+
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+  \infer1[\bangCopy/]{t(p, s)}
+
+  \infer2[\traderule/]{b(s)}
+
+\end{prooftree*}
+
+\noindent
+This is obviously more compact, and much simpler. To understand how it works, let's rebuild this tree, from the start. First, let's start with ``$b(p)$'' and ``$!t(p, s)$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+  
+  \infer[no rule]2{}
+
+\end{prooftree*}
+
+\noindent
+Now we want to use the \traderule/ with ``$b(p)$'' and ``$t(p, s)$.'' To do that, we first need to get a copy of ``$t(p, s)$,'' which we can do with the simplified \bangCopy/ rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+  \infer1[\bangCopy/]{t(p, s)}
+  
+  \infer[no rule]2{}
+
+\end{prooftree*}
+
+\noindent
+Now we use the \traderule/:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+  \infer1[\bangCopy/]{t(p, s)}
+  
+  \infer2[\traderule/]{b(s)}
+
+\end{prooftree*}
+ 
+ \noindent
+ Next, add the assumption ``$t(s, p)$'':
+ 
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+  \infer1[\bangCopy/]{t(p, s)}
+
+  \infer2[\traderule/]{b(s)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+
+  \infer[no rule]2{}
+
+\end{prooftree*}
+ 
+\noindent
+Use the \traderule/ again:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+  \infer1[\bangCopy/]{t(p, s)}
+  
+  \infer2[\traderule/]{b(s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  
+  \infer2[\traderule/]{b(p)}
+
+\end{prooftree*} 
+
+\noindent
+Now we want to use a copy of the bang ``$!t(p, s)$'' again, so we simply add that as a new assumption:
+
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+  \infer1[\bangCopy/]{t(p, s)}
+  
+  \infer2[\traderule/]{b(s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  
+  \infer2[\traderule/]{b(p)}
+
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+
+  \infer[no rule]2{}
+
+\end{prooftree*}
+
+\noindent
+Then use the \bangCopy/ rule to get a copy of it:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+  \infer1[\bangCopy/]{t(p, s)}
+  
+  \infer2[\traderule/]{b(s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  
+  \infer2[\traderule/]{b(p)}
+
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+  \infer1[\bangCopy/]{t(p, s)}
+
+  \infer[no rule]2{}
+
+\end{prooftree*}
+
+\noindent
+And finally, use the \traderule/ again to derive the desired conclusion:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+  \infer1[\bangCopy/]{t(p, s)}
+  
+  \infer2[\traderule/]{b(s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(s, p)}
+  
+  \infer2[\traderule/]{b(p)}
+
+  \hypo{}
+  \infer1[\startrule/]{!t(p, s)}
+  \infer1[\bangCopy/]{t(p, s)}
+
+  \infer2[\traderule/]{b(s)}
+
+\end{prooftree*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Dereliction and copy}
+ 
+The copy rule can actually be derived from the dereliction rule. Here is the dereliction rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{!A :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{A :: true^{x}}
+  \ellipsis{}{$B :: true$}
+  
+  \infer2[\bangDer/$^{x}$]{B :: true}
+\end{prooftree*}
+
+\noindent
+This says that if we can show how to derive a conclusion ``$B :: true$'' from an un-banged copy of ``$!A :: true$,'' then we are licensed to infer that conclusion from the bang.
+
+Well, we can use that to simply infer an un-banged copy of ``$A :: true$.'' Suppose we have derived a bang of the form ``$!A :: true$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{!A :: true}
+\end{prooftree*}
+
+\noindent
+Now let's assume an un-banged copy of the bang:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{!A :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{\fbox{$A :: true$}}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+We'll discharge this in a moment, so let's mark it with a label, say ``$a$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{!A :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{\fbox{$A :: true^{a}$}}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Now, what can we derive from this? Well, if we've assumed ``$A :: true$,'' then the one thing we can infer for sure is that ``$A :: true$'' follows! After all, ``$A :: true$'' holds whenever you've assumed ``$A :: true$.'' So we can use the dereliction rule to directly conclude ``$A :: true$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{!A :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{A :: true^{a}}
+  
+  \infer2[\bangDer/$^{a}$]{\fbox{$A :: true$}}
+\end{prooftree*}
+
+\noindent
+This shows that we can always derive an un-banged copy from a banged judgment, using the dereliction rule. So we can see how this reduces to the simpler dereliction rule:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \ellipsis{}{!A :: true}
+  \hypo{}
+  \infer1[\startrule/]{A :: true^{a}}
+  \infer2[\bangDer/$^{a}$]{A :: true}
+\end{prooftree}
+\quad\rightsquigarrow\quad
+\begin{prooftree}
+  \hypo{}
+  \infer1[\startrule/]{!A :: true}  
+  \infer1[\bangCopy/]{A :: true}
+\end{prooftree}
+$$
+
+\noindent
+The \bangCopy/ rule is thus a \vocab{derived rule}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+The \bangCopy/ rule can be derived from the \bangDer/ rule, and it is much simpler. It says: if you need to use a bang, introduce it into the proof tree with the \startrule/, and then use the \bangCopy/ rule to extract a linear copy that you can use.
+
+
+\end{document}

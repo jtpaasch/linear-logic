@@ -1,0 +1,328 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Full minimal logic}
+
+Minimal logic has other connectives too. We will discuss them briefly in this chapter.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conjunction}
+
+If you have a proposition ``$\nd{A}$'' and a proposition ``$\nd{B}$,'' you can join them together to say that ``$\nd{A} \conj/ \nd{B}$.'' Read that ``$\nd{A}$ and $\nd{B}$.'' The meaning is that both ``$\nd{A}$'' and ``$\nd{B}$'' are true. We call this \vocab{conjunction}. Here is the formation rule:
+
+\begin{prooftree*}
+  \hypo{\nd{A} :: prop}
+  \hypo{\nd{B} :: prop}
+  \infer2{\nd{A} \conj/ \nd{B} :: prop}
+\end{prooftree*}
+
+\noindent
+This says that if ``$\nd{A}$'' is a proposition and if ``$\nd{B}$'' is a proposition, then you can join them together with the conjunction symbol, to make the proposition ``$\nd{A} \conj/ \nd{B}$.''
+
+The introduction rule is this:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{}
+  \infer[no rule]1{\nd{A} :: true}
+  \hypo{}
+  \ellipsis{}{}
+  \infer[no rule]1{\nd{B} :: true}
+  \infer2[\conjIntro/]{\nd{A} \conj/ \nd{B} :: true}
+\end{prooftree*}
+
+\noindent
+This says that if you have derived ``$\nd{A} :: true$'' and you have also derived ``$\nd{B} :: true$,'' then you can infer that $\nd{A} \conj/ \nd{B} :: true$.'' That is, if you have shown that each of ``$\nd{A}$'' and ``$\nd{B}$'' are true independently, then you can conclude that the conjunction of the two is true.
+
+There are two elimination rules:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \ellipsis{}{}
+  \infer[no rule]1{\nd{A} \conj/ \nd{B} :: true}
+  \infer1[\conjElim/]{\nd{A} :: true}
+\end{prooftree}
+\hskip 3cm
+\begin{prooftree}
+  \hypo{}
+  \ellipsis{}{}
+  \infer[no rule]1{\nd{A} \conj/ \nd{B} :: true}
+  \infer1[\conjElim/]{\nd{B} :: true}
+\end{prooftree}
+$$
+
+\noindent
+The first of these rules says this: if you know that the conjunction ``$\nd{A} \conj/ \nd{B}$'' is true, then you know that ``$\nd{A}$'' is true. The second rule is the same, except it concludes with ``$\nd{B}$.'' In other words, the elimination rules say that if you know that ``$\nd{A}$'' and ``$\nd{B}$'' are both true, then you of course know that either one of them by itself is true.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Disjunction}
+
+If you have a proposition ``$\nd{A}$'' and a proposition ``$\nd{B}$,'' you can join them together to say that ``$\nd{A} \disj/ \nd{B}$.'' Read that ``$\nd{A}$ or $\nd{B}$.'' The meaning is that at least one of ``$\nd{A}$'' or ``$\nd{B}$'' is true. We call this \vocab{disjunction}. Here is the formation rule:
+
+\begin{prooftree*}
+  \hypo{\nd{A} :: prop}
+  \hypo{\nd{B} :: prop}
+  \infer2{\nd{A} \disj/ \nd{B} :: prop}
+\end{prooftree*}
+
+\noindent
+This says that if ``$\nd{A}$'' is a proposition and if ``$\nd{B}$'' is a proposition, then you can join them together with the disjunction symbol, to make the proposition ``$\nd{A} \disj/ \nd{B}$.''
+
+There are two introduction rules:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \ellipsis{}{}
+  \infer[no rule]1{\nd{A} :: true}
+  \infer1[\disjIntro/]{\nd{A} \disj/ \nd{B} :: true}
+\end{prooftree}
+\hskip 3cm
+\begin{prooftree}
+  \hypo{}
+  \ellipsis{}{}
+  \infer[no rule]1{\nd{B} :: true}
+  \infer1[\disjIntro/]{\nd{A} \disj/ \nd{B} :: true}
+\end{prooftree}
+$$
+
+\noindent
+The first of these rules says this: if you know that ``$\nd{A}$'' is true, then you know that ``$\nd{A}$'' or ``$\nd{B}$'' is true. If ``$\nd{A}$'' was true to begin with, then it's true that at least one of ``$\nd{A}$'' or ``$\nd{B}$'' is true --- and indeed it is ``$\nd{A}$'' that is true. The second introduction rule is just like the first, except it goes from ``$\nd{B}$'' to ``$\nd{A} \disj/ \nd{B}$.''
+
+The elimination rule is this:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{}
+  \infer[no rule]1{\nd{A} \disj/ \nd{B} :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{\nd{A} :: true^{x}}
+  \ellipsis{}{}
+  \infer[no rule]1{\nd{C} :: true}
+  \hypo{}
+  \infer1[\startrule/]{\nd{B} :: true^{x}}
+  \ellipsis{}{}
+  \infer[no rule]1{\nd{C} :: true}
+  \infer3[\disjElim/$^{x}$]{\nd{C} :: true}
+\end{prooftree*}
+
+\noindent
+This says the following. Suppose you know that ``$\nd{A} \disj/ \nd{B}$'' is true. That is, suppose you know that at least one of ``$\nd{A}$'' or ``$\nd{B}$'' is correct. Well, if you can show that ``$\nd{A}$'' leads to ``$\nd{C}$,'' and also that ``$\nd{B}$'' leads to ``$\nd{C}$,'' then it doesn't matter which of ``$\nd{A}$'' or ``$\nd{B}$'' you choose. Both get to ``$\nd{C}$,'' so you can simply conclude with ``$\nd{C}$.'' 
+
+Notice how in the above tree we start with the disjunction ``$\nd{A} \disj/ \nd{B}$,'' then we assume ``$\nd{A}$'' and ``$\nd{B}$,'' and we demonstrate that each leads to ``$\nd{C}$.'' Finally, we discharge those assumptions, and conclude with ``$\nd{C}$.''
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Negation}
+
+How do you say that something is not the case? For instance, how would I say something like ``Sally is not at the party''?
+
+In minimal logic, we reserve a special proposition that represents the state of being false. We write it like this:
+
+\begin{equation*}
+  \falsum/
+\end{equation*}
+
+\noindent
+We call this ``bottom,'' ``falsum,'' or ``absurdity.'' Here, we will simply call it \vocab{falsum}, and we will refer to the symbol as the \vocab{falsum} symbol. If you want to express its meaning in the form of an English sentence, you might say something like this: ``being in a state of falsehood,'' or ``being in an absurd state'' or ``being in a state that's impossible.''
+
+Once we have this proposition in our logic, we can then say that a proposition ``$\nd{A}$'' is false by writing this:
+
+\begin{equation*}
+  \nd{A} \impl/ \falsum/
+\end{equation*}
+
+\noindent
+This says: if ``$\nd{A}$'' were true, then that would land us in the state of absurdity,'' i.e., a state of falsehood. That is, ``$\nd{A}$'' being true leads to falsehood.
+
+There is a shorthand abbreviation for this. Instead of writing ``$\nd{A} \impl/ \falsum/$,'' we can simply write ``$\neg/ \nd{A}$,'' which you can read as ``not ``$\nd{A}$'' or ``it is not the case that $\nd{A}$.'' 
+
+The ``$\neg/$'' symbol is called the \vocab{negation} symbol, and here is the formation rule:
+
+\begin{prooftree*}
+  \hypo{\nd{A} :: prop}
+  \infer1{\neg/ \nd{A} :: prop}
+\end{prooftree*}
+
+\noindent
+This says that if ``$\nd{A}$'' is a proposition, then you can put the negation symbol in front of it, to make the proposition ``$\neg/ \nd{A}$.''
+
+However, remember that this is really just an abbreviation for ``$\nd{A} \impl/ \falsum/$.'' You can replace ``$\neg/ \nd{A}$'' anywhere you find it in minimal logic with ``$\nd{A} \impl/ \falsum/$.'' For example, we could write the negation formation rule like this:
+
+\begin{prooftree*}
+  \hypo{\nd{A} :: prop}
+  \infer1{\nd{A} \impl/ \falsum/ :: prop}
+\end{prooftree*}
+
+\noindent
+This says that if ``$\nd{A}$'' is a proposition, then you can combine that with implication and falsum to make ``$\nd{A} \impl/ \falsum/$,'' which is also a proposition. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Negation example}
+
+Negation is just an implication, so we use it in minimal logic just as we would any other implication. For instance, suppose we wonder if Sally went to the party, so we ask her roommate Jo. Jo says to us, ``if Sally stopped by the store, then she's not at the party.'' We then get a call from Sally, who tells us she's at the store. From this, we can conclude that she's therefore not at the party. 
+
+Let us formalize this with minimal logic. Let ``$\nd{store(Sally)}$'' be an abbreviation for ``Sally is at the store,'' and let ``$\nd{party(Sally)} \impl/ \falsum/$'' be an abbreviation for ``Sally is not at the party.'' 
+
+Then we can take Jo's claim that ``if Sally stopped by the store, then she's not at the party'' like this: ``$\nd{store(Sally)} \impl/ (\nd{party(Sally)} \impl/ \falsum/)$.'' If you like, you can read this last proposition like this: ``If Sally went to the store, then the idea of Sally going to the party is absurd.'' 
+
+Now we can construct a proof of the above inference in the following way (omitting ``$:: true$'' annotations):
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{store(Sally)} \impl/ (\nd{party(Sally)} \impl/ \falsum/)}
+  \hypo{}
+  \infer1[\startrule/]{\nd{store(Sally)}}
+  \infer2[\implElim/]{\nd{party(Sally)} \impl/ \falsum/}
+\end{prooftree*}
+
+\noindent
+We can also use the negation symbol to make this more concise and readable:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{store(Sally)} \impl/ \neg/ \nd{party(Sally)}}
+  \hypo{}
+  \infer1[\startrule/]{\nd{store(Sally)}}
+  \infer2[\implElim/]{\neg/ \nd{party(Sally)}}
+\end{prooftree*}
+
+\noindent
+Either way, the proof tree communicates the same proof. At the top left of the tree, we have Jo's statement that if Sally went to the store, then she's not at the party. At the top right of the tree, we have Sally's statement that she's at the store. Then we use the \implElim/ rule to conclude that Sally's not at the party.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Full minimal logic}
+
+Here are all the natural deduction rules for minimal logic. The rules for implication are these:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A} :: true^{x}}
+  \ellipsis{}{\nd{B} :: true}
+  \infer1[\implIntro/$^{x}$]{\nd{A \impl/ B} :: true}
+\end{prooftree}
+\hskip 3cm
+\begin{prooftree}
+  \hypo{}
+  \ellipsis{}{\nd{A \impl/ B} :: true}
+  \hypo{}
+  \ellipsis{}{\nd{A} :: true}
+  \infer2[\implElim/]{\nd{B} :: true}
+\end{prooftree}
+$$
+
+\noindent
+The rules for conjunction are these:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \ellipsis{}{}
+  \infer[no rule]1{\nd{A} :: true}
+  \hypo{}
+  \ellipsis{}{}
+  \infer[no rule]1{\nd{B} :: true}
+  \infer2[\conjIntro/]{\nd{A} \conj/ \nd{B} :: true}
+\end{prooftree}
+\hskip 1cm
+\begin{prooftree}
+  \hypo{}
+  \ellipsis{}{}
+  \infer[no rule]1{\nd{A} \conj/ \nd{B} :: true}
+  \infer1[\conjElim/]{\nd{A} :: true}
+\end{prooftree}
+\hskip 1cm
+\begin{prooftree}
+  \hypo{}
+  \ellipsis{}{}
+  \infer[no rule]1{\nd{A} \conj/ \nd{B} :: true}
+  \infer1[\conjElim/]{\nd{B} :: true}
+\end{prooftree}
+$$
+
+\noindent
+The rules for disjunction are these:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \ellipsis{}{}
+  \infer[no rule]1{\nd{A} :: true}
+  \infer1[\disjIntro/]{\nd{A} \disj/ \nd{B} :: true}
+\end{prooftree}
+\hskip 3cm
+\begin{prooftree}
+  \hypo{}
+  \ellipsis{}{}
+  \infer[no rule]1{\nd{B} :: true}
+  \infer1[\disjIntro/]{\nd{A} \disj/ \nd{B} :: true}
+\end{prooftree}
+$$
+
+\vskip 0.5cm
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{}
+  \infer[no rule]1{\nd{A} \disj/ \nd{B} :: true}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A} :: true^{x}}
+  \ellipsis{}{}
+  \infer[no rule]1{\nd{C} :: true}
+  \hypo{}
+  \infer1[\startrule/]{\nd{B} :: true^{x}}
+  \ellipsis{}{}
+  \infer[no rule]1{\nd{C} :: true}
+  \infer3[\disjElim/$^{x}$]{\nd{C} :: true}
+\end{prooftree*}
+
+\noindent
+And negation is defined as implying falsum:
+
+\begin{equation*}
+  \neg/ \nd{A} \hskip 1cm \rightsquigarrow \hskip 1cm \nd{A} \impl/ \falsum/
+\end{equation*}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Intuitionistic and classical logic}
+
+Does the proposition ``$\neg/ \nd{A}$'' really mean the same thing as ``$\nd{A} \impl/ \falsum/$''? In minimal logic, the answer is yes. In minimal logic, when we say that something ``$\nd{A}$'' is not the case, we mean nothing more than to assert that ``$\nd{A}$'' leads to falsehood.
+
+Recall that intuitionistic logic starts with minimal logic as its base, and then it adds some rules. Which rules in particular does it add? It adds some negation rules. So in intuitoinistic logic, we get a more powerful way to express and reason about negation.
+
+Then, to get classical logic, we add more rules about negation, which gives us an even more powerful way to express and reason about negation. So the basic difference between minimal, intuitionistic, and classical logic revolves around what they are willing to let you do with negation.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Translations into linear logic}
+
+In earlier chapters, we translated minimal logic (with just the \startrule/ rule and the implication rules) into linear logic. If we add the additive connectives to linear logic, then it becomes possible to translate all of the above minimal logic connectives into linear logic as well. In fact, we can translate intuitionistic and classical logic into linear logic too, in much the same way.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+In this chapter, we introduced the other connectives that are used in minimal logic. We covered conjunction, disjunction, and negation. We also noted that to get intuitionistic and classical logic, we take minimal logic, and then we add a few more rules about negation.
+
+
+\end{document}

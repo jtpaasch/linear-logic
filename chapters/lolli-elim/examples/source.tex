@@ -1,0 +1,449 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Examples}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A simple example}
+
+Let us prove this hypothetical judgment:
+
+\begin{equation*}
+  t(s, p) :: true, t(s, p) \lolli/ b(p) :: true \ndturnstile/ b(p) :: true
+\end{equation*}
+
+\noindent
+To begin, we introduce the assumptions with the start rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}
+
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) \lolli/ b(p) :: true}
+  
+  \infer[rule style=no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then we apply the \lolliElim/ rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}
+
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) \lolli/ b(p) :: true}
+  
+  \infer2[\lolliElim/]{b(p) :: true}
+\end{prooftree*}
+
+\noindent
+That completes the proof. It is a short proof, but it is complete. We began with the assumptions of the hypothetical judgment (at the top of the proof tree), and we reached the conclusion of the hypothetical judgment at the bottom of the proof tree.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Another example}
+
+Let us prove this hypothetical judgment:
+
+\begin{equation*}
+  b(s) :: true, t(s, p) :: true, b(p) \lolli/ t(c, z) :: true \ndturnstile/ t(c, z) :: true
+\end{equation*}
+
+\noindent
+To begin, we use the \startrule/ rule to introduce each assumption:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}  
+  \hypo{}
+  \infer1[\startrule/]{b(p) \lolli/ t(c, z) :: true}  
+  \infer[rule style=no rule]3{}
+\end{prooftree*}
+
+\noindent
+What's next? The conclusion we want to get is ``$t(c, z) :: true$.'' How can we get that? Well, we can see that ``$t(c, z) :: true$'' is the consequent of the lolli. Notice it here:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}  
+  \hypo{}
+  \infer1[\startrule/]{b(p) \lolli/ \fbox{$t(c, z)$} :: true}  
+  \infer[rule style=no rule]3{}
+\end{prooftree*}
+
+\noindent
+This means that, if we could get the antecedent of the lolli, then we could use the \lolliElim/ rule to get the consequent. What's the antecedent? It's here:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}  
+  \hypo{}
+  \infer1[\startrule/]{\fbox{$b(p)$} \lolli/ t(c, z) :: true}  
+  \infer[rule style=no rule]3{}
+\end{prooftree*}
+
+\noindent
+So what we need is to derive that antecedent, somehow:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}
+  \infer[rule style=no rule]2{}
+
+  \hypo{??}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{\fbox{$b(p)$} :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{\fbox{$b(p)$} \lolli/ t(c, z) :: true}  
+  \infer[rule style=no rule]2{}
+  
+  \infer[rule style=no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then we could use the \lolliElim/ rule to get the conclusion we want:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}
+  \infer[rule style=no rule]2{}
+
+  \hypo{??}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{\fbox{$b(p)$} :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{\fbox{$b(p)$} \lolli/ t(c, z) :: true}  
+  \infer2[\lolliElim/]{t(c, z) :: true}
+
+  \infer[rule style=no rule]2{}
+\end{prooftree*}
+
+\noindent
+But where are we going to get ``$b(p) :: true$''? Well, we only have two other assumptions, so ``$b(p) :: true$'' needs to somehow come from \emph{them}. Like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}
+  \infer2[]{}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{??}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{\fbox{$b(p)$} :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{\fbox{$b(p)$} \lolli/ t(c, z) :: true}  
+  \infer2[\lolliElim/]{t(c, z) :: true}
+\end{prooftree*}
+
+\noindent
+So how do we get ``$b(p) :: true$'' from the two assumptions above the question marks? We can apply the \rulename{trade} rule to get it. Like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}
+  \infer2[\rulename{trade}]{\fbox{$b(p)$} :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(p) \lolli/ t(c, z) :: true}  
+  \infer2[\lolliElim/]{t(c, z) :: true}
+\end{prooftree*}
+
+\noindent
+Now we can see that we have the antecedent that matches the input of the lolli:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}
+  \infer2[\rulename{trade}]{\fbox{$b(p)$} :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{\fbox{$b(p)$} \lolli/ t(c, z) :: true}  
+  \infer2[\lolliElim/]{t(c, z) :: true}
+\end{prooftree*}
+
+\noindent
+And the \lolliElim/ rule lets us derive the consequent of the lolli:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}
+  \infer2[\rulename{trade}]{b(p) :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(p) \lolli/ \fbox{$t(c, z)$} :: true}  
+  \infer2[\lolliElim/]{\fbox{$t(c, z)$} :: true}
+\end{prooftree*}
+
+\noindent
+That completes the proof of the hypothetical judgment that we set out to prove. The assumptions of the hypothetical judgment are at the top of the tree, and the conclusion is at the bottom. Everything in between is the proof that the hypothetical judgment's conclusion actually follows from the stated assumptions.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Yet another example}
+
+Let us prove this hypothetical judgment:
+
+\begin{equation*}
+  b(c) :: true, b(s) :: true, t(s, p) :: true, b(p) \lolli/ t(c, z) :: true \ndturnstile/ b(z) :: true
+\end{equation*}
+
+\noindent
+This is a slight modification of the proof we just constructed. To begin, we introduce all the assumptions with the \startrule/ rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(c) :: true}
+
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(p) \lolli/ t(c, z) :: true}  
+
+  \infer[rule style=no rule]4{}
+\end{prooftree*}
+
+\noindent
+Then we build the same proof tree under the last three assumptions:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(c) :: true}
+
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}
+  \infer2[\rulename{trade}]{b(p) :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(p) \lolli/ t(c, z) :: true}  
+  \infer2[\lolliElim/]{t(c, z) :: true}
+  
+  \infer[rule style=no rule]2{}
+\end{prooftree*}
+
+\noindent
+Notice that we have used up the last three assumptions to derive the judgment ``$t(c, z) :: true$.'' There is one assumption that is still not used though, over on the left, namely ``$b(c) :: true$.'' So we're left with these two judgments:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\fbox{$b(c) :: true$}}
+
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}
+  \infer2[\rulename{trade}]{b(p) :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(p) \lolli/ t(c, z) :: true}  
+  \infer2[\lolliElim/]{\fbox{$t(c, z) :: true$}}
+
+  \infer[rule style=no rule]2{}
+\end{prooftree*}
+
+\noindent
+We can apply the \rulename{trade} rule to these, to get our desired conclusion:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(c) :: true}
+
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}
+  \infer2[\rulename{trade}]{b(p) :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(p) \lolli/ t(c, z) :: true}  
+  \infer2[\lolliElim/]{t(c, z) :: true}
+
+  \infer2[\rulename{trade}]{\fbox{$b(z)$} :: true}
+\end{prooftree*}
+
+\noindent
+In the examples above, we used the \lolliElim/ rule as the very last step of the proof. But of course, we can use \lolliElim/ whenever it's convenient. And indeed, in this example, we used it right in the middle of the proof tree.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Nested lollis}
+
+If you have lollis nested inside lollis, you can apply \lolliElim/ multiple times to unwrap them. To illustrate this, let us prove this hypothetical judgment:
+
+\begin{equation*}
+  t(s, p) :: true, b(s) :: true, b(s) \lolli/ (t(s, p) \lolli/ b(p)) :: true \ndturnstile/ b(p) :: true
+\end{equation*}
+
+\noindent
+Notice that in the third assumption, there is a lolli nested inside a lolli:
+
+\begin{equation*}
+  b(s) \lolli/ (t(s, p) \lolli/ b(p)) :: true
+\end{equation*}
+
+\noindent
+To build a proof tree for this, we first introduce the assumptions as usual:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}
+
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+
+  \hypo{}
+  \infer1[\startrule/]{b(s) \lolli/ (t(s, p) \lolli/ b(p)) :: true}  
+
+  \infer[rule style=no rule]3{}
+\end{prooftree*}
+
+\noindent
+Next, we apply the \lolliElim/ rule to the second two of those assumptions:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}
+
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+
+  \hypo{}
+  \infer1[\startrule/]{b(s) \lolli/ (t(s, p) \lolli/ b(p)) :: true}  
+
+  \infer2[\lolliElim/]{t(s, p) \lolli/ b(p) :: true}
+
+  \infer[rule style=no rule]2{}
+\end{prooftree*}
+
+\noindent
+This is the first elimination. It removes the outermost lolli in the nested lolli. That leaves us with these judgments:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\fbox{$t(s, p) :: true$}}
+
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+
+  \hypo{}
+  \infer1[\startrule/]{b(s) \lolli/ (t(s, p) \lolli/ b(p)) :: true}  
+
+  \infer2[\lolliElim/]{\fbox{$t(s, p) \lolli/ b(p) :: true$}}
+
+  \infer[rule style=no rule]2{}
+\end{prooftree*}
+
+\noindent
+Now we can apply the \lolliElim/ rule to these judgments, to get our desired conclusion:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}
+
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+
+  \hypo{}
+  \infer1[\startrule/]{b(s) \lolli/ (t(s, p) \lolli/ b(p)) :: true}  
+
+  \infer2[\lolliElim/]{t(s, p) \lolli/ b(p) :: true}
+
+  \infer2[\lolliElim/]{\fbox{$b(p) :: true$}}
+\end{prooftree*}
+
+\noindent
+This second use of the \lolliElim/ rule removes the last lolli. So the first use \lolliElim/ removed the outermost lolli, and the second use of \lolliElim/ removed the innermost lolli.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Order of the premises}
+
+As we noted before, the order of the premises does not really matter. We can list the premises of any \lolliElim/ rule in the opposite order, and the rule still applies. 
+
+This means that we can write our proofs with the premises in different orders. For example, we could write the last proof like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) \lolli/ (t(s, p) \lolli/ b(p)) :: true}  
+
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+
+  \infer2[\lolliElim/]{t(s, p) \lolli/ b(p) :: true}
+
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}
+
+  \infer2[\lolliElim/]{b(p) :: true}
+\end{prooftree*}
+ 
+\noindent
+Here is another possible permutation:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}
+
+  \hypo{}
+  \infer1[\startrule/]{b(s) \lolli/ (t(s, p) \lolli/ b(p)) :: true}  
+
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+
+  \infer2[\lolliElim/]{t(s, p) \lolli/ b(p) :: true}
+
+  \infer2[\lolliElim/]{b(p) :: true}
+\end{prooftree*}
+
+\noindent
+These are all the same proofs.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+In this chapter, we looked at some examples of proofs where we use the \lolliElim/ rule. The first example was very simple, because we applied \lolliElim/ immediately after we introduced the starting assumptions. 
+
+The second proof was more complicated, because we derived an intermediate judgment first, before we applied the \lolliElim/ rule.
+
+The third proof tree offered an example where we used the \lolliElim/ rule in the middle of the proof tree. There, we derived intermediate judgments before and after the point where we used the \lolliElim/ rule.
+
+
+\end{document}

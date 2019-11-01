@@ -1,0 +1,133 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{What logic is about}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The object of study}
+
+Logic studies a particular phenomenon. It is the phenomenon that occurs when one or more statements \vocab{follow from} (or are conclusions of) one or more other statements (premises or evidence statements).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Terminology}
+
+We will use the following vocabulary:
+
+\begin{itemize}
+
+  \item{
+    \vocab{Premises}:
+    Premises are statements that conclusions follow from. Synonyms: \vocab{assumptions} or \vocab{hypotheses}.
+  }
+
+  \item{
+    \vocab{Conclusions}:
+    Conclusions are statements that follow from premises.
+  }
+  
+  \item{
+    \vocab{Logical consequence}:
+    Consequence is the name we give to the phenomenon of conclusions following from premises.
+  }
+
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{An informal example}
+
+Imagine a trial lawyer making the following argument. 
+
+\begin{quote}
+The crime occurred last Friday in Baltimore at 9:13pm. My client McX was recorded by Acme Bank's security cameras on the same day at 9:03pm in Manhattan. It is impossible to get from Manhattan to Baltimore in 10 minutes. Therefore, McX could not have been at the crime scene in Baltimore when the crime was committed.
+\end{quote}
+
+\noindent
+The lawyer puts forward two premises: 
+
+\begin{align}
+\label{eq:mcx-in-manhattan}\text{McX was in Manhattan at 9:03pm on the day in question.} \\
+\label{eq:cant-travel-from-manhattan-to-baltimore}\text{It is impossible to travel from Manhattan to Baltimore in 10 minutes.}
+\end{align}
+
+\noindent
+From \eqref{eq:mcx-in-manhattan} and \eqref{eq:cant-travel-from-manhattan-to-baltimore}, she infers a conclusion:
+
+\begin{equation}
+\text{McX could not have been in in Baltimore at 9:13pm on the same day.}
+\end{equation}
+
+\noindent
+This conclusion is a logical consequence of the premises. If the premises are true, then the conclusion really must follow.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Arguments}
+
+Informally, we can speak about logical arguments -- or just ``arguments'' for short. An argument is a collection of one or more premises and one or more conclusions.
+
+The conclusions of an argument need not actually follow from the premises. If they do, the argument is valid. If not, the argument is invalid.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Terminology}
+
+We will use the following vocabulary:
+
+\begin{itemize}
+
+  \item{
+    \vocab{Validity/invalidity}:
+    A conclusion is valid if it really follows from the proposed premises. A conclusion is invalid if it does not follow from the proposed premises.
+   }
+  
+  \item{
+    \vocab{Argument}:
+    An argument is a collection of one or more premises and one or more conclusions. Ideally, we want arguments with valid conclusions, but this is not necessary. An argument can be invalid.
+  }
+
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{An informal example}
+
+This is a valid argument:
+
+\begin{prooftree*}
+  \hypo{\text{All humans are animals.}}
+  \hypo{\text{All animals are mortal.}}
+  \infer2{\text{Therefore, all humans are mortal.}}
+\end{prooftree*}
+
+\noindent
+This is not valid:
+
+\begin{prooftree*}
+  \hypo{\text{All animals are physical objects.}}
+  \hypo{\text{All animals are organic objects.}}
+  \infer2{\text{Therefore, all physical objects are organic objects.}}
+\end{prooftree*}
+
+\noindent
+In the latter case, the conclusion does not follow from the premises.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+Logic aims to study the exact nature of the logical consequence. It wants to identify and understand exactly why and when this sort of logical consequence happens. 
+
+\end{document}

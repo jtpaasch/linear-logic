@@ -1,0 +1,203 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Catching errors}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A bad proof tree}
+
+It is instructive to model an invalid lolli introduction. Suppose we start with this proof tree:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true^{a}}
+  \infer2[\rulename{trade}]{b(p) :: true}
+\end{prooftree*}
+
+\noindent
+And then suppose that we introduce an invalid lolli, like this:
+
+\begin{diagram}
+
+  \draw[draw=black, densely dotted, fill=grey80]
+      (-1.5, 0.3) -- (-1.5, -0.5) -- (0.5, -0.5) -- (0.5, -0.15) -- (3.1, -0.15) -- 
+      (3.1, 1.15) -- (-0.15, 1.15) -- (-0.15, 0.3) -- (-1.5, 0.3);
+  \draw[spaced-arrows,->] (3.1, 0.5) -- (3.85, 0.5) -- (3.85, -0.75) -- (1.75, -0.75);
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{} 
+      \infer1[\startrule/]{b(s) :: true}
+      \hypo{}
+      \infer1[\startrule/]{t(s, p) :: true^{a}}
+      \infer2[\rulename{trade}]{b(p) :: true}
+      \infer1[\lolliIntro/$^{a}$]{t(z, p) \lolli/ b(p) :: true}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+The lolli we introduced here says: if I can trade zucchini for potatoes, then I will use that to get potatoes in my basket. This is invalid. (Can you see why?)
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Build the initial model}
+
+Let's model the situation, so that we can see exactly why this lolli introduction is invalid.
+
+First, let's diagram the proof tree as it stands right before we introduce the lolli. The proof tree at that stage is this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true^{a}}
+  \infer2[\rulename{trade}]{b(p) :: true}
+\end{prooftree*}
+
+\noindent
+Here is the model for this: 
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (s) [label=below:{$s$}] at (-0.5, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (0.75, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 1);
+    \draw[spaced-arrows,->] (s) to node [fill=white] {$t$} (p);
+
+  % State 1
+  \draw[spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (p_1) [label=below:{$p$}] at (4, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (4, 0);
+
+\end{diagram}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Rewind the model}
+
+The next thing we did in the proof tree above was introduce the lolli:
+
+\begin{equation*}
+  t(z, p) \lolli/ b(p) :: true
+\end{equation*}
+
+\noindent
+When we introduce a lolli into a proof tree, we discharge part of the proof tree. We can capture that by rewinding our model. So first, we remove the transition to $S_{1}$. That makes our model look like this:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (s) [label=below:{$s$}] at (-0.5, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (0.75, 0) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 1);
+    \draw[spaced-arrows,->] (s) to node [fill=white] {$t$} (p);
+
+\end{diagram}
+
+\noindent
+Then we remove the option to trade ``$t(s, p) :: true$,'' which leaves us only with squash in our basket:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (s) [label=below:{$s$}] at (-0.5, 1) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 1);
+
+\end{diagram}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Play out the lolli}
+
+Now we can check the lolli against the model. We can ask: does the lolli hold good in this scenario? Let's play it out.
+
+The lolli says: \emph{if} you can trade zucchini for potatoes, \emph{then} you can get potatoes in your basket. So let's draw the option to trade zucchini for potatoes. To show that it's hypothetical, let's use a dotted line again:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (s) [label=below:{$s$}] at (-0.5, 1) {};
+    \node[o-point] (z) [label=above:{$z$}] at (-0.5, -0.25) {};
+    \node[o-point] (p) [label=below:{$p$}] at (0.85, 1) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 1);
+    \draw[spaced-arrows,dotted,->] (z) to node [fill=white] {$t$} (p);
+
+\end{diagram}
+
+\noindent
+The lolli claims that \emph{if} this is correct, \emph{then} I can get potatoes in my basket. To represent the possibility that I can end up with potatoes in my basket, let's draw that in a new state (again with dotted lines):
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (s) [label=below:{$s$}] at (-0.5, 1) {};
+    \node[o-point] (z) [label=above:{$z$}] at (-0.5, -0.25) {};
+    \node[o-point] (p) [label=below:{$p$}] at (0.85, 1) {};
+
+    \coordinate[label=above:{\fbox{$b$}}] (b) at (-0.5, 1);
+    \draw[spaced-arrows,dotted,->] (z) to node [fill=white] {$t$} (p);
+
+  % State 1
+  \draw[spaced-arrows,dotted,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[densely dotted] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (p_1) [label=below:{$p$}] at (4, 1) {};
+
+    \node[draw, densely dotted] (b_1) at (4, 1.4) {$b$};
+
+\end{diagram}
+
+\noindent
+Now we have constructed a model of exactly what the lolli claims. But does this make sense? 
+
+No, this situation cannot be realized. In $S_{0}$, there is the (hypothetical) possibility that I can trade zucchini for potatoes. However, I don't have zucchini in my basket. I only have squash in my basket. So if the option to trade zucchinis for potatoes were actualized, I could not make that trade, in this scenario.
+
+This shows us why the lolli is invalid. In the initial situation, I have squash, but I can trade my squash for potatoes. We then mistakenly introduced a lolli which claims that, if I could trade zucchini for potatoes, I could get potatoes. But in the current situation (i.e., the situation where I have squash in my basket), it would be impossible to realize what the mistaken lolli claims.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+When we rewind and replay a model, in order to check the introduction of a lolli, we can see why a valid lolli is indeed correct, but we can also see why an invalid lolli is incorrect. If you play out the hypothetical situation that an invalid lolli represents, you'll see that it is impossible to realize in the given situation.
+
+
+\end{document}

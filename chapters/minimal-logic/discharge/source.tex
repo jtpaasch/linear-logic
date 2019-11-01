@@ -1,0 +1,279 @@
+\documentclass[../../../main.tex]{subfiles}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Non-linear discharge}
+
+We have seen that the implication connective in minimal logic is non-linear. Another point of non-linearity is the use of assumptions in proof trees. In linear natural deduction, every assumption must be used exactly once. That is precisely what makes it linear. In minimal logic natural deduction though, the same assumption can be used multiple times, or zero times. This means that we need to handle the discharge of assumptions in a slightly different way than we did with linear logic. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Multiple use}
+
+Let us look at an example where you use the same assumption more than once. Consider this hypothetical judgment:
+
+\begin{equation*}
+  \nd{A \impl/ (A \impl/ B)} \ndturnstile/ \nd{A \impl/ B}
+\end{equation*}
+
+\noindent
+Think about how we should prove this. The conclusion is an implication: ``$\nd{A \impl/ B}$.'' To prove any implication, we need to assume the antecedent, and then derive the consequent. So we have to assume the antecedent ``$\nd{A}$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{a}}
+\end{prooftree*}
+
+\noindent
+Then we need to derive the consequent somehow:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{a}}
+  \ellipsis{??}{\nd{B}}
+\end{prooftree*}
+
+\noindent
+We also have an assumption, which we can write over on the side:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A \impl/ (A \impl/ B)}}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{a}}
+  \ellipsis{??}{\nd{B}}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+How are we going to derive ``$\nd{B}$''? We could choose to ignore the assumption over on the side. After all, we are using non-linear natural deduction, so we don't need to use every assumption. However, if we do ignore it, we have nothing else to work with. So we need to use it somehow. Our proof tree needs to look something like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A \impl/ (A \impl/ B)}}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{a}}
+  \ellipsis{}{}
+  \infer2{}
+  \ellipsis{??}{\nd{B}}
+\end{prooftree*}
+
+\noindent
+How do we proceed? There is one move we can make: we can use \implElim/. That gives us this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A \impl/ (A \impl/ B)}}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{a}}
+  \infer2[\implElim/]{\nd{A \impl/ B}}
+
+  \ellipsis{??}{\nd{B}}
+\end{prooftree*}
+
+\noindent
+But now what? Well, we are in a non-linear environment, so we can use the same assumption again. That is, we can use ``$\nd{A}^{a}$'' again. Let's write it over on the side:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A \impl/ (A \impl/ B)}}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{a}}
+  \infer2[\implElim/]{\nd{A \impl/ B}}
+
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{a}}
+  \infer[no rule]2{}
+  \ellipsis{??}{\nd{B}}
+\end{prooftree*}
+
+\noindent
+Now we can use \implElim/ again, to get our desired ``$\nd{B}$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A \impl/ (A \impl/ B)}}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{a}}
+  \infer2[\implElim/]{\nd{A \impl/ B}}
+
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{a}}
+  \infer2[\implElim/]{\nd{B}}
+\end{prooftree*}
+
+\noindent
+Now we have what we initially wanted. We started with the assumption ``$\nd{A}^{a}$,'' and then we found a way to derive ``$\nd{B}$.'' We had to use ``$\nd{A}^{a}$'' twice in the process, along with our assumption ``$\nd{A \impl/ (A \impl/ B)}$,'' but we got there.
+
+So now we can discharge the branch(es) that start with our assumed ``$\nd{A}^{a}$,'' and wve can introduce the implication ``$\nd{A \impl/ B}$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A \impl/ (A \impl/ B))}}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{a}}
+  \infer2[\implElim/]{\nd{A \impl/ B}}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{a}}
+  \infer2[\implElim/]{\nd{B}}
+  \infer1[\implIntro/$^{a}$]{\nd{A \impl/ B}}
+\end{prooftree*}
+
+\noindent
+And with that, we have finished our proof of the original hypothetical judgment we were trying to prove.
+
+Notice that when we used \implIntro/, we discharged \emph{both} occurrences of ``$\nd{A}^{a}$.'' In non-linear natural deduction, this is entirely legal.
+
+Of course, there is nothing stopping us from giving the two occurrences of ``$\nd{A}$'' different labels. We are welcome to use unique labels for each occurrence if we like. But when we discharge them, we have to be sure to list both labels as superscripts at \implIntro/. Like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A \impl/ (A \impl/ B))}}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{a}}
+  \infer2[\implElim/]{\nd{A \impl/ B}}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{b}}
+  \infer2[\implElim/]{\nd{B}}
+  \infer1[\implIntro/$^{a, b}$]{\nd{A \impl/ B}}
+\end{prooftree*}
+
+\noindent
+Notice here that we gave each occurrence of ``$\nd{A}$'' a unique label. We added ``$a$'' to the first one, and ``$b$'' to the second one. But then when we used the \implIntro/ rule, we list both ``$a$'' and ``$b$'' as superscripts, to indicate that we discharge both at that particular point in the proof tree.
+
+Both ways are legitimate. In fact, both proof trees above --- the one with a single label ``$a$'' and the one with two labels ``$a$'' and ``$b$'' --- are just different versions of the same proof. The labels are merely a bookkeeping mechanism, to help us keep track of which assumptions get discharged when.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Self-implication}
+
+Suppose we have an assumption:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}}
+\end{prooftree*}
+
+\noindent
+Now, one thing we can do at this point is introduce the implication ``$\nd{A \impl/ A}$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{a}}
+  \infer1[\implIntro/$^{a}$]{\nd{A \impl/ A}}
+\end{prooftree*}
+
+\noindent
+This makes sense, because we start by assuming ``$\nd{A}$,'' and then of course we can derive ``$\nd{A}$'' from that assumption. To make this clear, suppose we have a rule that says we can reiterate an assumption (in linear logic, this is basically the \bangCopy/ rule). Let us write the rule like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}}
+  \infer1[\rulename{reiterate}]{\nd{A}}
+\end{prooftree*}
+
+\noindent
+This says that if we have assumed an ``$\nd{A}$,'' then of course we can reiterate it on the next line. We can say on the next line: ``$\nd{A}$ is still true. It was true one step up, and it's still true now.'' 
+
+We can use this rule to make the introduction of the implication explicit. We start with the assumption:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}}
+\end{prooftree*}
+
+\noindent
+Then we use reiteration:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}}
+  \infer1[\rulename{reiterate}]{\nd{A}}
+\end{prooftree*}
+
+\noindent
+Now we've shown very explicitly that if we assume an ``$\nd{A}$,'' we can derive an ``$\nd{A}$.'' And that's all we need to introduce an implication. So we can discharge the path from ``$\nd{A}$'' to ``$\nd{A}$,'' and introduce ``$\nd{A \impl/ A}$.'' Like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{a}}
+  \infer1[\rulename{reiterate}]{\nd{A}}
+  \infer1[\implIntro/$^{a}$]{\nd{A \impl/ A}}
+\end{prooftree*}
+
+\noindent
+Of course, we don't really need the \rulename{reiterate} rule. In non-linear natural deduction, every assumption remains true throughout the proof tree, so there is no need to explicitly reproduce a copy of any given assumption. Hence, we can just write the proof tree like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{a}}
+  \infer1[\implIntro/$^{a}$]{\nd{A \impl/ A}}
+\end{prooftree*}
+
+
+\begin{comment}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Vacuous discharge}
+
+There is another, somewhat odd case, that can occur in non-linear natural deduction. We call it ``vacuous discharge.''  Suppose we have an assumption:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}}
+\end{prooftree*}
+
+\noindent
+We are allowed at this point to introduce an implication of this shape:
+
+\begin{equation*}
+  \nd{X \impl/ A}
+\end{equation*}
+
+\noindent
+We can put any proposition we like in place of the ``$\nd{X}$.'' For example, we could put a ``$\nd{B}$'' in place of the ``$\nd{X}$'' and introduce ``$\nd{B \impl/ A}$.'' Like this: 
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}}
+  \infer1[\implIntro/]{\nd{B \impl/ A}}
+\end{prooftree*}
+
+\noindent
+Or, we could introduce ``$\nd{C \impl/ A}$'': 
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}}
+  \infer1[\implIntro/]{\nd{C \impl/ A}}
+\end{prooftree*}
+
+\noindent
+We do not discharge any assumptions when we do this, because we never assumed ``$\nd{C}$'' or ``$\nd{B}$.'' So the antecedent is simply not there to discharge. We call this \vocab{vacuous discharge}, because we perform the ``discharge'' step (when we use the \implIntro/ rule), but we don't actually discharge anything.
+
+Why is this move legitimate? Why can we infer that \emph{any} proposition ``$\nd{X}$'' can lead to ``$\nd{A}$''? 
+
+The answer has to do with the non-linearity of judgments here. Remember that ``$\nd{A}$'' is always true in the proof tree, no matter what. So, regardless of what the antecedent is, ''$\nd{A}$'' is still going to follow.
+
+
+\end{comment}
+
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+In non-linear natural deduction, we can assign the same label to multiple assumptions. When we discharge that label, we discharge all the assumptions that are marked with that label. 
+
+\begin{comment}We can also discharge no labels, which we call a vacuous discharge.\end{comment}
+
+
+\end{document}

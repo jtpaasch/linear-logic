@@ -1,0 +1,187 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Judgments}
+
+When we write down an inference rule, we put the premises above the line, and we put the conclusion below the line. But what are premises and conclusions supposed to look like, exactly? We will require that they are judgments.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Expressions}
+
+Let us start with the concept of an expression. For our purposes here, we will say that an \vocab{expression} is any string of characters that is written or spoken. 
+
+An expression can be garbled nonsense, or it might make up some words that we recognize in English, or it might even make up a sentence. Here are some examples:
+
+\begin{center}
+  aaa
+  Ageu 3ge!Eg bbbbcetu.t \\
+  Cows \\
+  Find blu thunkst \\
+  It is raining.
+\end{center}
+
+\noindent
+Each of these is an expression, in our sense of the word, since each of them is a string of characters.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Judgments}
+
+To \vocab{judge} something is to form an opinion or belief about it. But here we are not interested in just any sort of judgment. We are interested in judgments about expressions. 
+
+Indeed, we can formulate judgments \emph{about} expressions. We can take any given expression, we can picture it in our mind, and then we can form some kind of opinion about it. 
+
+Take the expression ``Find blu thunkst.'' You can picture this expression in your mind, and then form an opinion about it. You might decide that ``this expression is nonsense,'' or you might decide that ``this expression looks almost like English but it is not quite English.'' Or you might decide any other number of things about it.
+
+Of course, we can formulate incorrect judgments too. For example, if I were to picture the expression ``Find blu thunkst'' in my mind, and then I were to decide ``this is a true sentence,'' I would be wrong. However, if I were to decide that the expression ``Find blu thunkst'' is a string of characters, then I would be correct.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Writing down judgments}
+
+After we have formulated a judgment in our mind, we can write it down. Here is a template for this:
+
+\begin{center}
+  The expression ``$A$'' is $F$.
+\end{center}
+
+\noindent
+Replace $A$ with the expression you are considering, and replace $F$ with your judgment. For example, if I have decided that ``Find blu thunkst'' is nonsense, I would write down this:
+
+\begin{center}
+  The expression ``Find blu thunkst'' is nonsense.
+\end{center}
+
+\noindent
+We can actually write this more concisely. We can write that like this:
+
+\begin{center}
+  Find blu thunkst $:: nonsense$
+\end{center}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Sentences}
+
+One of the judgments we can form about expressions is whether or not they are sentences. For instance, consider this expression:
+
+\begin{center}
+  It is raining
+\end{center}
+
+\noindent
+I can formulate the following judgment about this expression:
+
+\begin{center}
+  It is raining $:: sentence$
+\end{center}
+
+\noindent
+That is, I can decide that the string of characters ``It is raining'' is a sentence (an English sentence, to be exact).
+
+Here is a judgment I might make, which is incorrect:
+
+\begin{center}
+  Thierry works for $:: sentence$
+\end{center}
+
+\noindent
+This judgment is incorrect because ``Thierry works for'' is not a sentence. To make it a sentence, we'd have to specify who or what Thierry works for. For example, we'd have to say ``Thierry works for Asics,'' or ``Thierry works for himself.''
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Statements of fact}
+
+There are various kinds of sentences. We are not interested in all of them. Here we are only interested in statements of fact. 
+
+A \vocab{statement of fact} is a sentence which can be true or false. For example:
+
+\begin{center}
+  H2O is composed of H and O atoms \\
+  Thierry works for Asics
+\end{center}
+
+\noindent
+These statements can be true or false. H2O is indeed composed of H and O atoms, so that is true. Similarly, if Thierry really does work for Asics, then ``Thierry works for Asics'' is true. If Thierry doesn't work for Asics, then it's false. 
+
+So these judgments are correct:
+
+\begin{center}
+  H2O is composed of H and O atoms $:: \text{\emph{statement~of~fact}}$ \\
+  Thierry works for Asics $:: \text{\emph{statement~of~fact}}$
+\end{center}
+
+\noindent
+Not all sentences can be true or false. For example, questions and commands are neither true nor false. Here are some examples:
+
+\begin{center}
+  Who just called? \\
+  Close the window!
+\end{center}
+
+\noindent
+Hence, these judgments are incorrect:
+
+\begin{center}
+  Who just called? $:: \text{\emph{statement~of~fact}}$ \\
+  Close the window! $:: \text{\emph{statement~of~fact}}$
+\end{center}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Detecting statements of fact}
+
+There is a simple test that almost always determines whether an expression is a statement of fact. Take the expression in question, and put it in the blank here:
+
+\begin{center}
+  Can the sentence \blank~be true or false?
+\end{center}
+
+\noindent
+Once you fill in the blank, can you answer the question with a ``yes''? If so, then the expression is a statement of fact. Otherwise, the expression is not a statement of fact.
+
+Take ``Thierry works for Asics'' as an example. If we put that into the blank, we get:
+
+\begin{center}
+  Can the sentence ``Thierry works for Asics'' be true or false?
+\end{center}
+
+\noindent
+The answer to this question is ``yes,'' so the expression ``Thierry works for Asics'' is a statement of fact. Hence, this is a correct judgment:
+
+\begin{center}
+  Thierry works for Asics $:: \text{\emph{statement~of~fact}}$
+\end{center}
+
+\noindent
+Now try the expression ``Close the window!'':
+
+\begin{center}
+  Can the sentence ``Close the window!'' be true or false?
+\end{center}
+
+\noindent
+The answer to this question is ``no,'' so ``Close the window!'' is not a statement of fact. Hence, this is an incorrect judgment:
+
+\begin{center}
+  Close the window! $:: \text{\emph{statement~of~fact}}$
+\end{center}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+An expression is any string of characters. We can form judgments about expressions. For example, we can decide if we think an expression is an English sentence, or we can decide whether we think an expression is a statement of fact. There are very many judgments we can make about expressions.
+
+\end{document}

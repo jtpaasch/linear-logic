@@ -1,0 +1,301 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Local completeness}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The strategy}
+
+To verify that the \tensorElim/ rule works in harmony with the \tensorIntro/ rule, we need to check that it is locally sound, and locally complete. In the previous chapter, we proved that it is locally sound. In this chapter, we will show that it is locally complete. 
+
+To prove local completeness, we will use the same strategy that we used before, with lolli elimination. That strategy was this: 
+
+\begin{itemize}
+  \item{Eliminate the connective}
+  \item{Attempt to re-introduce it} 
+\end{itemize}
+
+\noindent
+If we can re-introduce the connective, we can conclude that the elimination rule is locally complete.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Setting up}
+
+As usual, we want to be general, so we will use $A$ and $B$ as placeholders that can stand for any proposition. Our first task is to eliminate a tensor. To do that, we need a tensor:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{}
+  \infer[no rule]1[]{A \tensor/ B}
+\end{prooftree*}
+
+\noindent
+How did we derive this tensor? 
+
+\begin{prooftree*}
+  \hypo{??}
+  \ellipsis{}{}
+  \infer[no rule]1[]{A \tensor/ B}
+\end{prooftree*}
+
+\noindent
+It could have been introduced as an assumption, using the \startrule/. Like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{A \tensor/ B}
+\end{prooftree*}
+
+\noindent
+Or it could have been introduced through some other steps:
+
+\begin{prooftree*}
+  \hypo{\text{Other steps}}
+  \ellipsis{}{}
+  \infer[no rule]1[]{A \tensor/ B}
+\end{prooftree*}
+
+\noindent
+To capture all possibilities, let us use ``$\Proof/$'' as a placeholder that can stand for any proof of the tensor:
+
+\begin{prooftree*}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[no rule]1[]{A \tensor/ B}
+\end{prooftree*}
+
+\noindent
+Now we have a general proof tree which represents that we have introduced a tensor. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Eliminate it}
+
+The next step is to eliminate the tensor. If we look at the \tensorElim/ rule template, we can see that in order to eliminate a tensor, we need to assume ``$A$'' and ``$B$'' over on the right, as hypothetical possibilities:
+
+\begin{prooftree*}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[no rule]1[]{A \tensor/ B}
+  
+  \hypo{}
+  \infer1[\startrule/]{~~A^{a}~~}
+
+  \hypo{}
+  \infer1[\startrule/]{~~B^{b}~~}
+
+  \infer[no rule]2{}
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then the \tensorElim/ rule says that we need to derive some further conclusion ``$C$'' from ``$A^{a}$'' and ``$B^{b}$'' together. Something like this: 
+
+\begin{prooftree*}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[no rule]1[]{A \tensor/ B}
+
+  \hypo{}
+  \infer1[\startrule/]{~~A^{a}~~}
+  \ellipsis{}{}
+
+  \hypo{}
+  \infer1[\startrule/]{~~B^{b}~~}
+  \ellipsis{}{}
+
+  \infer2{~~~~~~~~~~C~~~~~~~~~~~~~}
+
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Once we do that, we will be able to apply the \tensorElim/ rule, to derive that very conclusion ``$C$'':
+
+\begin{prooftree*}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[no rule]1[]{A \tensor/ B}
+  
+  \hypo{}
+  \infer1[\startrule/]{~~A^{a}~~}
+  \ellipsis{}{}
+
+  \hypo{}
+  \infer1[\startrule/]{~~B^{b}~~}
+  \ellipsis{}{}
+
+  \infer2{~~~~~~~~~~C~~~~~~~~~~~~~}
+
+  \infer2[\tensorElim/$^{a,b}$]{C}
+\end{prooftree*}
+
+\noindent
+The question is, what should we pick to put in place of ``$C$''? Let's rewind the proof tree one step, so it looks like this:
+
+\begin{prooftree*}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[no rule]1[]{A \tensor/ B}
+
+  \hypo{}
+  \infer1[\startrule/]{~~A^{a}~~}
+  \ellipsis{}{}
+
+  \hypo{}
+  \infer1[\startrule/]{~~B^{b}~~}
+  \ellipsis{}{}
+
+  \infer2{~~~~~~~~~~C~~~~~~~~~~~~~}
+
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+What should we put in place of ``$C$''? What should we derive, in place of this box:
+
+\begin{prooftree*}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[no rule]1[]{A \tensor/ B}
+
+  \hypo{}
+  \infer1[\startrule/]{~~A^{a}~~}
+  \ellipsis{}{}
+
+  \hypo{}
+  \infer1[\startrule/]{~~B^{b}~~}
+  \ellipsis{}{}
+
+  \infer2{~~~~~~~~\fbox{$C$ ??}~~~~~~~~~~~}
+
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Remember our task: we want to eliminate the tensor, and then we want to use the conclusion of the elimination to re-introduce the tensor.
+
+So, in place of ``$C$,'' we want to derive something that will let us re-introduce the tensor ``$A \tensor/ B$.'' But what, exactly?
+
+Well, one thing we can derive from ``$A^{a}$'' and ``$B^{b}$'' is a tensor. That is, we can combine those two assumptions to form the tensor ``$A \tensor/ B$.'' Let's do that:
+
+\begin{prooftree*}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[no rule]1[]{A \tensor/ B}
+
+  \hypo{}
+  \infer1[\startrule/]{~~A^{a}~~}
+
+  \hypo{}
+  \infer1[\startrule/]{~~B^{b}~~}
+
+  \infer2[\tensorIntro/]{A \tensor/ B}
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Now we can apply the \tensorElim/ rule, to derive this new conclusion:
+
+\begin{prooftree*}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[no rule]1[]{A \tensor/ B}
+
+  \hypo{}
+  \infer1[\startrule/]{~~A^{a}~~}
+
+  \hypo{}
+  \infer1[\startrule/]{~~B^{b}~~}
+
+  \infer2[\tensorIntro/]{A \tensor/ B}
+
+  \infer2[\tensorElim/]{A \tensor/ B}
+\end{prooftree*}
+
+\noindent
+At this point, we have eliminated the original tensor ``$A \tensor/ B$,'' but what we ended up deriving in the process is the exact same tensor (or rather, another copy of the tensor).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Reintroduce it}
+
+According to the steps we enumerated at the beginning of the chapter, we can move on to the next step of our proof. That step is this: after we eliminate the connective, we should see if we can use the conclusion of the elimination to re-introduce the connective. 
+
+So what is the conclusion of the elimination rule? What did it produce? It produced the tensor, highlighted with the box:
+
+\begin{prooftree*}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[no rule]1[]{A \tensor/ B}
+
+  \hypo{}
+  \infer1[\startrule/]{~~A^{a}~~}
+
+  \hypo{}
+  \infer1[\startrule/]{~~B^{b}~~}
+
+  \infer2[\tensorIntro/]{A \tensor/ B}
+
+  \infer2[\tensorElim/]{\fbox{$A \tensor/ B$}}
+\end{prooftree*}
+
+\noindent
+Can we re-introduce a tensor from this? Well, yes. In fact, it's \emph{already} a tensor. So we are done. We have shown that if we eliminate a tensor, we are left with enough pieces to re-introduce the tensor. Indeed, in this case, the elimination step itself produced (or re-introduced) the tensor.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Other connectives like this}
+
+There are various other connectives, which have similar elimination rules: they say that if you can derive some arbitrary conclusion ``$C$'' from the connective's parts, then you can eliminate the connective and simply conclude ``$C$.''
+
+For such connectives, you'll notice that we can often prove that they are locally complete in just the same way that we did it here: in place of ``$C$,'' we simply derive the connective we are supposed to introduce.
+
+This shows that such elimination rules are strong enough to extract all the relevant information for us to consider them locally complete. Indeed, these elimination rules are \emph{very} strong, since they can extract \emph{any} information that can be derived in place of ``$C$.''
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Proof expansion}
+
+We have proven that the tensor elimination rule is locally complete with a proof expansion (synonym: eta-expansion). We can write out the transformation as before, so that it looks like this:
+
+$$
+\begin{prooftree}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[no rule]1[]{A \tensor/ B}
+\end{prooftree}
+\hskip 1cm\rightsquigarrow_{\eta}\hskip 1cm
+\begin{prooftree}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[no rule]1[]{A \tensor/ B}
+  \hypo{}
+  \infer1[\startrule/]{~~A^{a}~~}
+  \hypo{}
+  \infer1[\startrule/]{~~B^{b}~~}
+  \infer2[\tensorIntro/]{A \tensor/ B}
+  \infer2[\tensorElim/]{A \tensor/ B}
+\end{prooftree}
+$$
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+In this chapter, we proved that the \tensorElim/ rule is locally complete. We did this by constructing a proof expansion which shows that, if we eliminate a tensor, we can re-introduce it from the pieces. This shows that the elimination rule is strong enough to extract enough information from the connective. It does not produce too little information.
+
+
+\end{document}

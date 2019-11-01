@@ -1,0 +1,145 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Market rules}
+
+As I noted before, we want to start learning about linear natural deduction. In this chapter, we'll introduce the inference rules we can use to construct proof trees, in the linear natural deduction style.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Linear natural deduction}
+
+Natural deduction is a style of logic that concerns itself with judgments. We use inference rules just as we do with any proof system, but the premises and conclusions of the inference rules are always judgments that a proposition is true.
+
+For example, a natural deduction inference rule will look like this:
+
+\begin{prooftree*}
+  \hypo{A :: true}
+  \hypo{B :: true}
+  \infer2{C :: true}
+\end{prooftree*}
+
+\noindent
+This says that, if the judgment $A :: true$ is correct, and if the judgment $B :: true$ is correct, then we can infer that the judgment $C :: true$ is correct.
+
+We call it \vocab{linear} because we will use each assumption exactly one time in our proof trees. Do not worry about that point right now. It will become clear later, as we work through some examples. For now, all we need to know is that the kind of natural deduction we're doing is \emph{linear} natural deduction.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The \rulename{start} rule}
+
+If we want to build a proof tree, we have to be able to start the tree somehow. We need to be able to write down the initial premise(s). Then, after we have one or more initial premises, we can go on to apply inference rules to derive further conclusions, and build a tree.
+
+So, we must have a start rule. And indeed, every natural deduction system has a rule that lets us state any initial premise we like, in order to get started. We will call this rule the \rulename{start} rule (sometimes it is called the \rulename{axiom} rule).
+
+The template for the rule looks like this (where $A$ is a placeholder that can be replaced with any proposition we are willing to affirm is true):
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\rulename{start}]{A :: true}
+\end{prooftree*}
+
+\noindent
+Notice that there is nothing above the line. That is because this is a start rule. It says: you don't need to assume anything here. You can simply introduce your assertion that $A$ is true.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Example}
+
+Suppose that on this particular Saturday, I started my day with potatoes in my basket. If I wanted to start building a proof which begins from the assertion that ``I have potatoes in my basket'' is true, then I could use the \rulename{start} rule, like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\rulename{start}]{b(p) :: true}
+\end{prooftree*}
+
+\noindent
+I can use the \rulename{start} rule as many times as I like. For example, suppose that on this particular Saturday, I started my day with potatoes, so I want to assert that ``I have potatoes in my basket'' is true. But suppose also that I know Mrs. Sherman will trade potatoes for squash, so I want to assert that ``I can trade potatoes for squash'' is true as well. I can use the \rulename{start} rule to assert both of these things:
+
+\begin{center}
+\begin{prooftree}
+  \hypo{}
+  \infer1[\rulename{start}]{b(p) :: true}
+\end{prooftree}
+\hskip 2cm
+\begin{prooftree}
+  \hypo{}
+  \infer1[\rulename{start}]{t(p, s) :: true}
+\end{prooftree}
+\end{center}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The \rulename{trade} rule}
+
+As I mentioned, every natural deduction system has an \rulename{start} rule, because you always need a way to get started with your proof trees.
+
+However, in addition to a \rulename{start} rule, different proof systems can have different custom rules that are tailored to their particular domain. 
+
+Let's introduce one such rule for our situation. We'll call it the \rulename{trade} rule. The template looks like this:
+
+\begin{prooftree*}
+  \hypo{b(x) :: true}
+  \hypo{t(x, y) :: true}
+  \infer2[\rulename{trade}]{b(y) :: true}
+\end{prooftree*}
+
+\noindent
+In this template, $x$ and $y$ are placeholders that should be replaced with the first-letter abbreviation of any of the vegetables mentioned before. This rule says: if it's true that I have $x$ in my basket, and if it's true that I can trade $x$ for $y$, then I will do the trade, and end up with $y$ in my basket.
+
+This rule captures the basic transaction game I always play at the farmer's market, which is that I will trade anything I can. So if somebody will make a trade, and I have the relevant goods to trade, I will do it.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Example}
+
+Suppose that I have been able to derive that I have potatoes in my basket, and suppose I have also been able to derive that I can trade potatoes for squash. Something like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{}
+  \infer1{b(p) :: true}
+
+  \hypo{}
+  \ellipsis{}{}  
+  \infer1{t(p, s) :: true}
+
+  \infer[rule style=no rule]2[]{}
+\end{prooftree*}
+
+\noindent
+These two judgments match the premises that are needed in the \rulename{trade} template. So I can use the \rulename{trade} rule to infer the further judgment that I will have squash in my basket:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{}
+  \infer1{b(p) :: true}
+
+  \hypo{}
+  \ellipsis{}{}  
+  \infer1{t(p, s) :: true}
+
+  \infer2[\rulename{trade}]{b(s) :: true}
+\end{prooftree*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+A linear natural deduction style proof system is a proof system where the premises and conclusions are truth-judgments. That is, each premise and conclusion in the inference rules has the form $A :: true$, where $A$ is a proposition.
+
+Also, every natural deduction system has a \rulename{start} rule of some kind, which gives us a way to start building proof trees. The \rulename{start} rule says that we can assert up front that any particular proposition we are prepared to vouch for is true.
+
+We also introduced a rule that is custom to our farmer's market scenario: it is the \rulename{trade} rule, which describes the transactions I can make at the farmer's market: if I have something $x$ in my basket, and someone will trade my $x$ for $y$, then I'll end up with $y$ in my basket.
+
+
+\end{document}

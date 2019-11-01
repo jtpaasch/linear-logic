@@ -1,0 +1,224 @@
+\documentclass[../../../main.tex]{subfiles}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Non-linear implication}
+
+As we mentioned in the last chapter, minimal logic is not linear. In this chapter, we want to explore that point in more depth.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Non-linear reasoning}
+
+Sometimes we want to reason about a situation that doesn't change state. For example, in mathematics, it is typical to work with propositions that are always true.
+
+To see this, consider the folllowing. Suppose we want to say something like this:
+
+\begin{center}
+  If $x$ is even, then $x$ can be divided into two equal parts.
+\end{center}
+
+\noindent
+Let us say that ``$even(x)$'' means ``$x$ is even'' and ``$div2(x)$'' means ``$x$ can be divided into 2 equal parts.'' In linear logic, we might naively decide to express this with a lolli:
+
+\begin{equation*}
+  even(x) \lolli/ div2(x)
+\end{equation*}
+
+\noindent
+Then we might naively try to use this in a proof. For example, we might want to prove that the number $12782$ can be divided into 2 equal parts. So, we might use the \startrule/ rule to assert that if $12782$ is even, then it can be divided into two equal parts:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{even(12782) \lolli/ div2(12782)}
+\end{prooftree*}
+
+\noindent
+Then we might use the \startrule/ rule again to assert that $12782$ is in fact even:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{even(12782) \lolli/ div2(12782)}
+  
+  \hypo{}
+  \infer1[\startrule/]{even(12782)}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+And then we might use \lolliElim/ to get our conclusion:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{even(12782) \lolli/ div2(12782)}
+  
+  \hypo{}
+  \infer1[\startrule/]{even(12782)}
+  
+  \infer2[\lolliElim/]{div2(12782)}
+\end{prooftree*}
+
+\noindent
+This is a proof that $12872$ can be divided into two equal parts, given the provided assumptions.
+
+However, this is a linear proof, and that means that the assumptions get used up. So, ``$even(12782)$'' is no longer available for use if we were to extend this proof tree further:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\cancel{even(12782) \lolli/ div2(12782)}}
+  
+  \hypo{}
+  \infer1[\startrule/]{\cancel{even(12782)}}
+  
+  \infer2[\lolliElim/]{div2(12782)}
+\end{prooftree*}
+
+\noindent
+But surely that's not what we intend. Surely we don't mean to imply with this proof that the number $12782$ ceases to be even. Surely we might want to use the fact that $12782$ is even, another time later on, if we were to extend this proof tree further.
+
+Of course, in linear logic we can accomplish this with bangs. But it's tedious, because of all the bookkeeping that we have to do to handle bangs. Wouldn't it be easier if we could use a logical system where the assumptions are always available for use? That is, wouldn't it be easier to use a non-linear system?
+
+There are logical systems that operate in just this way, and in fact most of the traditional mathematical logic from 20th century is non-linear. (Linear logic was not formulated until the 1980s.)
+
+Minimal logic is the simplest one from among these 20th century systems. It is a non-linear system, precisely because the assumptions in any given proof tree do not need to be used exactly once. In minimal logic, any given assumption can be used once, twice, a hundred times, or zero times. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Linear vs non-linear implication}
+
+One place the non-linearity of minimal logic comes out is with respect to implication. The meaning of an implication ``$\nd{A \impl/ B}$'' is that of a hypothetical or conditional statement. It says: \emph{if} $\nd{A}$ were true, \emph{then} $\nd{B}$ would be true as well.
+
+But notice that this kind of implication is not linear. A lolli of the form ``$A \lolli/ B$'' means: if you give me an ``$A$,'' I'll use it up and give you back a ``$B$.'' Regular implication is not like this. The ``$\nd{A}$'' does not get used up. It does not cease to be true. On the contrary, it remains true and available for use, alongside ``$\nd{B}$.'' 
+
+As we noted earlier, this is useful for mathematical contexts. But here is another, non-mathematical example. Let ``$\nd{clear(TS)}$'' mean ``I/you/they have TS (top secret) clearance,'' and let ``$\nd{read(D136)}$'' mean ``I/you/they can read classified document no. D136.'' 
+
+Now suppose that we encode a security policy like this: if someone has TS clearance, they can read D136:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{clear(TS) \impl/ read(D136)}}
+\end{prooftree*}
+
+\noindent
+Suppose now that you want to read D136. So, you submit that you do, in fact, have TS clearance:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{clear(TS) \impl/ read(D136)}}
+  
+  \hypo{}
+  \infer1[\startrule/]{\nd{clear(TS)}}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Next we can use implication elimination to infer that you can indeed read D136:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{clear(TS) \impl/ read(D136)}}
+  
+  \hypo{}
+  \infer1[\startrule/]{\nd{clear(TS)}}
+  
+  \infer2[\implElim/]{\nd{read(D136)}}
+\end{prooftree*}
+
+\noindent
+This tree represents a simple proof that you are in compliance with the security policy, and so can read D136.
+
+Of course, when you read D136, you don't lose your TS clearance. So you could comply with another policy, say one that said ``$\nd{clear(TS) \impl/ read(D5324)}$.'' And because the antecedent of the firts lolli still applies to this other case as well, we can see that the notion of implication that is at play here is not a linear notion of implication.
+
+To see this, contrast what we just saw with a linear situation. For example, let ``$\nd{have(1USD)}$'' mean ``I have one dollar,'' and let ``$\nd{buy(juice)}$'' mean ``I buy juice.'' Suppose we say that if I spend a dollar, I buy juice, and suppose we try to encode this with regular (non-linear) implication:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{have(1USD) \impl/ buy(juice)}}
+\end{prooftree*}
+
+\noindent
+Let us suppose now that I do in fact have a dollar:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{have(1USD) \impl/ buy(juice)}}
+  
+  \hypo{}
+  \infer1[\startrule/]{\nd{have(1USD)}}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+And from this, let us infer that I buy juice:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{have(1USD) \impl/ buy(juice)}}
+  
+  \hypo{}
+  \infer1[\startrule/]{\nd{have(1USD)}}
+  
+  \infer2[\implElim/]{\nd{buy(juice)}}
+\end{prooftree*}
+
+\noindent
+Unfortunately, we have a problem here. I have encoded this proof using the non-linear implication of minimal logic. As a consequence, the antecedent --- ``$\nd{have(1USD)}$,'' i.e., I have one dollar --- is still available. So, in \emph{this} proof tree, I would still have a dollar!
+
+But of course, that doesn't capture the situation correctly. In the case of the security clearance, it made sense to say that we could still use the possession of TS clearance for a further inference (say, to read D5324). But that kind of thing doesn't make sense here. After I purchase the juice, I can no longer use that dollar to buy something else, for instance: ``$\nd{have(1USD) \impl/ buy(donuts)}$.'' 
+
+So really, we should encode this latter proof with linear logic, rather than minimal logic, because with linear logic the assumption that I have a dollar will get used up, and so it will correctly represent that I can't use it again to purchase something else:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{have(1USD) \lolli/ buy(juice)}
+
+  \hypo{}
+  \infer1[\startrule/]{have(1USD)}
+
+  \infer2[\lolliElim/]{buy(juice)}
+\end{prooftree*}
+
+\noindent
+These examples are here to highlight how the notion of implication in minimal logic is not linear. In minimal logic, an implication of the form ``$\nd{A \impl/ B}$'' does not imply that the ``$\nd{A}$'' or the ``$\nd{B}$'' cease to be true, after the implication gets used.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Other non-linear systems}
+
+Besides minimal logic, there are two other popular systems from 20th century mathematical logic that are non-linear. 
+
+First, \vocab{intuitionistic logic} builds on top of minimal logic, but it adds an extra rule. We won't discuss that extra rule here, but it is a particular rule designed to help intuitionistic logic handle negation in a specific way.
+
+Then there is \vocab{classical logic}, which builds on top of intuitionistic logic by adding yet another rule. We won't discuss that extra rule either, but again, it is designed to help classical logic handle negation in even further ways.
+
+So the hierarchy is this:
+
+\begin{itemize}
+  \item{Minimal logic --- the simplest of the three}
+  \item{Intuitionistic logic --- we get this system by adding a specific rule to minimal logic.}
+  \item{Classical logic --- we get this system by adding a further specific rule to minimal logic.}
+\end{itemize}
+
+\noindent
+Actually, there are a couple of different rules that logicians can add to get from minimal logic to intuitionistic or classical logic, so there are options. But it turns out these options have the same results.
+
+For our purposes, we want to keep things simple, and we want a logical system that is very close to what we have covered in linear logic. So minimal logic serves our purposes for now.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+Although minimal logic is much like the minimal form of linear logic that we have covered so far, it is not linear. This affects the meaning of implication in minimal logic. With minimal logic implication, the antecedents and consequents do not cease to be true after an implication is used. They do not get used up.
+
+
+\end{document}

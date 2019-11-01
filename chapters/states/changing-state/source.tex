@@ -1,0 +1,407 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Changing state}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Stateful systems}
+
+The models we constructed earlier represent snapshots of a particular situation. They capture the objects and the relations they stand in frozen at a particular point.
+
+In many scenarios, situations undergo changes. If things change, we call it a \vocab{transition system}, because it is a system that can go through different \vocab{states}.
+
+To diagram a stateful system, we draw a model for each state, and we draw lines between the states to indicate which ones transition to which others.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Diagraming states: an example}
+
+Consider the following scenario:
+
+\begin{quote}
+  Jo is standing next to the counter in her kitchen, staring blankly into nothing. It's been one of those weeks! There are three nickels on the counter in front of her. Without thinking, she picks one of them up, then she picks up a second one. After a while, she puts the nickels back on the counter.
+\end{quote}
+
+\noindent
+This is a simple situation. There is Jo, and there are three nickels. We will call the nickels $n_{1}$, $n_{2}$, and $n_{3}$. We give them subscripted indexes so we can track each of them separately. So the objects involved are these:
+
+\begin{center}
+  Jo, $n_{1}$, $n_{2}$, $n_{3}$
+\end{center}
+
+\noindent
+How are the objects related in this model? Let's just focus on this: 
+
+\begin{center}
+  $x$ holds $y$
+\end{center}
+
+\noindent
+However, Jo holds different nickels at different items. At first she holds no nickels, then she holds one, then she holds two, and finally she holds none again. So there are four states here:
+
+\begin{itemize}
+  \item{State 0: Jo has nothing in her hand. The three nickels are on the counter.}
+  \item{State 1: Jo has one nickel in her hand. The other two nickels are on the counter.}
+  \item{State 2: Jo has two nickels in her hand. The last nickel is on the counter.}
+  \item{State 3: Jo has nothing in her hand. The three nickels are back on the counter.}
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The first state}
+
+Let's draw the first state. First, draw a dot for each object involved. There is Jo and the three nickels:
+
+\begin{diagram}
+
+  % State 0  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+
+\end{diagram}
+
+\noindent
+Are there any relationships involved here? In the first state, Jo holds nothing in her hand, so there are no arrows from Jo to any of the nickels. Thus, the diagram of this first state is complete.
+
+Let's draw a box around this model, and label it $S_{0}$, short for ``state 0,'' or simply ``the initial state'' or ``start state'':
+
+\begin{diagram}
+
+  % State 0
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+
+\end{diagram}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The second state}
+
+Now let's draw the second state. In the second state, Jo holds a nickel in her hand. 
+
+Let's draw the second state beside the first state, and let's draw an arrow to indicate that there is a transition from the one state to the other. Like this:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+\end{diagram}
+
+\noindent
+The same objects are present in the second state (Jo is still there, and the three nickels are still there):
+
+\begin{diagram}
+
+  % State 0
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+    \node[o-point] (jo_1) [label=below:{Jo}] at (6, -0.25) {};
+    \node[o-point] (n_1_1) [label=above:{$n_{1}$}] at (4.75, 1) {};
+    \node[o-point] (n_2_1) [label=above:{$n_{2}$}] at (6, 1.25) {};
+    \node[o-point] (n_3_1) [label=above:{$n_{3}$}] at (7.25, 1) {};
+
+\end{diagram}
+
+\noindent
+However, in the second state, Jo has picked up a nickel. Which nickel? Let's suppose that she picked up the first nickel ($n_{1}$). So now she is holding $n_{1}$. To show this, draw an arrow from Jo to $n_{1}$ and label it:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+    \node[o-point] (jo_1) [label=below:{Jo}] at (6, -0.25) {};
+    \node[o-point] (n_1_1) [label=above:{$n_{1}$}] at (4.75, 1) {};
+    \node[o-point] (n_2_1) [label=above:{$n_{2}$}] at (6, 1.25) {};
+    \node[o-point] (n_3_1) [label=above:{$n_{3}$}] at (7.25, 1) {};
+  
+    \draw[spaced-arrows,->] (jo_1) to node [fill=white] {holds} (n_1_1);
+
+\end{diagram}
+
+\noindent
+Now our diagram shows that can see that we have moved from one state ($S_{0}$), where Jo is holding nothing, to a second state ($S_{1}$), where Jo is holding the first nickel.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The third state}
+
+Let's draw the third state. In this state, Jo has picked up another nickel, and so now she is holding two nickels.
+
+Let's again draw a separate box for this new state and label it $S_{2}$. Let's also add an arrow from $S_{1}$ to $S_{2}$, to indicate that there is a transition there:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+    \node[o-point] (jo_1) [label=below:{Jo}] at (6, -0.25) {};
+    \node[o-point] (n_1_1) [label=above:{$n_{1}$}] at (4.75, 1) {};
+    \node[o-point] (n_2_1) [label=above:{$n_{2}$}] at (6, 1.25) {};
+    \node[o-point] (n_3_1) [label=above:{$n_{3}$}] at (7.25, 1) {};
+  
+    \draw[spaced-arrows,->] (jo_1) to node [fill=white] {holds} (n_1_1);
+
+  % State 2
+  \draw[spaced-arrows,->] (4, -1) -- (2, -2);  
+  \draw (-2, -5) -- (2, -5) -- (2, -2) -- (-2, -2) -- (-2, -5);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (0, -5);
+
+\end{diagram}
+
+\noindent
+In this new state, the same objects are present: Jo is still there, and the three nickels are still there. Furthermore, Jo is still holding the first nickel:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+    \node[o-point] (jo_1) [label=below:{Jo}] at (6, -0.25) {};
+    \node[o-point] (n_1_1) [label=above:{$n_{1}$}] at (4.75, 1) {};
+    \node[o-point] (n_2_1) [label=above:{$n_{2}$}] at (6, 1.25) {};
+    \node[o-point] (n_3_1) [label=above:{$n_{3}$}] at (7.25, 1) {};
+  
+    \draw[spaced-arrows,->] (jo_1) to node [fill=white] {holds} (n_1_1);
+
+  % State 2
+  \draw[spaced-arrows,->] (4, -1) -- (2, -2);  
+  \draw (-2, -5) -- (2, -5) -- (2, -2) -- (-2, -2) -- (-2, -5);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (0, -5);
+
+    \node[o-point] (jo_2) [label=below:{Jo}] at (0, -4.25) {};
+    \node[o-point] (n_1_2) [label=above:{$n_{1}$}] at (-1.25, -3) {};
+    \node[o-point] (n_2_2) [label=above:{$n_{2}$}] at (0, -2.75) {};
+    \node[o-point] (n_3_2) [label=above:{$n_{3}$}] at (1.25, -3) {};
+  
+    \draw[spaced-arrows,->] (jo_2) to node [fill=white] {holds} (n_1_2);
+
+\end{diagram}
+
+\noindent
+But in this third state, Jo has picked up another nickel. Let's suppose she has picked up the third nickel: $n_{3}$. So we can draw an arrow to indicate that too:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+    \node[o-point] (jo_1) [label=below:{Jo}] at (6, -0.25) {};
+    \node[o-point] (n_1_1) [label=above:{$n_{1}$}] at (4.75, 1) {};
+    \node[o-point] (n_2_1) [label=above:{$n_{2}$}] at (6, 1.25) {};
+    \node[o-point] (n_3_1) [label=above:{$n_{3}$}] at (7.25, 1) {};
+  
+    \draw[spaced-arrows,->] (jo_1) to node [fill=white] {holds} (n_1_1);
+
+  % State 2
+  \draw[spaced-arrows,->] (4, -1) -- (2, -2);  
+  \draw (-2, -5) -- (2, -5) -- (2, -2) -- (-2, -2) -- (-2, -5);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (0, -5);
+
+    \node[o-point] (jo_2) [label=below:{Jo}] at (0, -4.25) {};
+    \node[o-point] (n_1_2) [label=above:{$n_{1}$}] at (-1.25, -3) {};
+    \node[o-point] (n_2_2) [label=above:{$n_{2}$}] at (0, -2.75) {};
+    \node[o-point] (n_3_2) [label=above:{$n_{3}$}] at (1.25, -3) {};
+  
+    \draw[spaced-arrows,->] (jo_2) to node [fill=white] {holds} (n_1_2);
+    \draw[spaced-arrows,->] (jo_2) to node [fill=white] {holds} (n_3_2);
+
+\end{diagram}
+
+\noindent
+Now our diagram moves through three states: in the first state Jo holds nothing, in the second state she holds one nickel, and in the third state she holds two nickels.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The final state}
+
+Let's draw the final state, where Jo has dropped both of the nickels. For this last state, we add a fourth box (labeled $S_{3}$) and an arrow that shows the transition:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+    \node[o-point] (jo_1) [label=below:{Jo}] at (6, -0.25) {};
+    \node[o-point] (n_1_1) [label=above:{$n_{1}$}] at (4.75, 1) {};
+    \node[o-point] (n_2_1) [label=above:{$n_{2}$}] at (6, 1.25) {};
+    \node[o-point] (n_3_1) [label=above:{$n_{3}$}] at (7.25, 1) {};
+  
+    \draw[spaced-arrows,->] (jo_1) to node [fill=white] {holds} (n_1_1);
+
+  % State 2
+  \draw[spaced-arrows,->] (4, -1) -- (2, -2);  
+  \draw (-2, -5) -- (2, -5) -- (2, -2) -- (-2, -2) -- (-2, -5);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (0, -5);
+
+    \node[o-point] (jo_2) [label=below:{Jo}] at (0, -4.25) {};
+    \node[o-point] (n_1_2) [label=above:{$n_{1}$}] at (-1.25, -3) {};
+    \node[o-point] (n_2_2) [label=above:{$n_{2}$}] at (0, -2.75) {};
+    \node[o-point] (n_3_2) [label=above:{$n_{3}$}] at (1.25, -3) {};
+  
+    \draw[spaced-arrows,->] (jo_2) to node [fill=white] {holds} (n_1_2);
+    \draw[spaced-arrows,->] (jo_2) to node [fill=white] {holds} (n_3_2);
+
+  % State 3
+  \draw[spaced-arrows,->] (2, -3.5) -- (4, -3.5);
+  \draw (4, -5) -- (8, -5) -- (8, -2) -- (4, -2) -- (4, -5);
+  \coordinate[label=below:{\textbf{S}$_{3}$}] (s_3) at (6, -5);
+
+\end{diagram}
+
+\noindent
+Then we fill it in with scenario where Jo holds nothing:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+    \node[o-point] (jo_1) [label=below:{Jo}] at (6, -0.25) {};
+    \node[o-point] (n_1_1) [label=above:{$n_{1}$}] at (4.75, 1) {};
+    \node[o-point] (n_2_1) [label=above:{$n_{2}$}] at (6, 1.25) {};
+    \node[o-point] (n_3_1) [label=above:{$n_{3}$}] at (7.25, 1) {};
+  
+    \draw[spaced-arrows,->] (jo_1) to node [fill=white] {holds} (n_1_1);
+
+  % State 2
+  \draw[spaced-arrows,->] (4, -1) -- (2, -2);  
+  \draw (-2, -5) -- (2, -5) -- (2, -2) -- (-2, -2) -- (-2, -5);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (0, -5);
+
+    \node[o-point] (jo_2) [label=below:{Jo}] at (0, -4.25) {};
+    \node[o-point] (n_1_2) [label=above:{$n_{1}$}] at (-1.25, -3) {};
+    \node[o-point] (n_2_2) [label=above:{$n_{2}$}] at (0, -2.75) {};
+    \node[o-point] (n_3_2) [label=above:{$n_{3}$}] at (1.25, -3) {};
+  
+    \draw[spaced-arrows,->] (jo_2) to node [fill=white] {holds} (n_1_2);
+    \draw[spaced-arrows,->] (jo_2) to node [fill=white] {holds} (n_3_2);
+
+  % State 3
+  \draw[spaced-arrows,->] (2, -3.5) -- (4, -3.5);
+  \draw (4, -5) -- (8, -5) -- (8, -2) -- (4, -2) -- (4, -5);
+  \coordinate[label=below:{\textbf{S}$_{3}$}] (s_3) at (6, -5);
+
+    \node[o-point] (jo_3) [label=below:{Jo}] at (6, -4.25) {};
+    \node[o-point] (n_1_3) [label=above:{$n_{1}$}] at (4.75, -3) {};
+    \node[o-point] (n_2_3) [label=above:{$n_{2}$}] at (6, -2.75) {};
+    \node[o-point] (n_3_3) [label=above:{$n_{3}$}] at (7.25, -3) {};
+
+\end{diagram}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+Sometimes things change state. To model a stateful system, we can construct a model for each state that the system can be in, and then we can wire up the states with transitions. 
+
+
+\end{document}

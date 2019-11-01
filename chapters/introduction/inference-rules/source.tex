@@ -1,0 +1,191 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Inference rules}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Templates}
+
+Consider this argument:
+
+\begin{prooftree*}
+  \hypo{\text{All humans are animals.}}
+  \hypo{\text{All animals are mortal.}}
+  \infer2{\text{Therefore, all humans are mortal.}}
+\end{prooftree*}
+
+\noindent
+It has a specific form:
+
+\begin{prooftree*}
+  \hypo{\text{All $A$s are $B$.}}
+  \hypo{\text{All $B$s are $C$.}}
+  \infer2{\text{Therefore, all $A$s are $C$.}}
+\end{prooftree*}
+
+\noindent
+This is a \vocab{template} (synonym: \vocab{schema}) for an argument, in the sense that the italicized letters $A$, $B$, and $C$ are placeholders or holes that can be filled in by common terms like ``human,'' ``animal,'' and ``mortal.''
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Inference rules}
+
+We can write down inference rules with templates. To do that, first draw a line, and write the name of the rule beside it, like this:
+
+\begin{prooftree*}
+  \hypo{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~}
+  \infer1[$\mathsf{Barbara}$]{}
+\end{prooftree*}
+
+\noindent
+Next, write down templates for all the premises above the line, side by side. For example:
+
+\begin{prooftree*}
+  \hypo{\text{All $A$s are $B$.}}
+  \hypo{\text{All $B$s are $C$.}}
+  \infer2[$\mathsf{Barbara}$]{}
+\end{prooftree*}
+
+\noindent
+Finally, write down templates for the conclusions below the line:
+
+\begin{prooftree*}
+  \hypo{\text{All $A$s are $B$.}}
+  \hypo{\text{All $B$s are $C$.}}
+  \infer2[$\mathsf{Barbara}$]{\text{All $A$s are $C$.}}
+\end{prooftree*}
+
+\noindent
+This is in fact a well known inference rule constructed long ago by Aristotle. The name ``Barbara'' was invented in the Middle Ages.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Substitution instances}
+
+The \rulename{Barbara} rule is a template. To construct a concrete argument, replace the placeholders with real values. We call the result a \vocab{substitution instance}.
+
+For instance, we can replace every $A$ with ``organism,'' every $B$ with ``living thing,'' and every $C$ with ``physical being'':
+
+\begin{prooftree*}
+  \hypo{\text{All organisms are living things.}}
+  \hypo{\text{All living things are physical things.}}
+  \infer2[$\mathsf{Barbara}$]{\text{All organisms are physical things.}}
+\end{prooftree*}
+
+\noindent
+This says that we used the \rulename{Barbara} rule to infer that ``All organisms are physical things'' from the premises ``All organisms are living things'' and ``All living things are physical things.'' 
+
+Here is a different substitution instance:
+
+\begin{prooftree*}
+  \hypo{\text{All squares are 4-sided shapes.}}
+  \hypo{\text{All 4-sided shapes are quadrangles.}}
+  \infer2[$\mathsf{Barbara}$]{\text{All squares are quadrangles.}}
+\end{prooftree*} 
+
+\noindent
+This says that we again used the \rulename{Barbara} rule to infer that ``All squares are quadrangles'' from the premises ``All squares are 4-sided shapes'' and ``All 4-sided shapes are quadrangles.'' 
+
+Note that we must replace \textbf{every} $A$ with the same value. We cannot replace one occurrence of $A$ with ``squares,'' and then replace another occurrence with ``squirrels.'' We must substitute concrete values for the placeholders \vocab{uniformly}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Zero-premise rules}
+
+In \rulename{Barbara}, there are two premise templates above the line, but inference rules can have zero or more. 
+
+Here is a rule with no premises. Let $n$ be a placeholder for any number:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\mathsf{Numeric~identity}$]{n = n}
+\end{prooftree*}
+
+\noindent
+This rule is called \rulename{Numeric~identity}, and it says that we can conclude that any number $n$ is the same as itself (we need no premises to draw this conclusion).
+
+To use this rule, we can replace $n$ with any number. For example, fill in $n$ with $467$:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\mathsf{Numeric~identity}$]{467 = 467}
+\end{prooftree*}
+
+\noindent
+This says we used the rule \rulename{Numeric~identity} to infer that ``$467 = 467$.'' 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{One-premise rules}
+
+Here is a rule with one premise and one conclusion. Let $n$ and $m$ be placeholders for numbers again:
+
+\begin{prooftree*}
+  \hypo{n = m}
+  \infer1[$\mathsf{Symmetry}$]{m = n}
+\end{prooftree*}
+
+\noindent
+This rule says that if we have a statement of the form $n = m$, we can flip it around: $m = n$.
+
+Here is a substitution instance of using the rule:
+
+\begin{prooftree*}
+  \hypo{4 = (2 * 2)}
+  \infer1[$\mathsf{Symmetry}$]{(2 * 2) = 4}
+\end{prooftree*}
+
+\noindent
+This says that we used the rule \rulename{Symmetry} to infer that ``$(2 *2) = 4$'' from the premise that ``$4 = (2 * 2)$.''
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Two or more-premise rules}
+
+Here is a rule with three premises, and one conclusion.
+
+\begin{prooftree*}
+  \hypo{a = b}
+  \hypo{b = c}
+  \hypo{c = d}
+  \infer3[$\mathsf{Three~links}$]{a = d}
+\end{prooftree*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The general form}
+
+We can have any number of premise templates above the line, and we can have any number of premise templates below the line. In general, an inference rule has this shape ---
+
+\begin{prooftree*}
+  \hypo{S_{1}}
+  \hypo{S_{2}}
+  \hypo{\ldots}
+  \hypo{S_{n}}
+  \infer4[$\mathsf{Name}$]{T_{1}, T_{2}, \ldots, T_{m}}
+\end{prooftree*}
+
+\noindent
+--- where there can be any number of $S$s above the line, and any number of $T$s below the line.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+We write down inference rules by drawing a line and writing a name next to it. We place templates for the required premises above the line, and we place templates for the conclusions below the line.
+
+We can use an inference rule by uniformly replacing its placeholders with concrete values.
+
+\end{document}

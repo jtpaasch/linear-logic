@@ -1,0 +1,196 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Distinct events}
+
+
+In our previous examples, we drew loops freely. Whenever we wanted to show that Jo could repeat a particular action, we would draw an arrow back to an earlier state, to show that she could go back to that state and then repeat.
+
+Sometimes, this is not fine-grained enough. For example, if we want to be sensitive to how many times Jo picks up a nickel, then our previous diagrams with loops will not do. The looping pictures make it seem as if Jo can replay the same act of picking up a nickel. But that is not correct. Each time she picks up a nickel is a new event.
+
+Let us take a fresh look at modeling Jo's situation, but this time around, let's be careful to represent each distinct event.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introducing a new event}
+
+Recall the situation where Jo is standing by her counter, with three nickels in front of her. At this point, she is holding nothing.
+
+\begin{diagram}
+
+  % State 0
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+\end{diagram}
+
+\noindent
+Now suppose she picks up the first nickel ($n_{1}$). Since in this particular version of the scenario, this is the first time Jo picks up the nickel, let's label it ``holds$_{1}$'':
+
+\begin{diagram}
+
+  % State 0
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+    \node[o-point] (jo_1) [label=below:{Jo}] at (6, -0.25) {};
+    \node[o-point] (n_1_1) [label=above:{$n_{1}$}] at (4.75, 1) {};
+    \node[o-point] (n_2_1) [label=above:{$n_{2}$}] at (6, 1.25) {};
+    \node[o-point] (n_3_1) [label=above:{$n_{3}$}] at (7.25, 1) {};
+  
+    \draw[spaced-arrows,->] (jo_1) to node [fill=white] {holds$_{1}$} (n_1_1);
+  
+\end{diagram}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{No loops}
+
+Next suppose that Jo puts down the nickel. To represent this, it might be tempting to draw an arrow back to the initial state $S_{0}$, where she holds nothing:
+
+\begin{diagram}
+
+  % State 0
+  \draw[spaced-arrows,<-] (2, 0) -- (4, 0);
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+    \node[o-point] (jo_1) [label=below:{Jo}] at (6, -0.25) {};
+    \node[o-point] (n_1_1) [label=above:{$n_{1}$}] at (4.75, 1) {};
+    \node[o-point] (n_2_1) [label=above:{$n_{2}$}] at (6, 1.25) {};
+    \node[o-point] (n_3_1) [label=above:{$n_{3}$}] at (7.25, 1) {};
+  
+    \draw[spaced-arrows,->] (jo_1) to node [fill=white] {holds$_{1}$} (n_1_1);
+  
+\end{diagram}
+
+\noindent
+But that says Jo can hold$_{1}$ the nickel for the first time, repeatedly, which is nonsense. It should convey that when Jo puts down the nickel, she enters a new state, where she holds nothing:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+    \node[o-point] (jo_1) [label=below:{Jo}] at (6, -0.25) {};
+    \node[o-point] (n_1_1) [label=above:{$n_{1}$}] at (4.75, 1) {};
+    \node[o-point] (n_2_1) [label=above:{$n_{2}$}] at (6, 1.25) {};
+    \node[o-point] (n_3_1) [label=above:{$n_{3}$}] at (7.25, 1) {};
+  
+    \draw[spaced-arrows,->] (jo_1) to node [fill=white] {holds$_{1}$} (n_1_1);
+
+  % State 2
+  \draw[spaced-arrows,->] (4, -1) -- (2, -2);
+  \draw (-2, -5) -- (2, -5) -- (2, -2) -- (-2, -2) -- (-2, -5);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (0, -5);
+
+    \node[o-point] (jo_2) [label=below:{Jo}] at (0, -4.25) {};
+    \node[o-point] (n_1_2) [label=above:{$n_{1}$}] at (-1.25, -3) {};
+    \node[o-point] (n_2_2) [label=above:{$n_{2}$}] at (0, -2.75) {};
+    \node[o-point] (n_3_2) [label=above:{$n_{3}$}] at (1.25, -3) {};
+  
+\end{diagram}
+
+\noindent
+Then Jo can pick up the nickel for a second time (which we can put in a new state, and mark with ``holds$_{2}$''):
+
+\begin{diagram}
+
+  % State 0
+  \draw (-2, -1) -- (2, -1) -- (2, 2) -- (-2, 2) -- (-2, -1);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0, -1);
+  
+    \node[o-point] (jo) [label=below:{Jo}] at (0, -0.25) {};
+    \node[o-point] (n_1) [label=above:{$n_{1}$}] at (-1.25, 1) {};
+    \node[o-point] (n_2) [label=above:{$n_{2}$}] at (0, 1.25) {};
+    \node[o-point] (n_3) [label=above:{$n_{3}$}] at (1.25, 1) {};
+  
+  % State 1
+  \draw[spaced-arrows,->] (2, 0.5) -- (4, 0.5);
+  \draw (4, -1) -- (8, -1) -- (8, 2) -- (4, 2) -- (4, -1);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (6, -1);
+
+    \node[o-point] (jo_1) [label=below:{Jo}] at (6, -0.25) {};
+    \node[o-point] (n_1_1) [label=above:{$n_{1}$}] at (4.75, 1) {};
+    \node[o-point] (n_2_1) [label=above:{$n_{2}$}] at (6, 1.25) {};
+    \node[o-point] (n_3_1) [label=above:{$n_{3}$}] at (7.25, 1) {};
+  
+    \draw[spaced-arrows,->] (jo_1) to node [fill=white] {holds$_{1}$} (n_1_1);
+
+  % State 2
+  \draw[spaced-arrows,->] (4, -1) -- (2, -2);
+  \draw (-2, -5) -- (2, -5) -- (2, -2) -- (-2, -2) -- (-2, -5);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (0, -5);
+
+    \node[o-point] (jo_2) [label=below:{Jo}] at (0, -4.25) {};
+    \node[o-point] (n_1_2) [label=above:{$n_{1}$}] at (-1.25, -3) {};
+    \node[o-point] (n_2_2) [label=above:{$n_{2}$}] at (0, -2.75) {};
+    \node[o-point] (n_3_2) [label=above:{$n_{3}$}] at (1.25, -3) {};
+
+  % State 3
+  \draw[spaced-arrows,->] (2, -3) -- (4, -3);
+  \draw (4, -5) -- (8, -5) -- (8, -2) -- (4, -2) -- (4, -5);
+  \coordinate[label=below:{\textbf{S}$_{3}$}] (s_3) at (6, -5);
+
+    \node[o-point] (jo_3) [label=below:{Jo}] at (6, -4.25) {};
+    \node[o-point] (n_1_3) [label=above:{$n_{1}$}] at (4.75, -3) {};
+    \node[o-point] (n_2_3) [label=above:{$n_{2}$}] at (6, -2.75) {};
+    \node[o-point] (n_3_3) [label=above:{$n_{3}$}] at (7.25, -3) {};
+    
+    \draw[spaced-arrows,->] (jo_3) to node [fill=white] {holds$_{2}$} (n_1_3);
+
+\end{diagram}
+
+\noindent
+Now our diagram represents each event correctly, because it shows that Jo picks up the first nickel twice.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+The above example shows is that if we want to represent distinct events in our transition systems, we should avoid loops, and we should index each arrow with a subscripted number so that we can keep track of which occurrence is which.
+
+
+\end{document}

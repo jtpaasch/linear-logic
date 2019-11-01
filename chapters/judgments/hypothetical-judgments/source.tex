@@ -1,0 +1,173 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Hypothetical judgments}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Truth under assumption}
+
+We often want to assert that some proposition is true, \emph{provided that} certain other propositions are true. In colloquial conversation, we often make statements along these lines. 
+
+\begin{center}
+  Harold will win the election, assuming he can mobilize his voting base. \\
+  I'll make it to the store in time, so long as I leave work by 4:30pm. \\
+  If I had wings, I could fly.
+\end{center}
+
+\noindent
+In each of these examples, we are saying that something will be true, under the assumption that something else is true.
+
+Take the first example: ``Harold will win the election, assuming he can mobilize his voting base.'' The primary judgment here is this:
+
+\begin{center}
+  Harold will win the election $:: true$
+\end{center}
+
+\noindent
+However, that judgment is said to be correct only if this other judgment is also correct:
+
+\begin{center}
+  Harold mobilizes his voting base $:: true$
+\end{center}
+
+\noindent
+If Harold fails to mobilize his voting base, then there is no guarantee he will win the election. But if he does mobilize his voting base, then (or so the judgment claims) he \emph{will} the election.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Truth under multiple assumptions}
+
+Each of the examples in the last section is a judgment that depends on a single assumption. But judgments can of course (and often do) depend on more than one assumption. Here is an example:
+
+\begin{center}
+  If I can get the solenoid off the starter assembly, \\
+  and if I can get the solenoid open, \\
+  then I can fix the plunger.
+\end{center}
+
+\noindent
+Here is the primary judgment:
+
+\begin{center}
+  I can fix the plunger $:: true$
+\end{center}
+
+\noindent
+But this depends on two other assumptions. First, I will only be able to fix the plunger if this is correct:
+
+\begin{center}
+  I can get the solenoid off the starter assembly $:: true$
+\end{center}
+
+\noindent
+And if that is correct, then I will also need this to be correct as well:
+
+\begin{center}
+  I can get the solenoid open $:: true$
+\end{center}
+
+\noindent
+If either of these judgments are incorrect, then there is no guarantee that the primary judgment (namely, that I can fix the plunger) will also be correct. However, if both of those assumptions are correct, then (or so the judgment claims) I will be able to fix the plunger. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Notation and terminology}
+
+Judgments that depend on assumptions like this are called \vocab{hypothetical judgments}. We will write hypothetical judgments so they look like this:
+
+\begin{equation*}
+  A :: true, B :: true, C :: true \ndturnstile/ D :: true
+\end{equation*}
+
+\noindent
+You can read this as, ``if $A$ is true, and $B$ is true, and $C$ is true, then it follows that $D$ is true.'' Or, you could read it as ``$D$ is true, provided that $A$ is true, and $B$ is true, and $C$ is true.'' Some terminology:
+
+\begin{itemize}
+  \item{$A :: true$, $B :: true$, and $C :: true$ are called the \vocab{assumptions} of the judgment.}
+  \item{$D :: true$ is called the \vocab{conclusion} of the judgment.}
+  \item{The $\ndturnstile/$ symbol is called a \vocab{turnstile}.}
+  \item{We say that the judgment $D :: true$ is \vocab{made under the assumptions} $A :: true$, $B :: true$, $C :: true$.}.
+\end{itemize}
+
+\noindent
+A hypothetical judgment can have any number of assumptions. For example, it might have two assumptions, and look something like this:
+
+\begin{equation*}
+  A :: true, B :: true \ndturnstile/ C :: true
+\end{equation*}
+
+\noindent
+Or it can have only one assumption. Take the example from above, that if I had wings, I could fly. We can write that like this:
+
+\begin{center}
+  I have wings $:: true$ $\ndturnstile/$ I can fly $:: true$
+\end{center}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Categorical judgments}
+
+If a judgment is made under zero assumptions, then it is not a hypothetical judgment. Instead, we call it a \vocab{categorical} judgment. We can write a categorical judgment with a null character to the left of the turnstile:
+
+\begin{equation*}
+  \varnothing \ndturnstile/ A :: true
+\end{equation*}
+
+\noindent
+Or, we can simply put nothing to the left of the turnstile, like this:
+
+\begin{equation*}
+  \ndturnstile/ A :: true
+\end{equation*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Unique labels}
+
+As will become clear later, we will encounter situations where there are multiple copies of the same judgment in the list of assumptions. So, for example, we might have a hypothetical judgment that looks like this:
+
+\begin{equation*}
+  A :: true, A :: true, A :: true, B :: true, C :: true \ndturnstile/ D :: true
+\end{equation*}
+
+\noindent
+Here we have three copies of $A :: true$ in our list of assumptions. In such cases, we need some way to differentiate between the copies. We need some way to single out the first $A :: true$ when we want to talk about it, as opposed to the third $A :: true$. 
+
+To accomplish this, we can attach a unique label to each of the assumptions. The label can really be anything, so long as each assumption has a label that no other assumption has. 
+
+A common convention is to put a distinct small lower case letter in front of each assumption, like this:
+
+\begin{equation*}
+  a : A :: true, b : A :: true, c : A :: true, d : B :: true, e : C :: true \ndturnstile/ D :: true
+\end{equation*}
+
+\noindent
+Now we can single out the first $A :: true$ (by saying ``$a : A :: true$''), we can single out the second $A :: true$ by saying ``$b : A :: true$,'' and so on.
+
+Another way we could do this is to put a subscripted number on each copy. Like this:
+
+\begin{equation*}
+  A :: true_{1}, A :: true_{2}, A :: true_{3}, B :: true, C :: true \ndturnstile/ D :: true
+\end{equation*}
+
+\noindent
+With this approach, we also can single out the first $A :: true$ (by saying $A :: true_{1}$), we can single out the second $A :: true$ (by saying $A :: true_{2}$, and so on.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+We can make judgments under assumptions. A judgment under assumptions is a judgment that some proposition is true provided that some other list of propositions are true as well. We write it down by listing the assumptions, then we write a turnstile ($\ndturnstile/$), then we write the concluding judgment. Hypothetical judgments can be based on one or more assumptions. However, if there are zero assumptions, it is not a hypothetical judgment. Instead, we call it a categorical judgment.
+
+
+\end{document}

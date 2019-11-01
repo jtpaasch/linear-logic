@@ -1,0 +1,390 @@
+\documentclass[../../../main.tex]{subfiles}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Translating implication introduction}
+
+In the last chapter, we looked at minimal logic proofs that end with the \startrule/ rule, and we learned how to translate that last step into an equivalent step in linear logic. In this chapter, we will learn how to translate the last step if it uses the implication introduction rule.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Implication introduction}
+
+In a minimal logic proof tree, the last step might introduce an implication with the \implIntro/ rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{}
+  \infer1[\implElim/$^{a}$]{\nd{A \impl/ B}}
+\end{prooftree*}
+
+\noindent
+In order to do this, the proof tree above must assume ``$\nd{A}$'' and then from that derive a ``$\nd{B}$''. That is, the tree above would have to look like this (omitting the ``$:: true$'' annotations):
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{a}}
+  \ellipsis{}{\nd{B}}
+  \infer1[\implElim/$^{a}$]{\nd{A \impl/ B}}
+\end{prooftree*}
+
+\noindent
+What hypothetical judgment does this prove? It doesn't prove a hypothetical judgment at all. It proves a categorical judgment. Since the branch from ``$\nd{A}$'' down to ``$\nd{B}$'' is discharged, there are no open assumptions left in this tree. Hence, the judgment this tree proves is a categorical one:
+
+\begin{equation*}
+  \ndturnstile/ \nd{A \impl/ B}
+\end{equation*}
+
+\noindent
+We can translate this to an equivalent linear logic judgment:
+
+\begin{equation*}
+  \ndturnstile/ \nd{A \impl/ B}
+  \hskip 1cm \rightsquigarrow \hskip 1cm 
+  \ndturnstile/~\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}
+\end{equation*}
+
+\noindent
+To prove this, we first start with the assumption:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{*}}
+\end{prooftree*}
+
+\noindent
+Then, we derive ``$\nd{B}^{*}$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{*}}
+  \ellipsis{}{\nd{B}^{*}}
+\end{prooftree*}
+
+\noindent
+Once have done that, we discharge the branch and introduce the lolli:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{* a}}
+  \ellipsis{}{\nd{B}^{*}}
+  \infer1[\lolliIntro/$^{a}$]{\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}}
+\end{prooftree*}
+
+\noindent
+That is a proof of the categorical judgment we set out to prove:
+
+\begin{equation*}
+  \ndturnstile/~\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}
+\end{equation*}
+
+\noindent
+How does this derivation of ``$\nd{B}^{*}$'' from ``$\bang/\nd{A}^{*}$'' actually play out? We need to use the \bangDer/ rule or the \bangCopy/ rule to actually use the banged assumption. If we use the \bangCopy/ rule, the proof tree will look like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{* a}}
+  \infer1[\bangCopy/]{\nd{A}^{*}}
+  \ellipsis{}{\nd{B}^{*}}
+  \infer1[\lolliIntro/$^{a}$]{\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}}
+\end{prooftree*}
+
+\noindent
+If you prefer the \bangDer/ rule, it will look like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{* b}}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{* a}}
+  \ellipsis{}{\nd{B}^{*}}
+  \infer2[\bangDer/$^{a}$]{\nd{B}^{*}}
+  \infer1[\lolliIntro/$^{b}$]{\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}}
+\end{prooftree*}
+
+\noindent
+We can push the extraction of ``$\nd{A}^{*}$'' up higher though, like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{* b}}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{* a}}
+  \infer2[\bangDer/$^{a}$]{\nd{A}^{*}}
+  \ellipsis{}{\nd{B}^{*}}
+  \infer1[\lolliIntro/$^{b}$]{\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}}
+\end{prooftree*}
+
+\noindent
+In all of these variations, we prove the same judgment:
+
+\begin{equation*}
+  \ndturnstile/~\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}
+\end{equation*}
+
+\noindent
+The conclusion of the tree goes on the right side of the turnstile, and there are no open assumptions in the tree, so nothing goes on the left side of the turnstile.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Implication introduction with context}
+
+\noindent
+In the above, we translated a proof that ended with \implIntro/, and there was no further context. To be more general, we need to do the same thing, but with more context above that last implication introduction step. So the judgment in minimal logic that we want to prove is going to look like this:
+
+\begin{equation*}
+  \nd{\context/} \ndturnstile/ \nd{A} \impl/ \nd{B}
+\end{equation*}
+
+\noindent
+To prove this in minimal logic, we start with whatever the assumptions ``$\nd{\context/}$'' prove:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+\end{prooftree*}
+
+\noindent
+Then we introduce ``$\nd{A}$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}}
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then we use those assumptions to derive ``$\nd{B}$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}}
+  \ellipsis{}{}
+  \infer[no rule]2{}
+  \ellipsis{}{\nd{B}}
+\end{prooftree*}
+
+\noindent
+Finally, we discharge the assumption ``$\nd{A}$,'' and we introduce the implication ``$\nd{A} \impl/ \nd{B}$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{a}}
+  \ellipsis{}{}
+  \infer[no rule]2{}
+  \ellipsis{}{\nd{B}}
+  \infer1[\implIntro/$^{a}$]{\nd{A} \impl/ \nd{B}}
+\end{prooftree*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The translation}
+
+To translate this proof into an equivalent linear logic proof, we first translate the hypothetical judgment:
+
+\begin{equation*}
+  \nd{\context/} \ndturnstile/ \nd{A} \impl/ \nd{B}
+  \hskip 1cm \rightsquigarrow \hskip 1cm
+  \bang/\nd{\context/}^{*} \ndturnstile/~\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}
+\end{equation*}
+
+\noindent
+So the hypothetical judgment we want to prove in linear logic is this:
+
+\begin{equation*}
+  \bang/\nd{\context/}^{*} \ndturnstile/~\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}
+\end{equation*}
+
+\noindent
+To prove this, we begin with whatever ``$\bang/\nd{\Gamma}^{*}$'' proves:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+\end{prooftree*}
+
+\noindent
+Then we introduce the assumption ``$\bang/\nd{A}^{*}$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{*}}
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then we extract a copy of ``$\nd{A}^{*}$.'' For example, we can use the \bangCopy/ rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{*}}
+  \infer1[\bangCopy/]{\nd{A}^{*}}
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then we derive ``$\nd{B}^{*}$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{*}}
+  \infer1[\bangCopy/]{\nd{A}^{*}}
+  \ellipsis{}{}
+  \infer[no rule]2{}
+  \ellipsis{}{\nd{B}^{*}}
+\end{prooftree*}
+
+\noindent
+Finally, we discharge ``$\bang/\nd{A}^{*}$'' and introduce the lolli:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{* a}}
+  \infer1[\bangCopy/]{\nd{A}^{*}}
+  \ellipsis{}{}
+  \infer[no rule]2{}
+  \ellipsis{}{\nd{B}^{*}}
+  \infer1[\lolliIntro/$^{a}$]{\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}}
+\end{prooftree*}
+
+\noindent
+Alternatively, we can use the \bangDer/ rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{* b}}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{* a}}
+  \infer2[\bangDer/$^{a}$]{\nd{A}^{*}}
+  \ellipsis{}{}
+  \infer[no rule]2{}
+  \ellipsis{}{\nd{B}^{*}}
+  \infer1[\lolliIntro/$^{b}$]{\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}}
+\end{prooftree*}
+
+\noindent
+Whichever of these variants we choose, we end up proving the same hypothetical assumption:
+
+\begin{equation*}
+  \bang/\nd{\context/}^{*} \ndturnstile/~\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}
+\end{equation*}
+
+\noindent
+The only open assumptions are ``$\bang/\nd{\context/}^{*}$,'' since ``$\bang/\nd{A}$'' gets discharged, and the conclusion is the lolli ``$\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}$,'' which is exactly what we set out to prove.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The general translation}
+
+The general last-step translation is the one that includes the context. The version above with no context is a special case, where the context is empty. That is, if we set ``$\nd{\context/}$'' to ``$\emptyassumptions/$,'' then this
+
+\begin{equation*}
+  \nd{\context/} \ndturnstile/ \nd{A} \impl/ \nd{B}
+  \hskip 1cm \rightsquigarrow \hskip 1cm
+  \bang/\nd{\context/}^{*} \ndturnstile/~\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}
+\end{equation*}
+
+\noindent
+becomes this:
+
+\begin{equation*}
+  \emptyassumptions/ \ndturnstile/ \nd{A} \impl/ \nd{B}
+  \hskip 1cm \rightsquigarrow \hskip 1cm
+  \emptyassumptions/ \ndturnstile/~\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}
+\end{equation*}
+
+\noindent
+Which is the same as this:
+
+\begin{equation*}
+  \ndturnstile/ \nd{A} \impl/ \nd{B}
+  \hskip 1cm \rightsquigarrow \hskip 1cm
+  \ndturnstile/~\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}
+\end{equation*}
+
+\noindent
+And that is the special case we covered first, when there is no context.
+
+Here is the full translation for the last step (the implication introduction):
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\nd{\context/}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{\nd{A}^{a}}
+  \ellipsis{}{}
+  \infer[no rule]2{}
+  \ellipsis{}{\nd{B}}
+  \infer1[\implIntro/$^{a}$]{\nd{A} \impl/ \nd{B}}
+\end{prooftree}
+\hskip 1cm \rightsquigarrow \hskip 1cm
+\begin{prooftree}
+  \hypo{}
+  \infer[no rule]1{\bang/\nd{\context/}^{*}}
+  \ellipsis{}{\Proof/}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{\bang/\nd{A}^{* a}}
+  \infer1[\bangCopy/]{\nd{A}^{*}}
+  \ellipsis{}{}
+  \infer[no rule]2{}
+  \ellipsis{}{\nd{B}^{*}}
+  \infer1[\lolliIntro/$^{a}$]{\bang/\nd{A}^{*} \lolli/ \nd{B}^{*}}
+\end{prooftree}
+$$
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+In this chapter, we looked at minimal logic proofs that end with the \implIntro/ rule. We established a way to translate that last step from minimal logic into an equivalent form in linear logic. in minimal logic, if you introduce an implication of the form ``$\nd{A} \impl/ \nd{B}$,'' you derive ``$\nd{B}$'' from an assumed ``$\nd{A}$'' (along with any other context ``$\nd{\context/}$''). In an equivalent proof in linear logic, you derive ``$\nd{B}$'' from an assumed ``$\bang/\nd{A}^{*}$'' (along with any other context ``$\bang/\nd{\context/}^{*}$'').
+
+
+\end{document}

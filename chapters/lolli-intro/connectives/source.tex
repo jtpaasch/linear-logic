@@ -1,0 +1,232 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Connectives}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Simple propositions}
+
+So far, the only propositions we have formed are simple propositions which describe some state of affairs in a model. To form these propositions, we always combine the names and predicates that we've defined for a model. 
+
+At the base level, this is desirable. When it comes to forming basic propositions, we only want to form propositions that we can model, because models specify exactly what a proposition is supposed to \emph{mean}. If we didn't have a model to tell us what some names and predicates were supposed to describe, it'd be anybody's guess how we should interpret them.
+
+We will call these propositions that we form with the names and predicates from models \vocab{atomic propositions}. We call them ``atomic'' because they are the simplest propositions we can build. The word ``atom'' here is meant to convey something small, that more complicated things can be built from.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Combining propositions}
+
+We can take atomic propositions, and put them together to form larger propositions. And we call these larger propositions \vocab{complex propositions} or \vocab{molecular propositions}, where the word ``molecular'' is meant to convey a complex built from atoms.
+
+Of course, there are various ways to combine propositions, to make more complex ones. A simple example comes from how we use the word ``and'' in English. Suppose I have this proposition:
+
+\begin{quote}
+  Mary got snacks for the party $:: prop$
+\end{quote}
+
+\noindent
+Suppose I also have this proposition: 
+
+\begin{quote}
+  Mary got drinks for the party $:: prop$
+\end{quote}
+
+\noindent
+I can use the word ``and'' to put these two propositions together into a larger proposition:
+
+\begin{quote}
+  Mary got snacks for the party and Mary got \\ drinks for the party $:: prop$
+\end{quote}
+
+\noindent
+Actually, in English, we'd probably make this even shorter, and just say this:
+
+\begin{quote}
+  Mary got snacks and drinks for the party $:: prop$
+\end{quote}
+
+\noindent
+But that's really just a shorthand. Logically speaking, it's a complex proposition that's built from two separate propositions, which are put together with ``and.''
+
+The word ``and'' is called a \vocab{connective}, because it lets us connect two smaller propositions together, in order to build a larger proposition.
+
+We can describe how ``and'' lets us build propositions in English with an inference rule:
+
+\begin{prooftree*}
+  \hypo{A :: prop}
+  \hypo{B :: prop}
+  \infer2{A \text{ and } B :: prop}
+\end{prooftree*}
+
+\noindent
+Here $A$ and $B$ are placeholders that can be replaced with any English proposition. This rule says that if $A$ is a proposition, and if $B$ is a proposition, we can put the word ``and'' between them, to form a larger proposition.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Combining and combining}
+
+We can build complex propositions out of other complex propositions. For instance, we can use ``and'' to build complex propositions from smaller propositions, but then we can use ``and'' again to build even more complex propositions from \emph{those} already complex propositions.
+
+The picture looks like this:
+
+\begin{prooftree*}
+  \hypo{A :: prop}
+  \hypo{B :: prop}
+  \infer2{A \text{ and } B :: prop}
+  
+  \hypo{C :: prop}
+  \hypo{D :: prop}
+  \infer2{C \text{ and } D :: prop}
+  
+  \infer2{(A \text{ and } B) \text{ and } (C \text{ and } D) :: prop}
+\end{prooftree*}
+
+\noindent
+If we wanted to, we could then use ``and'' again, to build even more complex propositions. For example:
+
+\begin{prooftree*}
+  \hypo{A :: prop}
+  \hypo{B :: prop}
+  \infer2{A \text{ and } B :: prop}
+  
+  \hypo{C :: prop}
+  \hypo{D :: prop}
+  \infer2{C \text{ and } D :: prop}
+  
+  \infer2{(A \text{ and } B) \text{ and } (C \text{ and } D) :: prop}
+  
+  \hypo{E :: prop}
+  \hypo{F :: prop}
+  \infer2{E \text{ and } F :: prop}
+  
+  \infer2{((A \text{ and } B) \text{ and } (C \text{ and } D)) \text{ and } (E \text{ and } F) :: prop}
+\end{prooftree*}
+
+\noindent
+We could go on and on like this, building ever more complex propositions, just using the ``and'' connector. 
+
+(Of course, in English, we rarely build sentences this complicated, on account of how difficult it would be for our conversation partners to grasp what we'd be saying. But it's still possible to do this in English.)
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Other connectives}
+
+The word ``and'' is not the only connective in English. Another common one is ``or.'' For example, if we take the two propositions above, we can put them together with ``or'' instead of ``and,'' to get this:
+
+\begin{quote}
+  Mary got snacks for the party or Mary got \\ drinks for the party $:: prop$
+\end{quote}
+
+\noindent
+Actually, in English, we'd probably make this even shorter, and just say this:
+
+\begin{quote}
+  Mary got snacks or drinks for the party $:: prop$
+\end{quote}
+
+\noindent
+But again, that's really just a shorthand. Logically speaking, it's a complex proposition that's built from two separate propositions, which are put together with ``or.''
+
+We can describe how ``or'' lets us build propositions in English with an inference rule, similar to the ``and'' rule:
+
+\begin{prooftree*}
+  \hypo{A :: prop}
+  \hypo{B :: prop}
+  \infer2{A \text{ or } B :: prop}
+\end{prooftree*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Connective meanings}
+
+Notice that the meaning of the ``or'' example is different from the meaning of the ``and'' example. In the ``and'' case, we're all set for the party, because Mary got snacks \emph{and} drinks. 
+
+But in the ``or'' case, Mary only got one of the two: she got snacks, \emph{or} she got drinks. So, in the ``or'' case, before the party starts, we probably need to send someone out to pick up whatever Mary wasn't able to get. 
+
+This just goes to show that each connective has a different meaning from the others. 
+
+What is the meaning of a connective? Each connective expresses the way that the two propositions \vocab{are related}. The ``and'' connective says: both of these propositions are true. The ``or'' connective says: one of these propositions is true.
+
+Here is another example of a connective: ``happened before'' We can use this to combine any two propositions $A$ and $B$ into the proposition ``$A$ happened before $B$.'' What's the meaning of this connective? It says: on a timeline, the one happened before the other. Note: like ``and'' and ``or,'' ``happens before'' expresses how the two propositions are related, it's just that ``happens before'' expresses a temporal relationship.
+
+So, when you use a connective to build a larger proposition, that larger proposition has its own new meaning, which is different from the individual meanings of its parts. The smaller propositions have their own meaning, but the larger proposition built from them adds an additional piece of meaning: namely, it adds information about how the smaller propositions are related.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{One-place connectives}
+
+Connectives like ``and'' and ``or'' are \vocab{2-place connectives}. We call them ``2-place'' because they build a larger proposition out of \emph{two} smaller propositions.
+
+But there are also \vocab{1-place} connectives. For example, in English, we have the phrase ``it is not the case that.'' We can combine this with any proposition, to form another (slightly larger) proposition, which negates the first proposition.
+
+For example, take this proposition, mentioned above:
+
+\begin{quote}
+  Mary got snacks for the party $:: prop$
+\end{quote}
+
+\noindent
+We can add ``it is not the case that,'' to make the following proposition:
+
+\begin{quote}
+  It is not the case that Mary got snacks for the party $:: prop$
+\end{quote}
+
+\noindent
+Actually, in English, we'd probably shorten that to this:
+
+\begin{quote}
+  Mary did not get snacks for the party $:: prop$
+\end{quote}
+
+\noindent
+But again, that's just shorthand. Logically speaking, this proposition is built from one smaller proposition --- namely, ``Mary got snacks for the party'' --- and the connective ``it is not the case that.''
+
+So there can be 1-place connectives too.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Different symbols}
+
+Above, I mentioned ``and,'' ``or,'' and ``it is not the case that'' as examples of connectives in English. I then explained their meaning in quite simple terms. For instance, I said that ``$A$ and $B$'' means: both of the propositions ``$A$'' and ``$B$'' are true.
+
+This is actually too simplistic. In English, we can talk about a variety of different ways that two propositions are true together, so the word ``and'' can actually have a variety of different meanings. The same goes for ``or'' and ``it is not the case that.''
+
+So, in reality, the English word ``and'' represents more than one connective, which we (as English speakers) can differentiate through context. 
+
+As we proceed, we will not rely merely on context. Instead, we will use explicit, distinct symbols to represent each of the different connectives. This way we can keep the different meanings separate, and not confuse them.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Pure vs custom rules}
+
+In the next chapters, we are going to start adding connectives to our linear natural deduction system. Each connective will give us new inference rules that we can add to our toolbox.
+
+So far, in our study of linear natural deduction, we've only had one pure natural deduction rule, and that is the \startrule/ rule. I call it a ``pure'' natural deduction rule because it applies to any natural deduction proof system we might use. 
+
+By contrast, the other rule we talked about --- the \rulename{trade} rule --- was a custom rule, formulated exclusively to help us reason about the farmer's market scenario. It does not apply to every logical system.
+
+The connective rules that we will add in future chapters are like the \startrule/ rule rather than the \rulename{trade} rule. These new connective rules will apply generally, to \emph{any} linear natural deduction proof system.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+We can use \vocab{connectives} to build more complex propositions out of smaller propositions. We call the simplest propositions \vocab{atomic propositions}, and we call any proposition built with a connective a \vocab{complex proposition} or a \vocab{molecular proposition}. 
+
+
+\end{document}

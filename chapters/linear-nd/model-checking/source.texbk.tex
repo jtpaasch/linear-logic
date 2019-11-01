@@ -1,0 +1,323 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Model checking}
+
+Recall that we wanted to prove this hypothetical judgment:
+
+\begin{equation*}
+  b(p) :: true, t(p, c) :: true \ndturnstile/ b(c) :: true
+\end{equation*}
+
+\noindent
+That is, we wanted to prove that I will end up with cucumbers in my basket, provided that (i) I start with potatoes in my basket, and (ii) I can trade potatoes for cucumbers.
+
+The proof we put together was this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\rulename{start}]{b(p) :: true}
+  \hypo{}
+  \infer1[\rulename{start}]{t(p, c) :: true}
+  \infer2[trade]{b(c) :: true}
+\end{prooftree*}
+
+\noindent
+Let's model the situation that we've described with this proof tree, to confirm that our proof reflects the situation correctly.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Modeling the start state}
+
+One of the things we said above is that the assumptions which we introduce into our proof tree represent facts about the starting state of the situation we're reasoning about. That gives us a clue about how to start building a model of the situation. The clue is: model all of the assumptions in the start state.
+
+Let's first draw a box and label it $S_{0}$:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+\end{diagram}
+
+\noindent
+Then we take each assumption from the hypothetical judgment, and we model it in $S_{0}$. In this case, we have two assumptions: ``$b(p) :: true$'' and ``$t(p, c) :: true$.'' The objects involved are potatoes ($p$) and cucumbers ($c$), so we can draw a dot for each of them:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+  
+    \node[o-point] (p) [label=below:{$p$}] at (0.5, 0) {};
+    \node[o-point] (c) [label=above:{$c$}] at (-0.5, 1) {};
+
+\end{diagram}
+
+\noindent
+One of the assumptions --- namely, ``$b(p) :: true$'' --- says that potatoes are in my basket, so I can mark the ``$p$'' dot with a boxed \fbox{$b$} to represent this:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+  
+    \node[o-point] (p) [label=below:{$p$}] at (0.5, 0) {};
+    \node[o-point] (c) [label=above:{$c$}] at (-0.5, 1) {};
+    
+    \coordinate[label=above right:{\fbox{$b$}}] (b) at (0.5, 0);
+
+\end{diagram}
+
+\noindent
+The other assumption --- namely ``$t(p, c) :: true$'' --- says that I can trade potatoes for cucumbers. So I can draw a line from the ``$p$'' dot to the ``$c$'' dot and label it with a ``$t$'' to represent that:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+  
+    \node[o-point] (p) [label=below:{$p$}] at (0.5, 0) {};
+    \node[o-point] (c) [label=above:{$c$}] at (-0.5, 1) {};
+    
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (c);
+    \coordinate[label=above right:{\fbox{$b$}}] (b) at (0.5, 0);
+
+\end{diagram}
+
+\noindent
+Now we have modeled the assumptions in our starting state. There are potatoes and cucumbers. The potatoes are in my basket, but I can trade the potatoes for cucumbers.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Adding other states}
+
+Next we want to model the other states. To do this, we work down the proof tree, one inference line at a time. 
+
+At each line, we need to pause and ask:
+
+\begin{center}
+  Does this inference line represents a change in state?
+\end{center}
+
+\noindent
+Then, depending on the answer, we do one of two things:
+
+\begin{itemize}
+  \item{If it does represent a change in state, then at this point, we add a new state to the transition system we're building up.}
+  \item{If the inference line doesn't represent a change in state, then we don't add a new state to the transition system.}
+\end{itemize}
+
+\noindent
+As we work our way down the tree, at each premise or conclusion that we come to, we want to put that information into the model. That is, we want to update the diagram of the current state we're working on, so it reflects the premise or conclusion that we're looking at.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The next state}
+
+In our proof tree, if we start at the assumptions, we can move down one inference line, to the one where I trade. 
+
+So we ask the question noted above: does this inference line represent a change in state? The answer is yes, because at this point I get rid of the vegetables in my basket, and put some new vegetables in my basket.
+
+First, then, we add a new state to our diagram:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+  
+    \node[o-point] (p) [label=below:{$p$}] at (0.5, 0) {};
+    \node[o-point] (c) [label=above:{$c$}] at (-0.5, 1) {};
+    
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (c);
+    \coordinate[label=above right:{\fbox{$b$}}] (b) at (0.5, 0);
+
+  % State 1
+  \draw[spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+\end{diagram}
+
+\noindent
+I'll initially copy over the same things to this new state:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+  
+    \node[o-point] (p) [label=below:{$p$}] at (0.5, 0) {};
+    \node[o-point] (c) [label=above:{$c$}] at (-0.5, 1) {};
+    
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (c);
+    \coordinate[label=above right:{\fbox{$b$}}] (b) at (0.5, 0);
+
+  % State 1
+  \draw[spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (p_1) [label=below:{$p$}] at (3.75, 0) {};
+    \node[o-point] (c_1) [label=above:{$c$}] at (2.75, 1) {};
+
+    \draw[spaced-arrows,->] (p_1) to node [fill=white] {$t$} (c_1);
+    \coordinate[label=above right:{\fbox{$b$}}] (b) at (3.75, 0);
+
+\end{diagram}
+
+\noindent
+But then I'll update it to reflect what I see in the conclusion under the \rulename{trade} inference line. In that conclusion --- namely, ``$b(c) :: true$'' --- I have cucumbers in my basket. So first I'll move the boxed \fbox{$b$} over to the ``$c$'' dot:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+  
+    \node[o-point] (p) [label=below:{$p$}] at (0.5, 0) {};
+    \node[o-point] (c) [label=above:{$c$}] at (-0.5, 1) {};
+    
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (c);
+    \coordinate[label=above right:{\fbox{$b$}}] (b) at (0.5, 0);
+
+  % State 1
+  \draw[spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (p_1) [label=below:{$p$}] at (3.75, 0) {};
+    \node[o-point] (c_1) [label=above:{$c$}] at (2.75, 1) {};
+
+    \draw[spaced-arrows,->] (p_1) to node [fill=white] {$t$} (c_1);
+    \coordinate[label=above right:{\fbox{$b$}}] (b) at (2.75, 1);
+
+\end{diagram}
+
+\noindent
+I've also used up my option to trade potatoes for cucumbers, so we can remove the arrow from the ``$p$'' dot to the ``$c$'' dot:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+  
+    \node[o-point] (p) [label=below:{$p$}] at (0.5, 0) {};
+    \node[o-point] (c) [label=above:{$c$}] at (-0.5, 1) {};
+    
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (c);
+    \coordinate[label=above right:{\fbox{$b$}}] (b) at (0.5, 0);
+
+  % State 1
+  \draw[spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (p_1) [label=below:{$p$}] at (3.75, 0) {};
+    \node[o-point] (c_1) [label=above:{$c$}] at (2.75, 1) {};
+
+    \coordinate[label=above right:{\fbox{$b$}}] (b) at (2.75, 1);
+
+\end{diagram}
+
+\noindent
+And finally, I can remove the ``$p$'' dot, since I've traded away my potatoes:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+  
+    \node[o-point] (p) [label=below:{$p$}] at (0.5, 0) {};
+    \node[o-point] (c) [label=above:{$c$}] at (-0.5, 1) {};
+    
+    \draw[spaced-arrows,->] (p) to node [fill=white] {$t$} (c);
+    \coordinate[label=above right:{\fbox{$b$}}] (b) at (0.5, 0);
+
+  % State 1
+  \draw[spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (c_1) [label=above:{$c$}] at (2.75, 1) {};
+
+    \coordinate[label=above right:{\fbox{$b$}}] (b) at (2.75, 1);
+
+\end{diagram}
+\noindent
+
+\noindent
+Now state $S_{1}$ fully represents the judgment we see below the \rulename{trade} inference line: namely ``$b(c) :: true$.''
+
+We've also reached the bottom of our proof tree, so our transition system is complete. We've now built a transition system that completely represents the situation described by the proof tree. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Check linearity}
+
+We want to make sure that our proofs are \vocab{linear} --- that is, we want to make sure that each assumption in the hypothetical judgment gets used \vocab{exactly once} in our proof tree.
+
+If you look back at the model we just built, you'll notice that we did this. As we built that model, we were careful to remove objects and arrows precisely at the point where we used them up during an inference.
+
+Still, to help make sure that we haven't made an obvious mistakes, we can do a check in our model, to confirm that everything makes sense. In particular, we can check that:
+
+\begin{itemize}
+  \item{Each of the assumptions of the hypothetical judgment should hold true in the start state.}
+  \item{The conclusion of the hypothetical judgment should hold true in the end state.}
+  \item{No assumptions from the hypothetical judgment should hold true in the end state. (Each assumption must be used up.)}
+\end{itemize}
+
+\noindent
+This isn't an exact check for linearity. But it is a sanity check, to make sure at least that the start and end states look right.
+
+Let's first check that the assumptions are true in the start state $S_{0}$:
+
+\begin{itemize}
+  \item{$b(p) :: true$ --- Is it true that I have potatoes in my basket, in $S_{0}$? Yes. If you look at the diagram of $S_{0}$, you can see that there is a boxed \fbox{$b$} next to the ``$p$'' dot, and that represents that the potatoes are in my basket.}
+  \item{$t(p, c) :: true$ --- Is it true that I can trade potatoes for cucumbers, in $S_{0}$? Yes. If you look at the diagram of $S_{0}$, you can see an arrow from the ``$p$'' dot to the ``$c$'' dot which is labeled with a ``$t$,'' and that represents that I can trade potatoes for cucumbers.}
+\end{itemize}
+
+\noindent
+Now let's check that the conclusion is true in the end state:
+
+\begin{itemize}
+  \item{$b(c) :: true$ --- Is it true that I have cucumbers in my basket, in the final state $S_{1}$? Yes. If you look at the diagram of $S_{1}$, you can see that there is a boxed \fbox{$b$} next to the ``$c$'' dot, and that represents that the cucumbers are in my basket.}
+\end{itemize}
+
+\noindent
+Finally, let's make sure that none of the assumptions are true in the end state:
+
+\begin{itemize}
+  \item{$b(p) :: true$ --- Is it true that I have potatoes in my basket, in the end state $S_{1}$? No. If you look at the diagram of $S_{1}$, you'll see that the boxed \fbox{$b$} is next to the ``$c$'' dot, and that represents that cucumbers are in my basket, not potatoes.}
+  \item{$t(p, c) :: true$ --- is it true that I can trade potatoes for cucumbers, in the end state $S_{1}$? No. If you look at the diagram of $S_{1}$, you'll see that there are no trade arrows anywhere.}
+\end{itemize}
+
+\noindent
+So the checks are good. We can see all the assumptions present in the start state, and we can see that they've all been used up by the end state.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+To model the situation represented by a linear natural deduction proof, we first construct the start state. In the start state, we must represent each of the assumptions used in the proof. 
+
+Then we move down through the proof tree, going from inference line to inference line. If the inference line represents a change in state, we add a new state to our model. Otherwise, we keep working with the state we're currently at. As we go, we update the most recent state in our model to make sure it reflects each premise and/or conclusion we encounter in the proof tree.
+
+When we have completed the full transition system, we then double check to make sure that all the assumptions hold true in the start state but not in the final state, and we want to double check to make sure that the conclusion holds true in the final state.
+
+\end{document}

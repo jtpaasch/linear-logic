@@ -1,0 +1,387 @@
+\documentclass[../../../main.tex]{subfiles}
+
+\def\NDm/{\textbf{NDm}}
+\def\LNDm/{\textbf{LNDm}}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Translating judgments}
+
+We can translate minimal logic into linear logic. We can do this because linear logic has bangs, so it lets us introduce always-available assumptions in a controlled way. Using that, we can construct judgments and proofs in linear logic which exactly capture the judgments and proofs that we can construct in minimal logic. 
+
+In this chapter, we will talk about how to translate individual judgments from minimal logic into individual judgments in linear logic.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Atomic judgments}
+
+The simplest kinds of judgments we can translate are judgments about \vocab{atomic propositions}. Suppose we have a judgment
+
+\begin{equation*}
+  \nd{A} :: true
+\end{equation*}
+
+\noindent
+where ``$\nd{A}$'' is a placeholder for any atomic proposition in minimal logic. We can translate that into the following linear logic judgment:
+
+\begin{equation*}
+  A :: true
+\end{equation*}
+
+\noindent
+In other words, we don't have to do anything special to translate a judgment about an atomic proposition from minimal logic into linear logic. 
+
+I will write the translation out like this:
+
+\begin{equation*}
+  \nd{A} :: true \hskip 1cm \rightsquigarrow \hskip 1cm A :: true \hskip 1cm \text{if $\nd{A}$ is atomic}
+\end{equation*}
+
+\noindent
+The judgment on the left is the original judgment in minimal logic, and the judgment on the right is the translation, i.e., the translated judgment in linear logic. The squiggly arrow indicates that a translation has been done.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Implication judgments}
+
+The only other kind of proposition we know how to form in minimal logic is an implication, and so we can form judgments of this shape:
+
+\begin{equation*}
+  \nd{A \impl/ B} :: true
+\end{equation*}
+
+\noindent
+where ``$\nd{A}$'' and ``$\nd{B}$'' are placeholders that can stand for any proposition in minimal logic. 
+
+If ``$\nd{A}$'' and ``$\nd{B}$'' are atomic propositions, then we can translate the implication into the following linear judgment:
+
+\begin{equation*}
+  (\bang/A) \lolli/ B :: true
+\end{equation*}
+
+\noindent
+For convenience, I will often drop the parentheses around ``$(\bang/A)$,'' and just write this:
+
+\begin{equation*}
+  \bang/A \lolli/ B :: true
+\end{equation*}
+
+\noindent
+At this point, it is tempting to write the translation like this:
+
+\begin{equation*}
+  \nd{A \impl/ B} :: true \hskip 1cm \rightsquigarrow \hskip 1cm \bang/A \lolli/ B :: true
+\end{equation*}
+
+\noindent
+Note, however, that although ``$\nd{A}$'' and ``$\nd{B}$'' can be atomic propositions, they can also be implications themselves. For instance, if we let ``$\nd{A}$'' stand for ``$\nd{C \impl/ D}$'', then ``$\nd{A \impl/ B} :: true$'' expands to this:
+
+\begin{equation*}
+  \nd{(C \impl/ D) \impl/ B} :: true
+\end{equation*}
+
+\noindent
+So we really need to translate ``$\nd{A}$'' and ``$\nd{B}$'' individually too. To indicate that these need to be translated, I will write an asterisk next to them. Now we can write the translation like this:
+
+\begin{equation*}
+  \nd{A \impl/ B} :: true \hskip 1cm \rightsquigarrow \hskip 1cm \bang/\nd{A}^{*} \lolli/ \nd{B}^{*} :: true
+\end{equation*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Translating the parts}
+
+The translation rule we just discussed says that we translate a minimal logic judgment of the form ``$\nd{A \impl/ B} :: true$'' into ``$\bang/\nd{A}^{*} \lolli/ \nd{B}^{*} :: true$'' --- that is, we change the implication symbol to a lolli, we add a bang, and then we translate ``$\nd{A}$'' and ``$\nd{B}$'' individually. Let us walk through this process. 
+
+If we have a minimal logic judgment of the form ``$\nd{A \impl/ B} :: true$,'' we first replace the implication symbol with the lolli symbol, so that we get this:
+
+\begin{equation*}
+  \nd{A \lolli/ B} :: true
+\end{equation*}
+
+\noindent
+Then we put a bang in front of ``$\nd{A}$'':
+
+\begin{equation*}
+  \nd{\bang/A \lolli/ B} :: true
+\end{equation*}
+
+\noindent
+Then we translate ``$\nd{A}$'' and ``$\nd{B}$'' individually, whatever they might be. And to indicate that, we put asterisks by them:
+
+\begin{equation*}
+  \nd{\bang/A}^{*} \lolli/ \nd{B}^{*} :: true
+\end{equation*}
+
+\noindent
+Let's translate ``$\nd{A}$'' first. It can have one of two forms. It can either be an atomic proposition, or an implication. 
+
+If ``$\nd{A}$'' is an atomic proposition, then we use the atomic translation rule we discussed earlier to translate ``$\nd{A}$'' to ``$A$'':
+
+\begin{equation*}
+  \bang/A \lolli/ \nd{B}^{*} :: true
+\end{equation*}
+
+\noindent
+But if ``$\nd{A}$'' is an implication, then we apply the whole translation procedure to \emph{that}. For instance, suppose ``$\nd{A}$'' is really ``$\nd{C \impl/ D}$.'' Then ``$\nd{\bang/A}^{*} \lolli/ \nd{B}^{*}$'' is really this:
+
+\begin{equation*}
+  \bang/(\nd{C \impl/ D})^{*} \lolli/ \nd{B}^{*} :: true
+\end{equation*}
+
+\noindent
+Now we need to translate ``$\nd{C \impl/ D}$.'' We follow the same procedure, so that we get this:
+
+\begin{equation*}
+  \bang/(\nd{\bang/C^{*} \lolli/ D^{*}}) \lolli/ \nd{B}^{*} :: true
+\end{equation*}
+
+\noindent
+Then we translate ``$\nd{C}$'' and ``$\nd{D}$'' individually, and we continue like this until we finally reach atomic propositions.
+
+And then, of course, we repeat this whole process for ``$\nd{B}^{*}$.'' So we start translating the outer proposition, and if it's a complex proposition that has parts (i.e., if it's an implication), then we drill down to its component parts, and we translate them. If those parts also have parts, then we drill down to those parts, and we translate them. Eventually, we will hit atomic propositions, at which point we are done translating.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary of rules}
+
+Here are the two translation rules for judgments:
+
+\begin{align*}
+  \nd{A} :: true \hskip 0.5cm &\rightsquigarrow \hskip 0.5cm A :: true \hskip 1cm \text{if $\nd{A}$ is atomic} \\
+  \nd{A \impl/ B} :: true \hskip 0.5cm &\rightsquigarrow \hskip 0.5cm \bang/\nd{A}^{*} \lolli/ \nd{B}^{*} :: true
+\end{align*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Examples}
+
+Let's do some examples. For this, we'll use the familial proof system from before. Recall the names of the objects (people) involved:
+
+\begin{align*}
+  \nd{p} &= \text{Paul} \\
+  \nd{s} &= \text{Shane} \\
+  \nd{z} &= \text{Zoe} \\
+  \nd{c} &= \text{Cal}
+\end{align*}
+
+\noindent
+And the predicates:
+
+\begin{align*}
+  \nd{sib(x, y)} &= \text{$x$ is a sibling of $y$} \\
+  \nd{par(x, y)} &= \text{$x$ is a parent of $y$} \\
+  \nd{child(x, y)} &= \text{$x$ is a child of $y$} \\
+\end{align*}
+
+\noindent
+Also, recall the inference rules:
+
+$$
+\begin{prooftree}
+  \hypo{\nd{sib(x, y)}}
+  \infer1[\rulename{sib}]{\nd{sib(y, x)}}
+\end{prooftree}
+\hskip 1cm ~ \hskip 1cm
+\begin{prooftree}
+  \hypo{\nd{par(x, y)}}
+  \infer1[\rulename{child}]{\nd{child(y, x)}}
+\end{prooftree}
+$$
+
+$$
+\begin{prooftree}
+  \hypo{\nd{child(x, y)}}
+  \infer1[\rulename{par}]{\nd{par(y, x)}}
+\end{prooftree}
+\hskip 1cm ~ \hskip 1cm
+\begin{prooftree}
+  \hypo{\nd{par(x, y)}}
+  \hypo{\nd{par(x, z)}}
+  \infer2[\rulename{sib}]{\nd{sib(y, z)}}
+\end{prooftree}
+$$
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Atomic judgments}
+
+Here is a judgment which says that Paul is a sibling of Shane:
+
+\begin{equation*}
+  \nd{sib(p, s)} :: true
+\end{equation*}
+
+\noindent
+Since this is a judgment about an atomic proposition, we can use the first translation rule to translate this directly into an equivalent atomic judgment in linear logic:
+
+\begin{equation*}
+    \nd{sib(p, s)} :: true \hskip 1cm \rightsquigarrow \hskip 1cm sib(p, s) :: true
+\end{equation*}
+
+\noindent
+Here is another translation of an atomic judgment:
+
+\begin{equation*}
+    \nd{child(p, z)} :: true \hskip 1cm \rightsquigarrow \hskip 1cm child(p, z) :: true
+\end{equation*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A simple implication}
+
+Now consider a simple implication. The following says: if Paul is a sibling of Shane, then Shane is a child of Zoe. 
+
+\begin{equation*}
+  \nd{sib(p, s) \impl/ child(s, z)} :: true
+\end{equation*}
+
+\noindent
+To translate this, we need to use the second translation rule: the one that tells us how to translate implications. First, we change the implication symbol to a lolli and we put a bang in front of the antecedent:
+
+\begin{equation*}
+  \nd{\bang/sib(p, s) \lolli/ child(s, z)} :: true
+\end{equation*}
+
+\noindent
+Then we need to translate the antecedent and the consequent individually. To indicate that we want to do that, we mark both with an asterisk:
+
+\begin{equation*}
+  \nd{\bang/sib(p, s)}^{*} \lolli/ \nd{child(s, z)}^{*} :: true
+\end{equation*}
+
+\noindent
+Let's do the antecedent first. The antecedent is this:
+
+\begin{equation*}
+  \nd{sib(p, s)}
+\end{equation*}
+
+\noindent
+This is an atomic proposition, so we can translate it directly to an atomic proposition in linear logic:
+
+\begin{equation*}
+  \bang/sib(p, s) \lolli/ \nd{child(s, z)}^{*} :: true
+\end{equation*}
+
+\noindent
+Next, let's translate the consequent. The consequent is this:
+
+\begin{equation*}
+  \nd{child(s, z)}
+\end{equation*}
+
+\noindent
+This is an atomic proposition too, so we can translate it directly into an atomic proposition in linear logic as well:
+
+\begin{equation*}
+  \bang/sib(p, s) \lolli/ child(s, z) :: true
+\end{equation*}
+
+\noindent
+At this point, the parts of the implication have been fully translated. So the whole implication is fully translated too.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A more complex implication}
+
+Now consider a more complicated implication:
+
+\begin{equation*}
+  \nd{(sib(p, s) \impl/ child(p, z)) \impl/ child(s, z)} :: true
+\end{equation*}
+
+\noindent
+To translate this, we need to use the second translation rule again. So first, we change the implication symbol to a lolli and we put a bang in front of the antecedent:
+
+\begin{equation*}
+  \nd{\bang/(sib(p, s) \impl/ child(p, z)) \lolli/ child(s, z)} :: true
+\end{equation*}
+
+\noindent
+Then we need to translate the antecedent and the consequent individually, and to indicate that we mark both with an asterisk:
+
+\begin{equation*}
+  \nd{\bang/(sib(p, s) \impl/ child(p, z))}^{*} \lolli/ \nd{child(s, z)}^{*} :: true
+\end{equation*}
+
+\noindent
+Let's translate the antecedent first. The antecedent is not an atomic proposition. It is itself an implication:
+
+\begin{equation*}
+  \nd{sib(p, s) \impl/ child(p, z)}
+\end{equation*}
+
+\noindent
+So we need to translate this whole proposition. It is an implication, so we use the implication translation rule again. First we change the implication symbol to a lolli and we add a bang up front:
+
+\begin{equation*}
+  \bang/\nd{sib(p, s)} \lolli/ \nd{child(p, z)}
+\end{equation*}
+
+\noindent
+Then we add asterisks to the antecedent and consequent to indicate that we need to translate the antecedent and consequent:
+
+\begin{equation*}
+  \bang/\nd{sib(p, s)}^{*} \lolli/ \nd{child(p, z)}^{*}
+\end{equation*}
+
+\noindent
+Then we translate the antecedent and the consequent. We can do the antecedent first. It is an atomic proposition, so we can use the first translation rule to convert it directly into an atomic proposition in linear logic:
+
+\begin{equation*}
+  \bang/sib(p, s) \lolli/ \nd{child(p, z)}^{*}
+\end{equation*}
+
+\noindent
+The consequent is also an atomic proposition, so we can translate it too:
+
+\begin{equation*}
+  \bang/(sib(p, s) \lolli/ child(p, z)
+\end{equation*}
+
+\noindent
+Now we have finished translating the antecedent of the original implication we were translating. So we can plug it into the original implication, which gives us this:
+
+\begin{equation*}
+  \bang/(\bang/sib(p, s) \lolli/ child(p, z)) \lolli/ \nd{child(s, z)}^{*} :: true
+\end{equation*}
+
+\noindent
+Now let's translate the consequent, which is this:
+
+\begin{equation*}
+  \nd{child(s, z)}
+\end{equation*}
+
+\noindent
+This is an atomic judgment, so we can translate it directly into an atomic judgment from linear logic:
+
+\begin{equation*}
+  child(s, z)
+\end{equation*}
+
+\noindent
+We can now plug that back into the original implication we were translating, which gives us this:
+
+\begin{equation*}
+  \bang/(\bang/sib(p, s) \lolli/ child(p, z)) \lolli/ child(s, z) :: true
+\end{equation*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+In this chapter, we set down two rules that we can use to translate individual judgments from minimal logic into individual judgments in linear logic. If the judgment in minimal logic is a judgment about an atomic proposition, we can translate that directly into an atomic judgment in linear logic. If the judgment from minimal logic is an implication, we change the implication symbol to a lolli, and we add a bang to the antecedent. Then we translate the antecedent and the consequent individually. This may take us through a series of further translation steps, if the antecedent or consequent are themselves complex implications.
+
+
+\end{document}

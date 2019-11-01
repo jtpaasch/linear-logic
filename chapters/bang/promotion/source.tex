@@ -1,0 +1,439 @@
+\documentclass[../../../main.tex]{subfiles}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Promotion}
+
+The promotion rule says that if you derive a conclusion from all banged assumptions, then you can add a bang to that conclusion. It lets you promote it, so to speak, from an un-banged proposition, to a banged proposition.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Setting up}
+
+Formulating the promotion rule requires a little set up. Suppose that we have derived one or more bangs. Let us represent this situation by writing the following (ommitting the ``$:: true$'' annotations):
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{\bang/A_{1}}
+  \hypo{}
+  \infer[no rule]1{\ldots}
+  \hypo{}
+  \ellipsis{}{\bang/A_{n}}
+  \infer[no rule]3{}
+\end{prooftree*}
+
+\noindent
+The notation ``$A_{1} \quad \ldots \quad A_{n}$'' indicates that there could be one or more banged assumptions --- any number from $1$ to $n$. So, there could be just one ``$\bang/A_{1}$'' assumption, there could be two ``$\bang/A_{1}, \bang/A_{2}$'' assumptions, or three, or any number $n$ of them.
+
+Now suppose that, on a hypothetical branch over on the side, we can show that if we assume all of these bangs, we can derive some further judgment ``$B$.'' To represent this, let's first assume each of these bangs over on the side, using the \startrule/ rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{\bang/A_{1}}
+  \hypo{}
+  \infer[no rule]1{\ldots}
+  \hypo{}
+  \ellipsis{}{\bang/A_{n}}
+  
+  \hypo{}
+  \infer1[\startrule/]{\bang/A_{1}}
+  \infer[no rule]1{}
+  \infer[no rule]1{}
+
+  \hypo{\ldots}
+  \infer[no rule]1{}
+  \infer[no rule]1{}
+  \infer[no rule]1{}
+  
+  \hypo{}
+  \infer1[\startrule/]{\bang/A_{n}}
+  \infer[no rule]1{}
+  \infer[no rule]1{}
+
+  \infer[no rule]6{}
+
+\end{prooftree*}
+
+\noindent
+And then let's use use vertical dots leading down to a ``$B$'' to indicate that, from these assumed bangs, we can derive the further conclusion ``$B$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{\bang/A_{1}}
+  \hypo{}
+  \infer[no rule]1{\ldots}
+  \hypo{}
+  \ellipsis{}{\bang/A_{n}}
+  
+  \hypo{}
+  \infer1[\startrule/]{\bang/A_{1}}
+
+  \hypo{\ldots}
+  \infer[no rule]1{}
+
+  \hypo{}
+  \infer1[\startrule/]{\bang/A_{n}}
+
+  \infer[no rule]3{}
+  \ellipsis{}{B}
+
+  \infer[no rule]4{}
+\end{prooftree*}
+
+
+\noindent
+We're going to discharge this whole branch, so let's add a unique superscripted label to each assumption. We'll use ``$x_{1}$'' up through ``$x_{n}$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{\bang/A_{1}}
+  \hypo{}
+  \infer[no rule]1{\ldots}
+  \hypo{}
+  \ellipsis{}{\bang/A_{n}}
+  
+  \hypo{}
+  \infer1[\startrule/]{\bang/A_{1}^{x_{1}}}
+
+  \hypo{\ldots}
+  \infer[no rule]1{}
+
+  \hypo{}
+  \infer1[\startrule/]{\bang/A_{n}^{x_{n}}}
+
+  \infer[no rule]3{}
+  \ellipsis{}{B}
+
+  \infer[no rule]4{}
+\end{prooftree*}
+
+\noindent
+At this point, we have a tree where we have derived a series of bangs, and then we have shown over on a branch that if we assume each of these bangs independently, we can derive ``$B$.'' 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The promotion rule}
+
+The promotion rule says that if you have all of the above, then you can discharge the branch over on the side and conclude ``$\bang/B$.'' Here is the full template for the promotion rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{\bang/A_{1}}
+  \hypo{}
+  \infer[no rule]1{\ldots}
+  \hypo{}
+  \ellipsis{}{\bang/A_{n}}
+  
+  \hypo{}
+  \infer1[\startrule/]{\bang/A_{1}^{x_{1}}}
+
+  \hypo{\ldots}
+  \infer[no rule]1{}
+
+  \hypo{}
+  \infer1[\startrule/]{\bang/A_{n}^{x_{n}}}
+
+  \infer[no rule]3{}
+  \ellipsis{}{B}
+
+  \infer4[\bangProm/$^{x_{1}, \ldots, x_{n}}$]{\bang/B}
+\end{prooftree*}
+
+\noindent
+This is called the \vocab{promotion rule}, which we symbolize as \bangProm/ (that's a bang, followed by a capital ``P,'' which is the first letter of ``Promotion''). Notice that when we use it, we need to discharge all of the assumed bangs.
+
+If you think about it, this rule makes a lot of sense. It says: if you can derive ``$B$'' from all banged premises, then ``$B$'' should itself be banged. After all, the premises are all banged, so you can use them to derive as many copies of ``$B$'' as you like.
+
+The promotion rule says that, with linear natural deduction, if we start with assumptions that are all bangs, the conclusion we derive from those assumptions can be promoted to a bang.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Promoting from one}
+
+in the simplest case, we can use the promotion rule to promote a conclusion that is drawn from a single banged proposition. Suppose we have derived only one bang:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{\bang/A}
+\end{prooftree*}
+
+\noindent
+Now, over on a side branch, assume the bang:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{\bang/A}
+  
+  \hypo{}
+  \infer1[\startrule/]{\bang/A^{x}}
+  \infer[no rule]1{}
+  \infer[no rule]1{}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+We can now use the \bangCopy/ rule to derive ``$A$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{\bang/A}
+  
+  \hypo{}
+  \infer1[\startrule/]{\bang/A^{x}}
+  \infer1[\bangCopy/]{A}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then, we can use \bangProm/ to promote ``$A$'' to the bang ``$\bang/A$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{\bang/A}
+  
+  \hypo{}
+  \infer1[\startrule/]{\bang/A^{x}}
+  \infer1[\bangCopy/]{A}
+  
+  \infer2[\bangProm/$^{x}$]{\bang/A}
+\end{prooftree*}
+
+\noindent
+Or, if you prefer the \bangDer/ rule, we can do it this way:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{\bang/A}
+
+  \hypo{}
+  \infer1[\startrule/]{\bang/A^{x}}
+  
+  \hypo{}
+  \infer1[\startrule/]{A^{y}}
+  
+  \infer2[\bangDer/$^{y}$]{A}
+
+  \infer2[\bangProm/$^{x}$]{\bang/A}
+\end{prooftree*}
+
+\noindent
+Whether we use \bangDer/ or \bangCopy/, the proof works the same way: we start with a bang, then we extract an un-banged version, and then we promote it back to the banged version.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Example}
+
+Suppose that, throughout the course of any given Saturday at the farmer's market, I can refill my basket with potatoes whenever I like throughout the day. For instance, suppose I bring a trailer full of potatoes, and at any point I can go back to my trailer and refill my basket. 
+
+To capture this, we can assume from the start ``$b(p)$,'' but with a bang in front of it:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\bang/b(p)}
+\end{prooftree*}
+
+\noindent
+Now it is clear that, for this proof tree, I can get as many baskets full of potatoes as I want.
+
+From this banged ``$\bang/b(p)$,'' I can derive an un-banged copy of ``$b(p)$.'' Let's show this on a separate branch, over on the side. First, let's assume the bang:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\bang/b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{\bang/b(p)^{a}}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then let's use the \bangCopy/ rule to get a copy:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\bang/b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{\bang/b(p)^{a}}
+  \infer1[\bangCopy/]{b(p)}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+Now we've shown that, if we assume the bang ``$\bang/b(p)$,'' we can derive the un-banged ``$b(p)$.'' According to the promotion rule, we can discharge this branch over on the side, and promote the un-banged ``$b(p)$'' back to the banged ``$\bang/b(p)$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\bang/b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{\bang/b(p)^{a}}
+  \infer1[\bangCopy/]{b(p)}
+  
+  \infer2[\bangProm/$^{a}$]{\bang/b(p)}
+\end{prooftree*}
+
+\noindent
+Or, if you prefer to use the \bangDer/ rule instead of the \bangCopy/ rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\bang/b(p)}
+  
+  \hypo{}
+  \infer1[\startrule/]{\bang/b(p)^{b}}
+  
+  \hypo{}
+  \infer1[\startrule/]{b(p)^{a}}
+  \infer2[\bangDer/$^{a}$]{b(p)}
+  
+  \infer2[\bangProm/$^{b}$]{\bang/b(p)}
+\end{prooftree*}
+
+\noindent
+Think about what either of these proof trees says. We start with the banged assumption ``$\bang/b(p)$,'' which means that I can get as many full baskets of potatoes as I want. Then we derive from that a single basket of potatoes. However, we have shown that we derived that single basket of potatoes from the endless supply. So, we can always get more baskets of potatoes. Hence, we can promote ``$b(p)$'' back to ``$\bang/b(p)$.''
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Promoting from many}
+
+We can also promote a conclusion that we derive from multiple bangs. Suppose that we have an endless supply of potato baskets, and suppose also that the squash vendor is willing to trade potatoes for squash as many times as we like. To represent both of these, we can start off with the bang ``$\bang/b(p)$'' and ``$\bang/t(p, s)$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\bang/b(p)}
+  \hypo{}
+  \infer1[\startrule/]{\bang/t(p, s)}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+\noindent
+From these two assumptions, we can show that I can get squash in my basket. Let's show this on another branch, over on the side. First then, let's assume these two bangs:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\bang/b(p)}
+  \hypo{}
+  \infer1[\startrule/]{\bang/t(p, s)}
+  
+  \hypo{}
+  \infer1[\startrule/]{\bang/b(p)^{a}}
+  \hypo{}
+  \infer1[\startrule/]{\bang/t(p, s)^{b}}
+
+  \infer[no rule]4{}
+\end{prooftree*}
+
+\noindent
+Next, let's use the \bangCopy/ rule to extract a usable copy of each:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\bang/b(p)}
+  \hypo{}
+  \infer1[\startrule/]{\bang/t(p, s)}
+ 
+  \hypo{}
+  \infer1[\startrule/]{\bang/b(p)^{a}}
+  \infer1[\bangCopy/]{b(p)}
+  \hypo{}
+  \infer1[\startrule/]{\bang/t(p, s)^{b}} 
+  \infer1[\bangCopy/]{t(p, s)}
+
+  \infer[no rule]4{}
+\end{prooftree*}
+
+\noindent
+Finally, let's use the \traderule/ rule to get squash in my basket:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\bang/b(p)}
+  \hypo{}
+  \infer1[\startrule/]{\bang/t(p, s)}
+ 
+  \hypo{}
+  \infer1[\startrule/]{\bang/b(p)^{a}}
+  \infer1[\bangCopy/]{b(p)}
+  \hypo{}
+  \infer1[\startrule/]{\bang/t(p, s)^{b}}
+  \infer1[\bangCopy/]{t(p, s)}
+  \infer2[\traderule/]{b(s)}
+
+  \infer[no rule]3{}
+\end{prooftree*}
+
+\noindent
+At this point, we have shown that if we assume the two bangs, we can get squash in my basket. But since we have derived this conclusion entirely from banged assumptions, the promotion rule says we can promote this conclusion. 
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\bang/b(p)}
+  \hypo{}
+  \infer1[\startrule/]{\bang/t(p, s)}
+ 
+  \hypo{}
+  \infer1[\startrule/]{\bang/b(p)^{a}}
+  \infer1[\bangCopy/]{b(p)}
+  \hypo{}
+  \infer1[\startrule/]{\bang/t(p, s)^{b}}
+  \infer1[\bangCopy/]{t(p, s)}
+  \infer2[\traderule/]{b(s)}
+
+  \infer3[\bangProm/$^{a, b}$]{\bang/b(s)}
+\end{prooftree*}
+
+\noindent
+Or, if you prefer to use the \bangDer/ rule instead of \bangCopy/:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\bang/b(p)}
+  \hypo{}
+  \infer1[\startrule/]{\bang/t(p, s)}
+ 
+  \hypo{}
+  \infer1[\startrule/]{\bang/b(p)^{b}}
+  \hypo{}
+  \infer1[\startrule/]{b(p)^{a}}
+  \infer2[\bangDer/$^{a}$]{b(p)}
+  \hypo{}
+  \infer1[\startrule/]{\bang/t(p, s)^{c}}
+  \hypo{}
+  \infer1[\startrule/]{t(p, s)^{d}}
+  \infer2[\bangDer/$^{d}$]{t(p, s)}
+  \infer2[\traderule/]{b(s)}
+
+  \infer3[\bangProm/$^{a, c}$]{\bang/b(s)}
+\end{prooftree*}
+
+\noindent
+Again, this makes sense. The left side of the tree says: from ``$\bang/b(p)$'' and ``$\bang/t(p, s)$'' we can derive ``$\bang/b(s)$.'' We can then say: prove it! To see proof of that, we can look at the right side of the tree. The discharged part of the tree on the right shows that if we assume the bangs, we can derive the conclusion ``$b(s)$.'' And since we can use those banged assumptions as many times as we like to produce that conclusion, surely it follows that the conclusion should be banged as well.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+The \bangProm/ rule says: if you can derive a conclusion from all banged assumptions, then you can promote that conclusion to a bang.
+
+
+\begin{comment}
+De Paiva et al (the term assignment paper) and Bierman's PhD thesis both point out that there is a problem of substitution if we don't derive the conclusion over on another branch.
+\end{comment}
+
+
+\end{document}

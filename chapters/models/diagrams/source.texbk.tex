@@ -1,0 +1,243 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Modeling situations}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Models}
+
+A model is like an imagined version of a situation. To construct a model, we imagine a situation, and then we write it down. Of course, we don't write down every detail. We only write down the pieces we care about.
+
+A model is convenient because we can reason about it. We can examine the model and figure out what's true in that model.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A situation}
+
+Consider the following situation:
+
+\begin{quote}
+  Bob and Geraldine are married, and they love each other deeply. The problem is, Geraldine's boss --- who's name is Julianne --- is also smitten with Bob.
+\end{quote}
+
+\noindent
+Before going on, pause for a moment to think about this situation. If you had to write this down in a compact way, how would you do it? Who/what is involved (can you make a list), and how are these things related? If you had to draw a diagram of the situation, what would your diagram look like?
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The objects in a model}
+
+To construct a model of some situation, we first write down all the entities that are involved in the situation. We call these entities the \vocab{objects} in the model. 
+
+In the above scenario, there are three objects in play:
+
+\begin{itemize}
+  \item{Bob}
+  \item{Geraldine}
+  \item{Julianne}
+\end{itemize}
+
+\noindent
+On a piece of paper, draw a dot for each of these, and label it. The dots can be anywhere on the paper. They just need to be spread out a little so we can draw lines between them. Something like this:
+
+\begin{diagram}
+
+  \node[o-point] (b) [label=below:{Bob}] at (-2, -2) {};
+  \node[o-point] (g) [label=above right:{Geraldine}] at (0, 0) {};
+  \node[o-point] (j) [label=above:{Julianne}] at (-4, 2) {};
+
+\end{diagram}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Relations in a model}
+
+Next, we want to identify the different ways these objects are \vocab{related}. In the above scenario, some of the players love others. For example, Geraldine loves Bob. To diagram this, draw an arrow from Geraldine to Bob, and label it ``loves'':
+
+\begin{diagram}
+
+  \node[o-point] (b) [label=below:{Bob}] at (-2, -2) {};
+  \node[o-point] (g) [label=above right:{Geraldine}] at (0, 0) {};
+  \node[o-point] (j) [label=above:{Julianne}] at (-4, 2) {};
+
+  \draw[spaced-arrows,->] 
+    (g) to [out=0, in=30] (1, -1) 
+    to node [near start, fill=white] {loves} (1, -1) 
+    to [out=230, in=0] (b);
+    
+\end{diagram}
+
+\noindent
+Bob loves Geraldine back, so draw another arrow for that:
+
+\begin{diagram}
+
+  \node[o-point] (b) [label=below:{Bob}] at (-2, -2) {};
+  \node[o-point] (g) [label=above right:{Geraldine}] at (0, 0) {};
+  \node[o-point] (j) [label=above:{Julianne}] at (-4, 2) {};
+
+  \draw[spaced-arrows,->]
+    (b) to [out=120, in=90] (-2, -1)
+    to node [near start, fill=white] {loves} (-2, -1)
+    to [out=60, in=180] (g);
+  \draw[spaced-arrows,->] 
+    (g) to [out=0, in=30] (1, -1) 
+    to node [near start, fill=white] {loves} (1, -1) 
+    to [out=230, in=0] (b);
+
+\end{diagram}
+
+\noindent
+Also, Julianne loves Bob, so add a third arrow for that:
+
+\begin{diagram}
+
+  \node[o-point] (b) [label=below:{Bob}] at (-2, -2) {};
+  \node[o-point] (g) [label=above right:{Geraldine}] at (0, 0) {};
+  \node[o-point] (j) [label=above:{Julianne}] at (-4, 2) {};
+
+  \draw[spaced-arrows,->]
+    (b) to [out=120, in=90] (-2, -1)
+    to node [near start, fill=white] {loves} (-2, -1)
+    to [out=60, in=180] (g);
+  \draw[spaced-arrows,->] 
+    (g) to [out=0, in=30] (1, -1) 
+    to node [near start, fill=white] {loves} (1, -1) 
+    to [out=230, in=0] (b);
+  \draw[spaced-arrows,->] 
+    (j) to [out=180, in=130] (-5, -.75) 
+    to [out=-45, in=180] node [near start, fill=white] {loves} 
+    (b);
+
+\end{diagram}
+
+\noindent
+Does Bob love Julianne? No, he does not, so there is an arrow from Julianne to Bob, but there is no reciprocal arrow.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{More relations}
+
+Another connection in the above scenario is this: Julianne is Geraldine's boss. To diagram this, draw an arrow from Julianne to Geraldine and label it ``employs'':
+
+\begin{diagram}
+
+  \node[o-point] (b) [label=below:{Bob}] at (-2, -2) {};
+  \node[o-point] (g) [label=above right:{Geraldine}] at (0, 0) {};
+  \node[o-point] (j) [label=above:{Julianne}] at (-4, 2) {};
+
+  \draw[spaced-arrows,->]
+    (b) to [out=120, in=90] (-2, -1)
+    to node [near start, fill=white] {loves} (-2, -1)
+    to [out=60, in=180] (g);
+  \draw[spaced-arrows,->] 
+    (g) to [out=0, in=30] (1, -1) 
+    to node [near start, fill=white] {loves} (1, -1) 
+    to [out=230, in=0] (b);
+  \draw[spaced-arrows,->] 
+    (j) to [out=180, in=130] (-5, -.75) 
+    to [out=-45, in=180] node [near start, fill=white] {loves} 
+    (b);
+
+  \draw[spaced-arrows,->]
+    (j) to [out=0] (-2, 1.5)
+    to node [near start, fill=white] {employs} (-2, 1.5)
+    to (g);
+
+\end{diagram}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Writing it down}
+
+The above diagram is a model of the situation we described at the beginning of the chapter. Diagrams are nice because they are easy to understand.
+
+However, we can also write the model down in a compact way. To do that, we first list the objects in the model:
+
+\begin{model}
+  \modelobjects{Geraldine, Julianne, Bob}
+\end{model}
+
+\noindent
+Then we list the relations. So start a list:
+
+\begin{model}
+  \modelobjects{Geraldine, Julianne, Bob}
+  \item{\textsc{Relations}: \ldots}
+\end{model}
+
+\noindent
+Now we want to write down each relation that we modeled in the diagram.
+
+The first relation we modeled is love. Rather than calling this by the rather generic name ``love,'' let's be more exact. Let's refer to this with the expression ``$x$ loves $y$'':
+
+\begin{model}
+  \modelobjects{Geraldine, Julianne, Bob}
+  \modelrelations{
+    \item{$x$ loves $y$: \ldots}
+  }
+\end{model}
+
+\noindent
+The expression ``$x$ loves $y$'' is called a \vocab{predicate}. A predicate is simply a description that has holes or slots in it that can be filled in with names. In this case, $x$ and $y$ are placeholders that can be filled in with names from the model. 
+
+The next step is to list out each lover-lovee pair that satisfies the description/predicate ``$x$ loves $y$''. In our diagram above, Geraldine loves Bob, Bob loves Geraldine, and Julianne loves Bob. So:
+
+\begin{model}
+  \modelobjects{Geraldine, Julianne, Bob}
+  \modelrelations{
+    \item{$x$ loves $y$: (Geraldine, Bob), (Bob, Geraldine), (Julianne, Bob)}
+  }
+\end{model}
+
+\noindent
+Now we can turn to the second relation we modeled, namely employment. Rather than calling this by the rather generic name ``employment,'' let's again use a predicate: let's refer to this by the expression ``$x$ employs $y$'':
+
+
+\begin{model}
+  \modelobjects{Geraldine, Julianne, Bob}
+  \modelrelations{
+    \item{$x$ loves $y$: (Geraldine, Bob), (Bob, Geraldine), (Julianne, Bob)}
+    \item{$x$ employs $y$: \ldots}
+  }
+\end{model}
+
+\noindent
+And then, list out all the employer-employee pairs that satisfy the description/predicate ``$x$ employs $y$'':
+
+\begin{model}
+  \modelobjects{Geraldine, Julianne, Bob}
+  \modelrelations{
+    \item{$x$ loves $y$: (Geraldine, Bob), (Bob, Geraldine), (Julianne, Bob)}
+    \item{$x$ employs $y$: (Julianne, Geraldine)}
+  }
+\end{model}
+
+\noindent
+And with that, we are done. We have now written down all the same information we can see in the diagram. 
+
+In fact, if we never saw the diagram in the first place, and were instead given this written description of the model, we could reconstruct the diagram ourselves. We could take a piece of paper and make a dot for each of the objects in the model. Then we could draw an arrow (labeled with ``loves'') for each of lover-lovee pairs, and we could draw an arrow (labeled with ``employs'') for each of the employer-employee pairs.
+
+As an exercise you should try this. Take the written description we just put together, and draw a diagram from it.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+To model a situation, you can diagram it. To do that, draw a dot for each object in the situation and label it with the name of the object. Then, draw arrows (and label them) to represent each relationship.
+
+In addition, you can write down the model in a very compact way by listing all the objects, and all the objects that are connected through a relationship.
+
+\end{document}

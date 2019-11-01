@@ -1,0 +1,300 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Modeling local completeness}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The expansion}
+
+Recall that, in order to prove that the lolli elimination rule is locally complete, we needed to show that if we eliminate a lolli, we can re-introduce it from the pieces that are left. 
+
+We summarized the whole expansion like this:
+
+$$
+\begin{prooftree}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A \lolli/ B}
+\end{prooftree}
+\hskip 1cm\rightsquigarrow_{\eta}\hskip 1cm
+\begin{prooftree}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A \lolli/ B}
+  \hypo{}
+  \infer1[\startrule/]{~~A^{a}~~}
+  \infer2[\lolliElim/]{B}
+  \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+\end{prooftree}
+$$
+
+\noindent
+We can model this too, and the model offers us another way to see that the expansion makes sense.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Model the lolli introduction}
+
+First, we will model the lolli the expansion begins with, which is the part highlighted here:
+
+\begin{diagram}
+
+  \draw[densely dotted, fill=grey90] 
+      (-1.9, 1.25) -- (-0.5, 1.25) -- (-0.5, -0.35) -- (-1.9, -0.35) -- (-1.9, 1.25);
+  
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{\Proof/}
+      \ellipsis{}{}
+      \infer[rule style=no rule]1{A \lolli/ B}
+      \hypo{}
+      \infer1[\startrule/]{~~A^{a}~~}
+      \infer2[\lolliElim/]{B}
+      \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+Whatever the ``$\Proof/$'' fragment amounts to, we end up with a lolli from ``$A$'' to ``$B$.'' The model for that looks like this:
+
+\begin{diagram}
+
+  % State 0
+  \draw[densely dotted] (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[] (a) [] at (0.15, 0.5) {$A$};
+
+  % State 1
+  \draw[densely dotted,spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[densely dotted] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[] (b) [] at (3.35, 0.5) {$B$};
+
+\end{diagram}
+
+\noindent
+This transition system shows that if we have a state where ``$A$'' is true, we can get to a state where ``$B$'' is true. This is all a hypothetical possibility, so it is drawn with dotted lines.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Model the lolli elimination}
+
+Now let us model the lolli elimination. To do that, let's first model the part where we introduce the ``$A$'':
+
+\begin{diagram}
+
+  \draw[densely dotted, fill=grey90] 
+      (-0.15, 0.6) -- (0.85, 0.6) -- (0.85, -0.4) -- (-0.15, -0.4) -- (-0.15, 0.6);
+  
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{\Proof/}
+      \ellipsis{}{}
+      \infer[rule style=no rule]1{A \lolli/ B}
+      \hypo{}
+      \infer1[\startrule/]{~~A^{a}~~}
+      \infer2[\lolliElim/]{B}
+      \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+To model that, we simply draw a new state, with an ``$A$'' in it. Let's set this new state over to the side, on the left of the hypothetical states:
+
+\begin{diagram}
+
+  % State 0
+  \draw[densely dotted] (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[] (a) [] at (0.15, 0.5) {$A$};
+
+  % State 1
+  \draw[densely dotted,spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[densely dotted] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[] (b) [] at (3.35, 0.5) {$B$};
+
+  % State 3
+  \draw[] (-4.25, -0.75) -- (-2, -0.75) -- (-2, 1.75) -- (-4.25, 1.75) -- (-4.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_1) at (-3.1, -0.75);
+
+    \node[] (b) [] at (-3.1, 0.5) {$A$};
+
+\end{diagram}
+
+\noindent
+Next let us model the elimination, i.e., the part of the proof tree that is highlighted here:
+
+\begin{diagram}
+
+  \draw[densely dotted, fill=grey90] 
+      (-1.9, 0.4) -- (0.85, 0.4) -- (0.85, -0.4) -- (-0.25, -0.4) -- (-0.25, -0.75) -- (-0.8, -0.75) --
+      (-0.8, -0.4) -- (-1.9, -0.4) -- (-1.9, 0.4);
+  
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{\Proof/}
+      \ellipsis{}{}
+      \infer[rule style=no rule]1{A \lolli/ B}
+      \hypo{}
+      \infer1[\startrule/]{~~A^{a}~~}
+      \infer2[\lolliElim/]{B}
+      \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+Here we apply the ``$A$'' to the lolli ``$A \lolli/ B$.'' And that delivers a ``$B$.'' In our model, we can depict this by laying $S_{2}$ over the top of $S_{0}$, to show that the ``$A$'' in $S_{2}$ is being supplied for the hypothetical ``$A$'' in $S_{0}$:
+
+\begin{diagram}
+
+  % State 1
+  \draw[densely dotted] (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (0.175, -0.75);
+
+    \node[] (a) [] at (0.15, 0.5) {$B$};
+
+  % State 3
+  \draw[densely dotted,spaced-arrows,->] (-2, 0.5) -- (-1, 0.5);  
+  \draw[] (-4.25, -0.75) -- (-2, -0.75) -- (-2, 1.75) -- (-4.25, 1.75) -- (-4.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (-3.1, -0.75);
+
+    \node[] (b) [] at (-3.1, 0.5) {$A$};
+
+\end{diagram}
+
+\noindent
+And once ``$A$'' becomes actualized (rather than staying as a mere possibility), then the transition to $S_{1}$ is actualized too, so ``$B$'' becomes actualized in $S_{1}$ as well:
+
+
+\begin{diagram}
+
+  % State 1
+  \draw[] (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (0.175, -0.75);
+
+    \node[] (a) [] at (0.15, 0.5) {$B$};
+
+  % State 3
+  \draw[spaced-arrows,->] (-2, 0.5) -- (-1, 0.5);  
+  \draw[] (-4.25, -0.75) -- (-2, -0.75) -- (-2, 1.75) -- (-4.25, 1.75) -- (-4.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (-3.1, -0.75);
+
+    \node[] (b) [] at (-3.1, 0.5) {$A$};
+
+\end{diagram}
+
+\noindent
+At this point, we started with a lolli, and then we eliminated it.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Model the re-introduction}
+
+Now we are at the crucial point in the proof. The question is: we have eliminated the lolli, but do we have enough to re-introduce it?
+
+In the proof tree, we saw that we can indeed do this. We can see it in the highlighted part here:
+
+\begin{diagram}
+
+  \draw[densely dotted, fill=grey90] 
+      (-0.15, 0.6) -- (0.85, 0.6) -- (0.85, -0.4) -- (-0.25, -0.4) -- (-0.25, -0.65) -- 
+      (0.2, -0.65) -- (0.2, -1.25) -- (-1.25, -1.25) -- (-1.25, -0.65) -- (-0.8, -0.65) --
+      (-0.8, -0.15) -- (-0.15, -0.15) -- (-0.15, 0.6);
+  
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{\Proof/}
+      \ellipsis{}{}
+      \infer[rule style=no rule]1{A \lolli/ B}
+      \hypo{}
+      \infer1[\startrule/]{~~A^{a}~~}
+      \infer2[\lolliElim/]{B}
+      \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+This says that, since we can see a path from ``$A$"' to ``$B$,'' we can cancel that part of the proof tree out, and encode it as a lolli.
+
+In our model, we can see this too. In our model, we have exactly that: a path from ``$A$'' to ``$B$.'' So we can rewind the model, and then redraw the transition from $S_{2}$ to $S_{1}$ with dotted lines, to show that it is a hypothetical possibility:
+
+\begin{diagram}
+
+  % State 0
+  \draw[densely dotted] (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (0.175, -0.75);
+
+    \node[] (a) [] at (0.15, 0.5) {$A$};
+
+  % State 1
+  \draw[densely dotted,spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[densely dotted] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[] (b) [] at (3.35, 0.5) {$B$};
+
+\end{diagram}
+
+\noindent
+Now we are right back where we started. We have modeled the lolli ``$A \lolli/ B$,'' which says that if you give me an ``$A$'' I'll give you back a ``$B$.'' And that is precisely what our model shows: the hypothetical possibility that, if ``$A$'' were actualized, we would transition to a state where ``$B$'' would be actualized.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The expansion}
+
+Recall what we were trying to model:
+
+$$
+\begin{prooftree}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A \lolli/ B}
+\end{prooftree}
+\hskip 1cm\rightsquigarrow_{\eta}\hskip 1cm
+\begin{prooftree}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A \lolli/ B}
+  \hypo{}
+  \infer1[\startrule/]{~~A^{a}~~}
+  \infer2[\lolliElim/]{B}
+  \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+\end{prooftree}
+$$
+
+\noindent
+That describes a proof expansion. It says if we start with a lolli and then immediately eliminate it, we can then re-introduce the lolli.
+
+If you look at the model we built, you can see that this is exactly what the model tells us. We modeled the situation where we start with a lolli, and then we eliminate it. We were left with a model that we can then introduce the lolli again.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+In this chapter, we modeled the proof that the \lolliElim/ rule gives us enough information to reintroduce a lolli after we eliminate it. To show that, we modeled the situation where we first eliminated a lolli, then we re-introduced it. And we saw that the set of states we went through correspond exactly to the expanded proof tree we put together in the last chapter.
+
+
+\end{document}

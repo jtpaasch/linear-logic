@@ -1,0 +1,291 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{A second proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Getting zucchini}
+
+Suppose we want to prove that I can get zucchini in my basket, under the assumptions that (i) I start with potatoes in my basket, (ii) I can trade potatoes for squash, and (iii) I can trade squash for zucchini. Let's write that out as a hypothetical judgment:
+
+\begin{equation*}
+  b(p) :: true, t(p, s) :: true, t(s, z) :: true \ndturnstile/ b(z) :: true
+\end{equation*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The proof tree}
+
+Let's build the proof from the top down. First, we put down the assumptions:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p) :: true}
+
+  \hypo{}
+  \infer1[\startrule/]{t(p, s) :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(s, z) :: true}
+  
+  \infer[rule style=no rule]3{}
+  
+\end{prooftree*}
+
+\noindent
+Next we to figure out which rules we can apply below, to work downwards. 
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p) :: true}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{??}
+
+  \hypo{}
+  \infer1[\startrule/]{t(p, s) :: true}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{??}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(s, z) :: true}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1??
+  
+  \infer[rule style=no rule]3{}
+  
+\end{prooftree*}
+
+
+\noindent
+If we look at the two assumptions on the left, we can see that we can apply the \rulename{trade} rule to them. If we draw the \rulename{trade} template below them, we can see how it fits:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p) :: true}
+  \infer[rule style=no rule]1{\left\uparrow\rule{0cm}{0.75cm}\right.}
+  \infer[rule style=no rule]1{b(x) :: true}
+
+  \hypo{}
+  \infer1[\startrule/]{t(p, s) :: true}
+  \infer[rule style=no rule]1{\left\uparrow\rule{0cm}{0.75cm}\right.}
+
+  \infer[rule style=no rule]1{t(x, y) :: true}
+  \infer2{b(y) :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(s, z) :: true}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{??}
+  \infer[rule style=no rule]1{\rule{0cm}{0.75cm}}
+      
+  \infer[rule style=no rule]2{~}
+  
+\end{prooftree*}
+
+\noindent
+Of course, we need to replace the $x$s and $y$s with $p$ and $s$:
+
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p) :: true}
+  \infer[rule style=no rule]1{\left\uparrow\rule{0cm}{0.75cm}\right.}
+  \infer[rule style=no rule]1{b(p) :: true}
+
+  \hypo{}
+  \infer1[\startrule/]{t(p, s) :: true}
+  \infer[rule style=no rule]1{\left\uparrow\rule{0cm}{0.75cm}\right.}
+
+  \infer[rule style=no rule]1{t(p, s) :: true}
+  \infer2{b(s) :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(s, z) :: true}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{??}
+  \infer[rule style=no rule]1{\rule{0cm}{0.75cm}}
+      
+  \infer[rule style=no rule]2{~}
+  
+\end{prooftree*}
+
+\noindent
+But now we have a perfect match, so we can collapse the arrows:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p) :: true}
+
+  \hypo{}
+  \infer1[\startrule/]{t(p, s) :: true}
+
+  \infer2{b(s) :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(s, z) :: true}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{??}
+      
+  \infer[rule style=no rule]2{~}
+  
+\end{prooftree*}
+
+\noindent
+Now we need to figure out which rule we can apply next. What can go below the pieces left in the tree. We have ``$b(s) :: true$'' on the left side, and we have ``$t(s, z) :: true$'' on the right side. What goes below them?
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p) :: true}
+
+  \hypo{}
+  \infer1[\startrule/]{t(p, s) :: true}
+
+  \infer2{b(s) :: true}
+
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{??}  
+    
+  \hypo{}
+  \infer1[\startrule/]{t(s, z) :: true}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{??}  
+
+  \infer[rule style=no rule]2{}
+  
+\end{prooftree*}
+
+\noindent
+We can see that the \rulename{trade} rule fits here too:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p) :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, s) :: true}
+
+  \infer2{b(s) :: true}
+  \infer[rule style=no rule]1{\left\uparrow\rule{0cm}{0.75cm}\right.}
+  \infer[rule style=no rule]1{b(x) :: true}
+    
+  \hypo{}
+  \infer1[\startrule/]{t(s, z) :: true}
+  \infer[rule style=no rule]1{\left\uparrow\rule{0cm}{0.75cm}\right.}
+
+  \infer[rule style=no rule]1{t(x, y) :: true}
+  \infer2{b(y) :: true}
+  
+\end{prooftree*}
+
+\noindent
+Of course, we need to replace the $x$s and $y$s:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p) :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, s) :: true}
+
+  \infer2{b(s) :: true}
+  \infer[rule style=no rule]1{\left\uparrow\rule{0cm}{0.75cm}\right.}
+  \infer[rule style=no rule]1{b(s) :: true}
+    
+  \hypo{}
+  \infer1[\startrule/]{t(s, z) :: true}
+  \infer[rule style=no rule]1{\left\uparrow\rule{0cm}{0.75cm}\right.}
+
+  \infer[rule style=no rule]1{t(s, z) :: true}
+  \infer2{b(z) :: true}
+  
+\end{prooftree*}
+
+\noindent
+But now we have a perfect fit, so we can collapse the arrows:
+
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p) :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(p, s) :: true}
+
+  \infer2{b(s) :: true}
+    
+  \hypo{}
+  \infer1[\startrule/]{t(s, z) :: true}
+
+  \infer2{b(z) :: true}
+  
+\end{prooftree*}
+
+\noindent
+That completes the proof. We've reached the conclusion we wanted to reach, namely ``$b(z) :: true$.'' 
+
+Here we built this proof by starting from the top and working down. You should re-build this tree yourself, starting from the bottom and going upwards. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The hypothetical judgment}
+
+Here again we have a proof of the hypothetical judgment we set out to solve. That hypothetical judgment was this:
+
+\begin{equation*}
+  b(p) :: true, t(p, s) :: true, t(s, z) :: true \ndturnstile/ b(z) :: true
+\end{equation*}
+
+\noindent
+In this hypothetical judgment, we have three assumptions --- ``$b(p) :: true$,'' ``$t(p, s) :: true$,'' and ``$t(s, z) :: true$.'' We also have the conclusion --- ``$b(z) :: true$.'' Notice again where each of these are positioned on the proof tree:
+
+\begin{diagram}
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{}
+      \infer1[\startrule/]{b(p) :: true}
+      \hypo{}
+      \infer1[\startrule/]{t(p, s) :: true}
+      \infer2{b(s) :: true}
+      \hypo{}
+      \infer1[\startrule/]{t(s, z) :: true}
+      \infer2{b(z) :: true}
+    \end{prooftree}
+  };
+
+  \draw (-0.55, -0.75) -- (-0.55, -1) -- (1.35, -1) -- (1.35, -0.75);
+  \draw[spaced-arrows,->] (0.4, -1.75) -- (0.4, -1);
+  \node (c_1_l) [label=below:{conclusion}] at (0.4, -1.6) {};
+
+  \draw (-4.75, 1) -- (-4.75, 1.25) -- (-2, 1.25) -- (-2, 1);
+  \draw[spaced-arrows,->] (-3.5, 2) -- (-3.5, 1.25);
+  \node (a_1_l) [label=above:{assumption 1}] at (-3.5, 1.9) {};
+
+  \draw (-1.65, 1) -- (-1.65, 1.25) -- (1.25, 1.25) -- (1.25, 1);
+  \draw[spaced-arrows,->] (-0.25, 2) -- (-0.25, 1.25);
+  \node (a_2_l) [label=above:{assumption 2}] at (-0.25, 1.9) {};
+  
+  \draw (1.65, 0.4) -- (1.65, 0.65) -- (4.65, 0.65) -- (4.65, 0.4);
+  \draw[spaced-arrows,->] (3, 1.5) -- (3, 0.65);
+  \node (a_3_l) [label=above:{assumption 3}] at (3.25, 1.4) {};
+    
+\end{diagram}
+
+\noindent
+The assumptions are all at the top of branches of the tree, and the conclusion is at the bottom. The body of the proof fills out everything in between.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+This time around, we built a proof that required two applications of the \rulename{trade} rule. However, the basic technique for building the proof is still the same, and the basic structure of the proof is still the same too. The assumptions go at the top of the tree, and the conclusion goes at the bottom, while everything in between is just an application of an inference rule.
+
+\end{document}

@@ -1,0 +1,451 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Modeling local soundness}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The reduction}
+
+Recall that we proved local soundness by showing that if we first introduce a tensor and then immediately eliminate it, we can find a different way to reach the same conclusion, without going through the elimination. Here is the proof reduction we worked out:
+
+$$
+\begin{prooftree}
+  \hypo{\Proof/_{1}}
+  \ellipsis{}{}
+  \infer[no rule]1{A}
+  \hypo{\Proof/_{2}}
+  \ellipsis{}{}
+  \infer[no rule]1{B}
+  \infer2[\tensorIntro/]{A \tensor/ B}
+  \hypo{}
+  \infer1[\startrule/]{~~A^{a}~~}
+  \ellipsis{}{}
+  \hypo{}
+  \infer1[\startrule/]{~~B^{b}~~}
+  \ellipsis{}{}
+  \infer2{~~~~~~~~~~C~~~~~~~~~~~~~}
+  \infer2[\tensorElim/$^{a,b}$]{C}
+\end{prooftree}
+\hskip 1cm\rightsquigarrow_{\beta}\hskip 1cm
+\begin{prooftree}
+  \hypo{\Proof/_{1}}
+  \ellipsis{}{}
+  \infer[no rule]1{~~~~~A~~~~}
+  \ellipsis{}{}
+  \hypo{\Proof/_{2}}
+  \ellipsis{}{}
+  \infer[no rule]1{B}
+  \ellipsis{}{}
+  \infer2{~~~~~~C~~~~~~~~}
+\end{prooftree}
+$$
+
+\noindent
+Let's model this, as a way to provide another view into why the reduction works the way it does.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduce the tensor}
+
+First, let's model the introduction:
+
+\begin{prooftree*}
+  \hypo{\Proof/_{1}}
+  \ellipsis{}{}
+  \infer[no rule]1{A}
+  \hypo{\Proof/_{2}}
+  \ellipsis{}{}
+  \infer[no rule]1{B}
+  \infer2[\tensorIntro/]{A \tensor/ B}
+\end{prooftree*}
+
+\noindent
+Let us first represent ``$\Proof/_{1}$'' and ``$\Proof/_{2}$'' like this:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \coordinate[label={$\Proof/_{1}$}] (p_1) at (-0.25, 0.75);
+    \coordinate[label={$\Proof/_{2}$}] (p_2) at (0.5, -0.25);
+
+\end{diagram}
+
+\noindent
+Then, let us show that this transitions to a new state, where both ``$A$'' and ``$B$'' are present:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \coordinate[label={$\Proof/_{1}$}] (p_1) at (-0.25, 0.75);
+    \coordinate[label={$\Proof/_{2}$}] (p_2) at (0.5, -0.25);
+ 
+  % State 1
+  \draw[spaced-arrows, ->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \coordinate[label={$A$}] (a) at (3, 0.75);
+    \coordinate[label={$B$}] (b) at (3.75, -0.25);
+
+\end{diagram}
+
+\noindent
+Notice that $S_{1}$ models ``$A \tensor/ B$.'' The tensor ``$A \tensor/ B$'' means precisely that ``$A$'' and ``$B$'' are both true simultaneously, so we can represent that with both ``$A$'' and ``$B$'' being true in the same state.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Eliminate it}
+
+Next, on the right side of the proof tree, we assume ``$A$'' and ``$B$'' as hypothetical possibilities. To model this, let's draw a new state over on the right, using dotted lines to show that it is a hypothetical possibility:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \coordinate[label={$\Proof/_{1}$}] (p_1) at (-0.25, 0.75);
+    \coordinate[label={$\Proof/_{2}$}] (p_2) at (0.5, -0.25);
+
+  % State 1
+  \draw[spaced-arrows, ->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \coordinate[label={$A$}] (a) at (3, 0.75);
+    \coordinate[label={$B$}] (b) at (3.75, -0.25);
+
+  % State 2
+  \draw[densely dotted] (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+\end{diagram}
+
+\noindent
+Let's put ``$A$'' and ``$B$'' in this new state, since we are assuming both of them:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \coordinate[label={$\Proof/_{1}$}] (p_1) at (-0.25, 0.75);
+    \coordinate[label={$\Proof/_{2}$}] (p_2) at (0.5, -0.25);
+
+  % State 1
+  \draw[spaced-arrows, ->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \coordinate[label={$A$}] (a) at (3, 0.75);
+    \coordinate[label={$B$}] (b) at (3.75, -0.25);
+
+  % State 2
+  \draw[densely dotted] (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+    \coordinate[label={$A$}] (a_2) at (6.25, 0.75);
+    \coordinate[label={$B$}] (b_2) at (7, -0.25);
+
+\end{diagram}
+
+\noindent
+Next, the proof tree takes the assumed ``$A$'' and ``$B$,'' and it combines them into ``$A \tensor/ B$.'' To model that, we remove the assumed ``$A$'' and ``$B$'' (to signify that we have used up the assumptions):
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \coordinate[label={$\Proof/_{1}$}] (p_1) at (-0.25, 0.75);
+    \coordinate[label={$\Proof/_{2}$}] (p_2) at (0.5, -0.25);
+
+  % State 1
+  \draw[spaced-arrows, ->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \coordinate[label={$A$}] (a) at (3, 0.75);
+    \coordinate[label={$B$}] (b) at (3.75, -0.25);
+
+  % State 2
+  \draw[densely dotted] (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+\end{diagram}
+
+\noindent
+And then we put them right back in (to signify that we have constructed a tensor from them):
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \coordinate[label={$\Proof/_{1}$}] (p_1) at (-0.25, 0.75);
+    \coordinate[label={$\Proof/_{2}$}] (p_2) at (0.5, -0.25);
+
+  % State 1
+  \draw[spaced-arrows, ->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \coordinate[label={$A$}] (a) at (3, 0.75);
+    \coordinate[label={$B$}] (b) at (3.75, -0.25);
+
+  % State 2
+  \draw[densely dotted] (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+    \coordinate[label={$A$}] (a_2) at (6.25, 0.75);
+    \coordinate[label={$B$}] (b_2) at (7, -0.25);
+
+\end{diagram}
+
+\noindent
+Next, the proof tree goes on to derive ``$C$.'' Let's model that by drawing a new hypothetical state:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \coordinate[label={$\Proof/_{1}$}] (p_1) at (-0.25, 0.75);
+    \coordinate[label={$\Proof/_{2}$}] (p_2) at (0.5, -0.25);
+
+  % State 1
+  \draw[spaced-arrows, ->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \coordinate[label={$A$}] (a) at (3, 0.75);
+    \coordinate[label={$B$}] (b) at (3.75, -0.25);
+
+  % State 2
+  \draw[densely dotted] (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+    \coordinate[label={$A$}] (a_2) at (6.25, 0.75);
+    \coordinate[label={$B$}] (b_2) at (7, -0.25);
+
+  % State 3
+  \draw[densely dotted,spaced-arrows, ->] (7.75, 0.5) -- (8.75, 0.5);
+  \draw[densely dotted] (8.75, -0.75) -- (11, -0.75) -- (11, 1.75) -- (8.75, 1.75) -- (8.75, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{3}$}] (s_3) at (10, -0.75);
+
+\end{diagram}
+
+\noindent
+And then let's put ``$C$'' in it:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \coordinate[label={$\Proof/_{1}$}] (p_1) at (-0.25, 0.75);
+    \coordinate[label={$\Proof/_{2}$}] (p_2) at (0.5, -0.25);
+
+  % State 1
+  \draw[spaced-arrows, ->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \coordinate[label={$A$}] (a) at (3, 0.75);
+    \coordinate[label={$B$}] (b) at (3.75, -0.25);
+
+  % State 2
+  \draw[densely dotted] (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+    \coordinate[label={$A$}] (a_2) at (6.25, 0.75);
+    \coordinate[label={$B$}] (b_2) at (7, -0.25);
+
+  % State 3
+  \draw[densely dotted,spaced-arrows, ->] (7.75, 0.5) -- (8.75, 0.5);
+  \draw[densely dotted] (8.75, -0.75) -- (11, -0.75) -- (11, 1.75) -- (8.75, 1.75) -- (8.75, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{3}$}] (s_3) at (10, -0.75);
+
+    \coordinate[label={$C$}] (c_2) at (10, 0.25);
+
+\end{diagram}
+
+\noindent
+Next, the proof tree applies the \tensorElim/ rule. That rule says we can derive ``$C$'' from what we have here, because we can plug the pieces of the tensor on the left side of the tree in for the hypothetical assumptions on the right side of proof tree.
+
+In our model, we can see how this will work, since we can see that $S_{1}$ looks exactly like $S_{2}$. It has the same pieces:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \coordinate[label={$\Proof/_{1}$}] (p_1) at (-0.25, 0.75);
+    \coordinate[label={$\Proof/_{2}$}] (p_2) at (0.5, -0.25);
+
+  % State 1
+  \draw[spaced-arrows, ->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \coordinate[label={$A$}] (a) at (3, 0.75);
+    \coordinate[label={$B$}] (b) at (3.75, -0.25);
+
+  \draw[spaced-arrows,->] (3.25, 1) -- (6, 1);
+  \draw[spaced-arrows,->] (4, 0) -- (6.75, 0);
+
+  % State 2
+  \draw[densely dotted] (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+    \coordinate[label={$A$}] (a_2) at (6.25, 0.75);
+    \coordinate[label={$B$}] (b_2) at (7, -0.25);
+
+  % State 3
+  \draw[densely dotted,spaced-arrows, ->] (7.75, 0.5) -- (8.75, 0.5);
+  \draw[densely dotted] (8.75, -0.75) -- (11, -0.75) -- (11, 1.75) -- (8.75, 1.75) -- (8.75, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{3}$}] (s_3) at (10, -0.75);
+
+    \coordinate[label={$C$}] (c_2) at (10, 0.25);
+
+\end{diagram}
+
+\noindent
+So, we can plug $S_{1}$ into $S_{2}$:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \coordinate[label={$\Proof/_{1}$}] (p_1) at (-0.25, 0.75);
+    \coordinate[label={$\Proof/_{2}$}] (p_2) at (0.5, -0.25);
+
+  % State 1
+  \draw[spaced-arrows, ->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \coordinate[label={$A$}] (a) at (3, 0.75);
+    \coordinate[label={$B$}] (b) at (3.75, -0.25);
+
+  % State 2
+  \draw[spaced-arrows,->] (4.5, 0.5) -- (5.5, 0.5);
+  \draw[densely dotted] (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{2}$}] (s_2) at (6.75, -0.75);
+
+    \coordinate[label={$A$}] (a_2) at (6.25, 0.75);
+    \coordinate[label={$B$}] (b_2) at (7, -0.25);
+
+  % State 3
+  \draw[densely dotted,spaced-arrows, ->] (7.75, 0.5) -- (8.75, 0.5);
+  \draw[densely dotted] (8.75, -0.75) -- (11, -0.75) -- (11, 1.75) -- (8.75, 1.75) -- (8.75, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{3}$}] (s_3) at (10, -0.75);
+
+    \coordinate[label={$C$}] (c_2) at (10, 0.25);
+
+\end{diagram}
+
+\noindent
+To represent this, we can push $S_{1}$ over the top of $S_{2}$:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \coordinate[label={$\Proof/_{1}$}] (p_1) at (-0.25, 0.75);
+    \coordinate[label={$\Proof/_{2}$}] (p_2) at (0.5, -0.25);
+
+  % State 1
+  \draw[spaced-arrows, ->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$/\textbf{S}$_{2}$}] (s_1) at (3.5, -0.75);
+
+    \coordinate[label={$A$}] (a) at (3, 0.75);
+    \coordinate[label={$B$}] (b) at (3.75, -0.25);
+
+  % State 2
+  \draw[spaced-arrows,->] (4.5, 0.5) -- (5.5, 0.5);
+  \draw[densely dotted] (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{3}$}] (s_3) at (6.75, -0.75);
+
+    \coordinate[label={$C$}] (c_2) at (6.75, 0.25);
+
+\end{diagram}
+
+\noindent
+Since we have actualized $S_{1}/S_{2}$, we can actualize $S_{3}$ too:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \coordinate[label={$\Proof/_{1}$}] (p_1) at (-0.25, 0.75);
+    \coordinate[label={$\Proof/_{2}$}] (p_2) at (0.5, -0.25);
+
+  % State 1
+  \draw[spaced-arrows, ->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$/\textbf{S}$_{2}$}] (s_1) at (3.5, -0.75);
+
+    \coordinate[label={$A$}] (a) at (3, 0.75);
+    \coordinate[label={$B$}] (b) at (3.75, -0.25);
+
+  % State 2
+  \draw[spaced-arrows,->] (4.5, 0.5) -- (5.5, 0.5);
+  \draw[] (5.5, -0.75) -- (7.75, -0.75) -- (7.75, 1.75) -- (5.5, 1.75) -- (5.5, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{3}$}] (s_3) at (6.75, -0.75);
+
+    \coordinate[label={$C$}] (c_2) at (6.75, 0.25);
+
+\end{diagram}
+
+\noindent
+At this point, the proof tree has reached the conclusion --- namely, ``$C$'' --- and we can see that ``$C$'' is also actualized in the final state of our model.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Check for detours}
+
+The last step in the proof of local soundness is to check that the elimination rule takes us through a detour. To do that, we try to find a more direct route to the conclusion ``$C$'' without going through the elimination rule.
+
+And indeed, we did find a more direct route: we can go from the proofs ``$\Proof/_{1}$'' and ``$\Proof/_{2}$'' of ``$A$'' and ``$B$'' directly to the conclusion ``$C$.'' That's what the beta-reduction says that we wrote out at the beginning of this chapter.
+
+Does this play out in our model? Can we find the same, shorter route in our model? Yes, we can. In fact, we can see that after we have drawn out the entire introduction-elimination sequence in the model, we are left with a model that directly represents this shorter route. It begins with the proofs ``$\Proof/_{1}$'' and ``$\Proof/_{2}$'' of ``$A$'' and ``$B$,'' and it moves directly to the conclusion ``$C$.'' 
+
+So we can see in the model too that the proof tree can actually be reduced to the shorter route, and therefore the elimination takes us through a useless detour. Hence, the elimination rule does not introduce any extra information beyond what was already present in the proof tree before we applied the elimination rule.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+In this chapter, we modeled the beta-reduction which proves that the \tensorElim/ rule is locally sound. We saw that, if we first introduce a tensor and then immediately eliminate it, the elimination takes us through a useless detour. We can get to the same conclusion without going through the elimination.
+
+
+\end{document}

@@ -1,0 +1,268 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{More examples}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Example 1}
+
+Here is a proof tree we have seen a lot now:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, p) :: true}
+  \infer2[\rulename{trade}]{b(p) :: true}
+\end{prooftree*}
+
+\noindent
+Earlier, we saw that we can extract ``$t(s, p) \lolli/ b(p) :: true$'' from the tree, like this:
+
+\begin{diagram}
+
+  \draw[draw=black, densely dotted, fill=grey80]
+      (-1.5, 0.3) -- (-1.5, -0.5) -- (0.5, -0.5) -- (0.5, -0.15) -- (3.1, -0.15) -- 
+      (3.1, 1.15) -- (-0.15, 1.15) -- (-0.15, 0.3) -- (-1.5, 0.3);
+  \draw[spaced-arrows,->] (3.1, 0.5) -- (3.85, 0.5) -- (3.85, -0.75) -- (1.75, -0.75);
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{} 
+      \infer1[\startrule/]{b(s) :: true}
+      \hypo{}
+      \infer1[\startrule/]{t(s, p) :: true^{a}}
+      \infer2[\rulename{trade}]{b(p) :: true}
+      \infer1[\lolliIntro/$^{a}$]{t(s, p) \lolli/ b(p) :: true}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+But that is not the only lolli we could extract from the original proof tree. If we wanted to, we could extract the other part of the tree instead, i.e., the part that goes from ``$b(s) :: true$'' down to $b(p) :: true$,'' like this:
+
+\begin{diagram}
+
+  \draw[draw=black, densely dotted, fill=grey80]
+      (0.5, -0.5) -- (-1.5, -0.5) -- (-1.5, 0) -- (-3.2, 0) -- (-3.2, 1) -- (-0.25, 1) -- (-0.25, 0.25) --
+      (0.5, 0.25) -- (0.5, -0.5);
+  \draw[spaced-arrows,->] (-3.2, 0.5) -- (-4, 0.5) -- (-4, -0.75) -- (-2, -0.75);
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{} 
+      \infer1[\startrule/]{b(s) :: true^{a}}
+      \hypo{}
+      \infer1[\startrule/]{t(s, p) :: true}
+      \infer2[\rulename{trade}]{b(p) :: true}
+      \infer1[\lolliIntro/$^{a}$]{b(s) \lolli/ b(p) :: true}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+That introduces a different lolli. This lolli says: if you give me a ``$b(s) :: true$,'' I'll use it up and give you back a ``$b(p) :: true$.'' In other words, it says: ``if I have squash in my basket, I can use that to get potatoes in my basket.''
+
+What is the hypothetical judgment that this tree proves? To answer that, we simply list the open assumptions, and the conclusion. So what are they? Well, we've deactivated or cancelled out the part in the grey, so that leaves:
+
+\begin{diagram}
+
+  \draw[draw=black, densely dotted, fill=grey80]
+      (0.5, -0.5) -- (-1.5, -0.5) -- (-1.5, 0) -- (-3.2, 0) -- (-3.2, 1) -- (-0.25, 1) -- (-0.25, 0.25) --
+      (0.5, 0.25) -- (0.5, -0.5);
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{} 
+      \infer1[\startrule/]{b(s) :: true^{a}}
+      \hypo{}
+      \infer1[\startrule/]{t(s, p) :: true}
+      \infer2[\rulename{trade}]{b(p) :: true}
+      \infer1[\lolliIntro/$^{a}$]{b(s) \lolli/ b(p) :: true}
+    \end{prooftree}
+  };
+
+  \draw (-2, -0.75) -- (-2, -1) -- (1, -1) -- (1, -0.75);
+  \draw[spaced-arrows,->] (-0.5, -1.75) -- (-0.5, -1);
+  \node (c_1_l) [label=below:{conclusion}] at (-0.5, -1.65) {};
+
+  \draw (0, 0.85) -- (0, 1.1) -- (3.1, 1.1) -- (3.1, 0.85);
+  \draw[spaced-arrows,->] (1.5, 1.85) -- (1.5, 1.1);
+  \node (a_1_l) [label=below:{assumption}] at (1.5, 2.45) {};
+
+\end{diagram}
+
+\noindent
+Hence, the hypothetical judgment that this tree proves is the one that is made up of that one assumption, and the conclusion:
+
+\begin{equation*}
+    t(s, p) :: true \ndturnstile/ b(s) \lolli/ b(p) :: true
+\end{equation*}
+
+\noindent
+This says: it is true that, if I have squash in my basket then I can get potatoes in my basket --- i.e., ``$b(s) \lolli/ b(p) :: true$'' --- provided we assume I can trade squash for potatoes --- i.e., provided that we assume ``$t(s, p) :: true$.'' 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Example 2}
+
+Suppose we want to prove this hypothetical judgment:
+
+\begin{equation*}
+  b(c) :: true, t(c, p) :: true, t(p, s) :: true, t(s, z) :: true \ndturnstile/ b(z) :: true
+\end{equation*}
+
+\noindent
+Here is the proof:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(c) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(c, p) :: true}
+  \infer2[\rulename{trade}]{b(p) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(p, s) :: true}
+  \infer2[\rulename{trade}]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, z) :: true}
+  \infer2[\rulename{trade}]{b(z) :: true}  
+\end{prooftree*}
+
+\noindent
+Look at the assumption ``$t(c, p) :: true$.'' There is an ``if--then'' relationship from this assumption, all the way down to the conclusion ``$b(z) :: true$.'' So, we can grey out that part of the tree, and encode it in a lolli at the bottom of the tree:
+
+\begin{diagram}
+
+  \draw[draw=black, densely dotted, fill=grey80]
+      (0.5, -0.5) -- (-2.35, -0.5) -- (-2.35, 0) -- (-5, 0) -- (-5, 0.65) -- (-3.5, 0.65) -- (-3.5, 1.6) -- (-0.35, 1.6) -- (-0.35, 0.25) --
+      (0, 0.25) -- (0, -0.25) -- (2.6, -0.25) -- (2.6, -0.9) -- (0.5, -0.9) -- (0.5, -0.5);
+  \draw[spaced-arrows,->] (-4, 0) -- (-4, -1.25) -- (0, -1.25);
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{}
+      \infer1[\startrule/]{b(c) :: true}
+      \hypo{}
+      \infer1[\startrule/]{t(c, p) :: true^{a}}
+      \infer2[\rulename{trade}]{b(p) :: true}
+      \hypo{}
+      \infer1[\startrule/]{t(p, s) :: true}
+      \infer2[\rulename{trade}]{b(s) :: true}
+      \hypo{}
+      \infer1[\startrule/]{t(s, z) :: true}
+      \infer2[\rulename{trade}]{b(z) :: true}
+      \infer1[\lolliIntro/$^{a}$]{t(c, p) \lolli/ b(z) :: true}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+What is the hypothetical judgment that this tree proves? Well, what are the remaining open assumptions, and what is the new conclusion? Here they are:
+
+\begin{diagram}
+
+  \draw[draw=black, densely dotted, fill=grey80]
+      (0.5, -0.5) -- (-2.35, -0.5) -- (-2.35, 0) -- (-5, 0) -- (-5, 0.65) -- (-3.5, 0.65) -- (-3.5, 1.6) -- (-0.35, 1.6) -- (-0.35, 0.25) --
+      (0, 0.25) -- (0, -0.25) -- (2.6, -0.25) -- (2.6, -0.9) -- (0.5, -0.9) -- (0.5, -0.5);
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{}
+      \infer1[\startrule/]{b(c) :: true}
+      \hypo{}
+      \infer1[\startrule/]{t(c, p) :: true^{a}}
+      \infer2[\rulename{trade}]{b(p) :: true}
+      \hypo{}
+      \infer1[\startrule/]{t(p, s) :: true}
+      \infer2[\rulename{trade}]{b(s) :: true}
+      \hypo{}
+      \infer1[\startrule/]{t(s, z) :: true}
+      \infer2[\rulename{trade}]{b(z) :: true}
+      \infer1[\lolliIntro/$^{a}$]{t(c, p) \lolli/ b(z) :: true}
+    \end{prooftree}
+  };
+  
+  \draw (0, -1.5) -- (0, -1.75) -- (3.35, -1.75) -- (3.35, -1.5);
+  \draw[spaced-arrows,->] (1.6, -2.5) -- (1.6, -1.75);
+  \node (c_1_l) [label=below:{conclusion}] at (1.5, -2.4) {};
+
+  \draw (-6.65, 1.5) -- (-6.65, 1.75) -- (-3.85, 1.75) -- (-3.85, 1.5);
+  \draw[spaced-arrows,->] (-5.25, 2.5) -- (-5.25, 1.75);
+  \node (a_1_l) [label=above:{assumption}] at (-5.25, 2.4) {};
+
+  \draw (0, 1) -- (0, 1.25) -- (3, 1.25) -- (3, 1);
+  \draw[spaced-arrows,->] (1.5, 2) -- (1.5, 1.25);
+  \node (a_1_l) [label=above:{assumption}] at (1.5, 1.9) {};
+
+  \draw (3.4, 0.5) -- (3.4, 0.75) -- (6.45, 0.75) -- (6.45, 0.5);
+  \draw[spaced-arrows,->] (5, 1.5) -- (5, 0.75);
+  \node (a_1_l) [label=above:{assumption}] at (5, 1.4) {};
+  
+\end{diagram}
+
+\noindent
+So that tree proves this hypothetical judgment:
+
+\begin{equation*}
+  b(c) :: true, t(p, s) :: true, t(s, z) :: true \ndturnstile/ t(c, p) \lolli/ b(z) :: true
+\end{equation*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Example 3}
+
+Consider a proof tree with a single assumption:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(p) :: true}
+\end{prooftree*}
+
+\noindent
+There is an ``if---then'' relationship here too, but with itself. After all, if you give me a ``$b(p) :: true$,'' then I can give you that same ``$b(p) :: true$'' right back. This is a sort of degenerate case, but it is valid nevertheless.
+
+So, we can extract a lolli from this too, which has itself as its antecedent and consequent:
+
+\begin{diagram}
+
+  \draw[draw=black, densely dotted, fill=grey80]
+      (-1.5, 0.7) -- (-1.5, 0) -- (1.4, 0) -- (1.4, 0.7) -- (-1.5, 0.7);
+  \draw[spaced-arrows,->] (1.4, 0.35) -- (2.85, 0.35) -- (2.85, -0.5) -- (1.25, -0.5);
+
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{} 
+      \infer1[\startrule/]{b(p) :: true^{a}}
+      \infer1[\lolliIntro/$^{a}$]{b(p) \lolli/ b(p) :: true}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+This proof tree has no assumptions. It only has a conclusion, the lolli. So this proof tree proves a categorical judgment (rather than a hypothetical judgment), namely this:
+
+\begin{equation*}
+  \ndturnstile/ b(p) \lolli/ b(p) :: true
+\end{equation*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+These examples illustrate some of the different ways we can introduce a lolli into a proof tree. We can build a lolli starting from any of the assumptions in a tree (as we saw in example 1). For larger proof trees, the principles are still the same (as we saw in example 2). Even for the most degenerate case, the principles function the same way (as we saw in example 3).
+
+\end{document}

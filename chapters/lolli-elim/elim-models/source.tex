@@ -1,0 +1,154 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Lolli elim models}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Modeling the lolli}
+
+Recall that a lolli represents a hypothetical ``if--then'' scenario. We modeled a lolli by drawing the antecedent as one state, and the consequent as a separate state, and we drew them with dotted lines to represent that this is a hypothetical possibility.
+
+For example, suppose we have this lolli:
+
+\begin{equation*}
+  t(s, p) \lolli/ b(p) :: true
+\end{equation*}
+
+\noindent
+This is a kind of process which says: if you give me the option to trade squash for potatoes, I'll give you back potatoes in your basket.
+
+To model this, we follow the same procedure that we used before to model lollis. First we draw a box, for the initial state:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+\end{diagram}
+
+\noindent
+Then we draw in the antecedent of the lolli --- ``$t(s, p)$'' --- but we use dotted lines to represent that it's a hypothetical possibility:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (s) [label=below:{$s$}] at (-0.5, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (0.75, 0) {};
+
+    \draw[spaced-arrows,dotted,->] (s) to node [fill=white] {$t$} (p);
+
+\end{diagram}
+
+\noindent
+Next, we add a new state, where we draw in the consequent --- ``$b(p)$.'' Again, we use dotted lines to represent that this is what would follow (hypothetically), if the antecedent were true:
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (s) [label=below:{$s$}] at (-0.5, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (0.75, 0) {};
+
+    \draw[spaced-arrows,dotted,->] (s) to node [fill=white] {$t$} (p);
+
+  % State 1
+  \draw[spaced-arrows,dotted,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[densely dotted] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (p_1) [label=below:{$p$}] at (4, 0) {};
+
+    \node[draw, densely dotted] (b_1) at (4, 0.4) {$b$};
+
+\end{diagram}
+
+\noindent
+Now we have modeled the lolli we set out to model (namely, ``$t(s, p) \lolli/ b(p) :: true$.'' Note in particular that we've drawn the antecedent in one state, and we've drawn the consequent in another state, and we've used dotted lines to represent that this is what would happen if the antecedent were true.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Use the lolli}
+
+As we saw from the last chapter, the lolli elimination rule says: if you have the antecedent of a lolli, you can use it to get back the consequent of the lolli. Let us model this.
+
+So, let us suppose that we actually have the antecedent of the lolli: ``$t(s, p) :: true$.'' To model this, we simply draw it into our current model, using solid lines to represent that it's an actuality in the situation (rather than a hypothetical possibility):
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (s) [label=below:{$s$}] at (-0.5, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (0.75, 0) {};
+
+    \draw[spaced-arrows,->] (s) to node [fill=white] {$t$} (p);
+
+  % State 1
+  \draw[spaced-arrows,dotted,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[densely dotted] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (p_1) [label=below:{$p$}] at (4, 0) {};
+
+    \node[draw, densely dotted] (b_1) at (4, 0.4) {$b$};
+
+\end{diagram}
+
+\noindent
+The lolli elimination rule says that once we have the antecedent to the lolli, we get back the consequent. So, to model that, we draw in the consequent (with solid lines):
+
+
+\begin{diagram}
+
+  % State 0
+  \draw (-1, -0.75) -- (1.25, -0.75) -- (1.25, 1.75) -- (-1, 1.75) -- (-1, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{0}$}] (s_0) at (0.175, -0.75);
+
+    \node[o-point] (s) [label=below:{$s$}] at (-0.5, 1) {};
+    \node[o-point] (p) [label=below:{$p$}] at (0.75, 0) {};
+
+    \draw[spaced-arrows,->] (s) to node [fill=white] {$t$} (p);
+
+  % State 1
+  \draw[spaced-arrows,->] (1.25, 0.5) -- (2.25, 0.5);
+  \draw[] (2.25, -0.75) -- (4.5, -0.75) -- (4.5, 1.75) -- (2.25, 1.75) -- (2.25, -0.75);
+  \coordinate[label=below:{\textbf{S}$_{1}$}] (s_1) at (3.5, -0.75);
+
+    \node[o-point] (p_1) [label=below:{$p$}] at (4, 0) {};
+
+    \node[draw] (b_1) at (4, 0.4) {$b$};
+
+\end{diagram}
+
+\noindent
+If we look at the states from left to right, we can see that in the start state, we had the antecedent of the lolli, while in the  last state, we ended up with the consequent of the lolli. This directly represents what the lolli elimination rule says: if we have the antecedent, we get back the consequent.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+The lolli elimination rule says that (i) if we have a lolli of the form ``$A \lolli/ B :: true$,'' and (ii) if we also have ``$A :: true$,'' then we can get back ``$B :: true$.'' 
+
+To model this, we first draw the lolli, with dotted lines to represent that it's hypothetical. This should span two states: the antecedent of the lolli should be represented in the first state, and the consequent should be represented in the second state. 
+
+Next, we draw in the antecedent in the first state, using solid lines to indicate that it really holds in the situation. Then we draw in the consequent in the second state, again using solid lines, to indicate that it really holds in the situation as well.
+
+The whole picture mirrors exactly what the elimination rule says. Although the antecedent holds in the first state, it gets used up, so to speak, so that in the last state, only the consequent holds.
+
+
+\end{document}

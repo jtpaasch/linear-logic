@@ -1,0 +1,466 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Local soundness}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Harmony}
+
+You'll notice that we have an introduction rule, and an elimination rule, for the lolli connective. Some connectives have more than one elimination rule, or more than one introduction rule. But however many introduction and elimination rules there are for a given connective, they are supposed to work together. 
+
+We say that the elimination rules must be in \vocab{harmony} with the introduction rules, and we mean something very specific by that. What we mean is this: the elimination rule must be \vocab{locally sound}, and it must be \vocab{locally complete}. In this chapter and the next, we'll talk about local soundness. We'll turn to local completeness after that.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Local soundness}
+
+To say that an elimination rule is locally sound is to say that it doesn't introduce any new information into a proof tree when we apply it. The only information it should introduce into a proof tree is information we already knew from introducing the connective in the first place.
+
+How do we determine this? There is a check we can do: we introduce the connective, then we immediately eliminate it, and we check to make sure that the elimination takes us through a useless detour --- i.e., we make sure that it takes us right back to where we started before we eliminated the connective. 
+
+If the elimination rules take us through a useless detour, this shows that they don't take us anywhere that we can't already get to, before we apply elimination.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The strategy}
+
+So, to check that the \lolliElim/ rule is locally sound, we should build a proof tree that first introduces a lolli, and then eliminates it. Then we check to make sure the elimination takes us through a useless detour.
+
+When we do this, we could come up with some particular examples of judgments and then use \lolliIntro/ followed by \lolliElim/, in order to show a useless detour. However, this would only show the detour for those \emph{particular} examples. It would not show that there is a detour for \emph{every} example. And we want to show that there is a detour for every example. 
+
+How do we do that? We can simply use the \lolliIntro/ and \lolliElim/ rule \emph{templates}, rather than particular \emph{substitution instances} of them. After all, the rule templates are fully general. They have placeholders like ``$A$'' and ``$B$'' which represent any substitutable value.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Setting up}
+
+As we said, we should build this proof by introducing a lolli and then immediately eliminating it. Sometimes, we'll find that we need to introduce extra assumptions, because otherwise the proof tree would be incomplete. We'll do this when it's needed.
+
+So, let us first introduce a lolli. For this, we can simply use the lolli introduction template:
+
+\begin{prooftree*}
+  \hypo{A^{a}}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{B}
+  \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+\end{prooftree*}
+
+\noindent
+This introduces a lolli of the form ``$A \lolli/ B$,'' where ``$A$'' and ``$B$'' can stand for any propositions. 
+
+Do we need to add any assumptions to introduce this? The answer is no. Here we can simply use the start rule to introduce ``$A$'':
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{~~A^{a}~~}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{B}
+  \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+\end{prooftree*}
+
+\noindent
+We do not need to write the \startrule/ step explicitly, since we know that the top of every branch must begin with the \rulename{start} rule. So we can just leave it out, so we don't have to write as much (even though we should always remember that the top of every branch begins with a \startrule/):
+
+\begin{prooftree*}
+  \hypo{A^{a}}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{B}
+  \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+\end{prooftree*}
+
+\noindent
+Next, we want to eliminate the lolli. For that, we need an ``$A$'' in the proof tree:
+
+\begin{prooftree*}
+  \hypo{A^{a}}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{B}
+  \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+  
+  \hypo{}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{\fbox{$A$}}
+  
+  \infer[rule style=no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then we can use \lolliElim/ to eliminate the lolli, and derive ``$B$'':
+
+\begin{prooftree*}
+  \hypo{A^{a}}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{B}
+  \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+  
+  \hypo{}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A}
+  
+  \infer2[\lolliElim/]{\fbox{$B$}}
+\end{prooftree*}
+
+\noindent
+How do we get ``$A$''? Here we need to consider how it is that we prove ``$A$.'' What goes above the ``$A$'' in the proof tree? 
+
+\begin{prooftree*}
+  \hypo{A^{a}}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{B}
+  \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+  
+  \hypo{\fbox{??}}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A}
+  
+  \infer2[\lolliElim/]{\fbox{$B$}}
+\end{prooftree*}
+
+\noindent
+The first thing to note is that the proof of ``$A$'' could be something very simple. For example, it could be that we simply use the \startrule/ rule to introduce it:
+
+\begin{prooftree*}
+  \hypo{A^{a}}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{B}
+  \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+  
+  \hypo{}
+  \infer1[\startrule/]{~~A~~}
+  
+  \infer2[\lolliElim/]{B}
+\end{prooftree*}
+
+\noindent
+Or it could be more complicated. There could be other steps above ``$A$,'' which lead to ``$A$'':
+
+\begin{prooftree*}
+  \hypo{A^{a}}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{B}
+  \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+  
+  \hypo{\text{Other steps}}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A}
+  
+  \infer2[\lolliElim/]{\fbox{$B$}}
+\end{prooftree*}
+
+\noindent
+Here we want to be completely general. So, we don't really care which of the above options it is. All we require is that there is \emph{some} portion of a proof tree above ``$A$,'' which proves ``$A$.''
+
+So, let's mark that with a ``$\Proof/$'' (the capital Greek letter ``Pi''), like this:
+
+\begin{prooftree*}
+  \hypo{A^{a}}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{B}
+  \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+  
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A}
+  
+  \infer2[\lolliElim/]{B}
+\end{prooftree*}
+
+\noindent
+With that, we have constructed what we set out to construct: we first introduced a lolli, then we immediately eliminated it. Moreover, this is a very general proof tree, because we are using placeholders for the judgments (``$A$'' and ``$B$''), and we are using a placeholder (namely ``$\Proof/$'') for the fragment above the second ``$A$.''
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Checking for detours}
+
+Now we can ask our question: does the elimination rule take us through a useless detour? It is a useless detour if, from the same assumptions, we can get to the conclusion of the proof tree, \emph{without using} the elimination rule.
+
+What is the conclusion we want to reach? It is ``$B$.'' Here it is, highlighted with a box drawn around it:
+
+\begin{prooftree*}
+  \hypo{A^{a}}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{B}
+  \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A}
+  \infer2[\lolliElim/]{\fbox{$B$}}
+\end{prooftree*}
+
+\noindent
+Can we derive ``$B$'' in this scenario, without using the elimination rule at all? The answer is yes.
+
+Look first at the part of the tree that we canceled out to derive the lolli. It goes from ``$A^{a}$'' down to ``$B$'':
+
+\begin{diagram}
+
+  \draw[densely dotted, fill=grey90] (-2, 1.25) -- (-0.75, 1.25) -- (-0.75, -0.2) -- (-2, -0.2) -- (-2, 1.25);
+  % \node (l_1) [fill=white] at (-1.5, 1.5) {input};
+  
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{A^{a}}
+      \ellipsis{}{}
+      \infer[rule style=no rule]1{B}
+      \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+      \hypo{\Proof/}
+      \ellipsis{}{}
+      \infer[rule style=no rule]1{A}
+      \infer2[\lolliElim/]{\fbox{$B$}}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+What this part of the tree says is this: \emph{if} you have an ``$A$,'' \emph{then} that leads to ``$B$.'' So, do we have an ``$A$''? Yes, in this setup we do. Over on the right, we have a proof ``$\Proof/$'' that leads to an ``$A$'':
+
+\begin{diagram}
+
+  % \draw[densely dotted, fill=grey90] (-2, 1.25) -- (-0.75, 1.25) -- (-0.75, -0.2) -- (-2, -0.2) -- (-2, 1.25);
+  \draw[densely dotted, fill=grey90] (0.4, 1) -- (1.3, 1) -- (1.3, -0.7) -- (0.4, -0.7) -- (0.4, 1);
+  
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{A^{a}}
+      \ellipsis{}{}
+      \infer[rule style=no rule]1{B}
+      \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+      \hypo{\Proof/}
+      \ellipsis{}{}
+      \infer[rule style=no rule]1{A}
+      \infer2[\lolliElim/]{\fbox{$B$}}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+We can use that proof of ``$A$'' on the right, as a proof of ``$A^{a}$'' over on the left. Let's draw an arrow to show how these two pieces fit together:
+
+\begin{diagram}
+
+  \draw[densely dotted, fill=grey90] (-2.1, 1.4) -- (-0.85, 1.4) -- (-0.85, -0.25) -- (-2.1, -0.25) -- (-2.1, 1.4);
+  \draw[densely dotted, fill=grey90] (0.4, 1) -- (1.3, 1) -- (1.3, -0.7) -- (0.4, -0.7) -- (0.4, 1);
+
+  \draw[spaced-arrows,->] (1.1, -0.35) -- (1.75, -0.35) -- (1.75, 2.25) -- (-1.45, 2.25) -- (-1.45, 1.45);
+  
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{\fbox{$A^{a}$}}
+      \ellipsis{}{}
+      \infer[rule style=no rule]1{B}
+      \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+      \hypo{\Proof/}
+      \ellipsis{}{}
+      \infer[rule style=no rule]1{\fbox{$A$}}
+      \infer2[\lolliElim/]{\fbox{$B$}}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+Let's move the proof of ``$A$'' on the right so that it's positioned above the ``$A$'' on the left:
+
+\begin{diagram}
+
+  \draw[densely dotted, fill=grey90] 
+      (-2.1, 2.7) -- (-0.85, 2.7) -- (-0.85, 0.95) -- (-2.1, 0.95) -- (-2.1, 2.7);
+  \draw[densely dotted, fill=grey90] 
+      (-2.1, 0.3) -- (-0.85, 0.3) -- (-0.85, -1.4) -- (-2.1, -1.4) -- (-2.1, 0.3);
+
+  \draw[spaced-arrows,->] (0.85, -0.2) -- (0.85, 3.5) -- (-1.45, 3.5) -- (-1.45, 2.75);
+  \draw[spaced-arrows,->] (-1.45, 0.95) -- (-1.45, 0.35);
+  
+  \draw[] (0.5, -0.25) -- (1.25, -2);
+  \draw[] (0.5, -2) -- (1.25, -0.25);
+  
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{\Proof/}
+      \ellipsis{}{}
+      \infer[rule style=no rule]1{\fbox{$A$}}
+      \infer[rule style=no rule]1{}
+      \infer[rule style=no rule]1{}
+      \infer[rule style=no rule]1{}
+      \infer[rule style=no rule]1{}
+      \infer[rule style=no rule]1{}
+      \infer[rule style=no rule]1{}
+      \infer[rule style=no rule]1{}
+      \infer[rule style=no rule]1{} 
+      \infer[rule style=no rule]1{\fbox{$A^{a}$}}
+      \ellipsis{}{}
+      \infer[rule style=no rule]1{B}
+      \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+
+      \hypo{\Proof/}
+      \ellipsis{}{}
+      \infer[rule style=no rule]1{\fbox{$A$}}
+      \infer2[\lolliElim/]{\fbox{$B$}}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+And, in fact, we can push the top proof of ``$A$'' down, because these two blocks fit together right at ``$A$/$A^{a}$.'' Like this:
+
+\begin{diagram}
+
+  \draw[densely dotted, fill=grey90] 
+      (-2.1, 2) -- (-0.85, 2) -- (-0.85, -0.7) -- (-2.1, -0.7) -- (-2.1, 2);
+
+  \draw[spaced-arrows,->] (0.85, 0.5) -- (0.85, 2.75) -- (-1.45, 2.75) -- (-1.45, 2.1);
+  
+  \draw[] (0.5, 0.5) -- (1.25, -1.25);
+  \draw[] (0.5, -1.25) -- (1.25, 0.5);
+  
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{\Proof/}
+      \ellipsis{}{}
+      \infer[rule style=no rule]1{\fbox{$A$}}
+      \ellipsis{}{}
+      \infer[rule style=no rule]1{B}
+      \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+
+      \hypo{\Proof/}
+      \ellipsis{}{}
+      \infer[rule style=no rule]1{\fbox{$A$}}
+      \infer2[\lolliElim/]{\fbox{$B$}}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+Now ``$\Proof/$'' is a proof of ``$A$,'' and ``$A$'' leads to ``$B$''. So from ``$\Proof/$'' alone, we can reach ``$B$.'' Notice where ``$B$'' lies in this re-arranged proof tree:
+
+\begin{diagram}
+
+  \draw[densely dotted, fill=grey90] 
+      (-1.95, 1.8) -- (-0.75, 1.8) -- (-0.75, -0.9) -- (-1.95, -0.9) -- (-1.95, 1.8);
+
+  \draw[spaced-arrows,->] (0.85, 0.35) -- (0.85, 2.5) -- (-1.35, 2.5) -- (-1.35, 1.9);
+  
+  \draw[] (0.5, 0.25) -- (1.25, -1.35);
+  \draw[] (0.5, -1.35) -- (1.25, 0.25);
+  
+  \node (j) [] at (0, 0) {
+    \begin{prooftree}
+      \hypo{\Proof/}
+      \ellipsis{}{}
+      \infer[rule style=no rule]1{A}
+      \ellipsis{}{}
+      \infer[rule style=no rule]1{\fbox{$B$}}
+      \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+
+      \hypo{\Proof/}
+      \ellipsis{}{}
+      \infer[rule style=no rule]1{A}
+      \infer2[\lolliElim/]{B}
+    \end{prooftree}
+  };
+
+\end{diagram}
+
+\noindent
+The elimination rule gives us ``$B$.'' But we can see here that we don't need to use the elimination rule, to get the same conclusion. We can derive ``$B$'' already, with the assumptions we had \emph{before} we used the \lolliElim/ rule.
+
+To make this completely clear, we can remove all the pieces we don't need, and leave just the parts that were highlighted:
+
+\begin{prooftree*}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{B}
+\end{prooftree*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Compact notation}
+
+We call this process \vocab{proof reduction}. What we did was take a larger proof: 
+
+\begin{prooftree*}
+  \hypo{A^{a}}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{B}
+  \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A}
+  \infer2[\lolliElim/]{B}
+\end{prooftree*}
+
+\noindent
+Then we reduced it down to something simpler:
+
+\begin{prooftree*}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{B}
+\end{prooftree*}
+
+\noindent
+We can summarize this particular reduction by writing it out like this:
+
+$$
+\begin{prooftree}
+  \hypo{A^{a}}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{B}
+  \infer1[\lolliIntro/$^{a}$]{A \lolli/ B}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A}
+  \infer2[\lolliElim/]{B}
+\end{prooftree}
+\hskip 1cm\rightsquigarrow_{\beta}\hskip 1cm
+\begin{prooftree}
+  \hypo{\Proof/}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{A}
+  \ellipsis{}{}
+  \infer[rule style=no rule]1{B}
+\end{prooftree}
+$$
+
+\noindent
+On the left, we have the original proof tree, and on the right we have the reduced proof tree. The squiggly arrow in the middle indicates that we have made some transformations to the tree. 
+
+The subscripted ``$\beta$'' (the lowercase Greek letter ``beta'') on the squiggly arrow deserves comment. It is a special symbol that we use to indicate that the transformation we have performed here is a proof reduction. There are other kinds of transformations we can make to proof trees. We will learn about another one in the next chapters.
+
+But here, we want to say that this particular transformation is a proof \emph{reduction}, rather than another kind of transformation. And so we attach a little ``$\beta$'' character to the arrow to indicate that.
+
+In fact, we often call a ``proof reduction'' by another name: we call it a \vocab{$\beta$-reduction} (or just ``beta-reduction,'' if you don't want to write out the Greek letter). The names ``proof reduction'' and ``$\beta$-reduction'' are synonyms in this context.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+This proof reduction shows that the \lolliElim/ rule takes us through an unnecessary detour. We don't need to go through the \lolliElim/ to get to the conclusion that it delivers for us. On the contrary, we can already get there, without using the \lolliElim/ rule at all.
+
+Since this detour is unnecessary, this shows that the \lolliElim/ rule doesn't introduce any new information into the proof tree. All it does is extract information that's already baked into the proof tree.
+And this means that \lolliElim/ is locally \vocab{sound}.
+
+The \lolliElim/ rule would be \vocab{unsound} if it introduced any new information into the tree. Because then, it would be introducing information that's not been proven. And we'd have to say: where did you get that new information? 
+
+The \lolliElim/ rule should give us no new information, beyond what's already there. That's how we can tell that it's locally sound. And the re-arranged proof tree we just constructed shows that this is indeed correct.
+
+\end{document}

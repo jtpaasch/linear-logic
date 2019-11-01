@@ -1,0 +1,450 @@
+\documentclass[../../../main.tex]{subfiles}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Examples}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Simple examples}
+
+It is a simple matter to build tensors from assumptions. To do that, we first introduce the assumptions we are interested in, and then we combine them into a tensor.
+
+For example, here is a hypothetical judgment:
+
+\begin{equation*}
+  b(s) :: true, t(s, z) :: true \ndturnstile/ b(s) \tensor/ t(s, z) :: true
+\end{equation*}
+
+\noindent
+To build a proof tree for this, we first introduce the assumptions:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, z) :: true}
+  \infer[rule style=no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then we use the \tensorIntro/ rule to combine them into a tensor:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, z) :: true}
+  \infer2[\tensorIntro/]{b(s) \tensor/ t(s, z) :: true}
+\end{prooftree*}
+
+\noindent
+Here is another hypothetical judgment:
+
+\begin{equation*}
+  b(c) :: true, t(c, s) :: true \ndturnstile/ b(c) \tensor/ t(c, s) :: true
+\end{equation*}
+
+\noindent
+Here is a proof tree for it:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(c) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(c, s) :: true}
+  \infer2[\tensorIntro/]{b(s) \tensor/ t(s, z) :: true}
+\end{prooftree*}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Multiple possibilities}
+
+Consider the first proof tree above:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, z) :: true}
+  \infer2[\tensorIntro/]{b(s) \tensor/ t(s, z) :: true}
+\end{prooftree*}
+
+\noindent
+The assumptions ``$b(s) :: true$'' and ``$t(s, z) :: true$'' could be used to draw a different conclusion. Look at the two assumptions again:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, z) :: true}
+  \infer[rule style=no rule]2{}
+\end{prooftree*}
+
+\noindent
+Instead of combining them into a tensor, we could instead apply the trade rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, z) :: true}
+  \infer2[\traderule/]{b(z) :: true}
+\end{prooftree*}
+
+\noindent
+So, from those two assumptions, we have the option to derive more than one conclusion. (Which particular conclusion we decide to prove at any particular time depends on what we need to do at that time.)
+
+Now consider this hypothetical judgment:
+
+\begin{equation*}
+  b(s) :: true, t(c, z) :: true \ndturnstile/ b(s) \tensor/ t(c, z) :: true
+\end{equation*}
+
+\noindent
+To prove this, we again introduce the assumptions, and then we use the \tensorIntro/ rule to combine them into a tensor:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(c, z) :: true}
+  \infer2[\tensorIntro/]{b(s) \tensor/ t(c, z) :: true}
+\end{prooftree*}
+
+\noindent
+However, these particular assumptions --- ``$b(s) :: true$'' and ``$t(c, z) :: true$'' cannot be used with the trade rule, because the vegetable in my basket (squash) does not match the vegetable I need to trade (cucumbers). So with this particular combination of assumptions, I can infer the tensor, but I cannot infer a trade.
+
+Other assumptions can be put together into a tensor too, which cannot be converted into a trade. For example, consider this proof tree:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{t(s, c) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(c, z) :: true}
+  \infer2[\tensorIntro/]{t(s, c) \tensor/ t(c, z) :: true}
+\end{prooftree*}
+
+\noindent
+This combines the premises ``$t(s, c) :: true$'' and ``$t(c, z) :: true$'' into a tensor. However, both of these express trade options: the first says I can trade squash for cucumbers, and the second says I can trade cucumbers for zucchini. We cannot apply the \traderule/ to two trade options. So here too we have two assumptions where I can infer a tensor, but I cannot infer a trade.
+
+This should make it clear that, in general, the \tensorIntro/ can be used to combine \emph{any} two assumptions into a tensor, even if those two assumptions cannot be combined in any other way.
+
+(Keep in mind, of course, that if you do combine any two assumptions $A$ and $B$ into a tensor, they are no longer available individually, since you have used them up to build the tensor. After you put the assumptions into a tensor, then they are bundled up in that tensor, and only the tensor is available for use. $A$, or $B$, are no longer independently available.)
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Tensors in tensors}
+
+We can apply the tensor rule multiple times, to build up tensors of tensors. For example, consider this hypothetical judgment:
+
+\begin{equation*}
+  b(s) :: true, t(s, c) :: true, t(c, z) :: true \ndturnstile/ (b(s) \tensor/ t(s, c)) \tensor/ t(c, z) :: true
+\end{equation*}
+
+\noindent
+To prove this, we first introduce the assumptions:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, c) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(c, z) :: true}  
+  \infer[rule style=no rule]3{}
+\end{prooftree*}
+
+\noindent
+Then we combine the first two assumptions with the \tensorIntro/ rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, c) :: true}
+  \infer2[\tensorIntro/]{b(s) \tensor/ t(s, c) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(c, z) :: true}  
+  \infer[rule style=no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then we apply the \tensorIntro/ rule again, to combine \emph{that} tensor with the third assumption:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s) :: true}
+  \hypo{}
+  \infer1[\startrule/]{t(s, c) :: true}
+  \infer2[\tensorIntro/]{b(s) \tensor/ t(s, c) :: true}
+  
+  \hypo{}
+  \infer1[\startrule/]{t(c, z) :: true}  
+  \infer2[\tensorIntro/]{(b(s) \tensor/ t(s, c)) \tensor/ t(c, z) :: true}
+\end{prooftree*}
+
+\noindent
+Notice that we wrap the first tensor in parentheses, in order to make the grouping clear.
+
+We can keep using the \tensorIntro/ rule to add more and more assumptions to a tensor. For example, consider this hypothetical judgment (I omit the ``$:: true$'' suffix, for brevity):
+
+\begin{equation*}
+  b(s), t(s, c), t(c, z), t(z, p) \ndturnstile/ ((b(s) \tensor/ t(s, c)) \tensor/ t(c, z)) \tensor/ t(z, p)
+\end{equation*}
+
+\noindent
+To prove this, we first introduce the assumptions:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, c)}
+  \hypo{}
+  \infer1[\startrule/]{t(c, z)}
+  \hypo{}
+  \infer1[\startrule/]{t(z, p)}
+  \infer[rule style=no rule]4{}
+\end{prooftree*}
+
+\noindent
+Then we combine the first two assumptions with the \tensorIntro/ rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, c)}
+  \infer2[\tensorIntro/]{b(s) \tensor/ t(s, c)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(c, z)}
+  \hypo{}
+  \infer1[\startrule/]{t(z, p)}
+  \infer[rule style=no rule]2{}
+  
+  \infer[rule style=no rule]2{}
+\end{prooftree*}
+
+\noindent
+And then we use the \tensorIntro/ rule to combine that tensor with the third assumption:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, c)}
+  \infer2[\tensorIntro/]{b(s) \tensor/ t(s, c)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(c, z)}
+  \infer2[\tensorIntro/]{(b(s) \tensor/ t(s, c)) \tensor/ t(c, z)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(z, p)}
+
+  \infer[rule style=no rule]2{}
+\end{prooftree*}
+
+\noindent
+Finally, we apply the \tensorIntro/ rule again, to add the last assumption:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, c)}
+  \infer2[\tensorIntro/]{b(s) \tensor/ t(s, c)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(c, z)}
+  \infer2[\tensorIntro/]{(b(s) \tensor/ t(s, c)) \tensor/ t(c, z)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(z, p)}
+  \infer2[\tensorIntro/]{(((b(s) \tensor/ t(s, c)) \tensor/ t(c, z)) \tensor/ t(z, p)}
+\end{prooftree*}
+
+\noindent
+Notice where the parentheses are. If the parentheses are in different places, the tree gets built differently. For example, look at this hypothetical judgment:
+
+\begin{equation*}
+  b(s), t(s, c), t(c, z), t(z, p) \ndturnstile/ b(s) \tensor/ (t(s, c) \tensor/ (t(c, z) \tensor/ t(z, p)))
+\end{equation*}
+
+\noindent
+This is exactly the same as the previous hypothetical judgment, except the parentheses are in different places in the conclusion. To prove this one, first introduce the assumptions:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, c)}
+  \hypo{}
+  \infer1[\startrule/]{t(c, z)}
+  \hypo{}
+  \infer1[\startrule/]{t(z, p)}
+  \infer[rule style=no rule]4{}
+\end{prooftree*}
+
+\noindent
+Then combine the last two assumptions with the \tensorIntro/ rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, c)}
+  \infer[rule style=no rule]2{}
+
+  \hypo{}
+  \infer1[\startrule/]{t(c, z)}
+  \hypo{}
+  \infer1[\startrule/]{t(z, p)}
+  \infer2[\tensorIntro/]{t(c, z) \tensor/ t(z, p)}
+  
+  \infer[rule style=no rule]2{}
+\end{prooftree*}
+
+\noindent
+Then use the \tensorIntro/ rule to combine the second assumption with that tensor:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(s, c)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(c, z)}
+  \hypo{}
+  \infer1[\startrule/]{t(z, p)}
+  \infer2[\tensorIntro/]{t(c, z) \tensor/ t(z, p)}
+
+  \infer2[\tensorIntro/]{t(s, c) \tensor/ (t(c, z) \tensor/ t(z, p))}
+  
+  \infer[rule style=no rule]2{}
+\end{prooftree*}
+
+\noindent
+And finally, apply the \tensorIntro/ rule again, to add the first assumption:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(s, c)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(c, z)}
+  \hypo{}
+  \infer1[\startrule/]{t(z, p)}
+  \infer2[\tensorIntro/]{t(c, z) \tensor/ t(z, p)}
+
+  \infer2[\tensorIntro/]{t(s, c) \tensor/ (t(c, z) \tensor/ t(z, p))}
+  
+  \infer2[\tensorIntro/]{b(s) \tensor/ (t(s, c) \tensor/ (t(c, z) \tensor/ t(z, p)))}
+\end{prooftree*}
+
+\noindent
+Notice how this tree looks just like the previous tree, but the order in which the tensors are built is flipped around.
+
+Tensors can be built by combining the pieces in a variety of ways. For example, here is a judgment that combines tensors in yet another way:
+
+\begin{equation*}
+  b(s), t(s, c), t(c, z), t(z, p) \ndturnstile/ (b(s) \tensor/ t(s, c)) \tensor/ (t(c, z) \tensor/ t(z, p))
+\end{equation*}
+
+\noindent
+To prove this, we first introduce the assumptions:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, c)}
+  \hypo{}
+  \infer1[\startrule/]{t(c, z)}
+  \hypo{}
+  \infer1[\startrule/]{t(z, p)}
+  \infer[rule style=no rule]4{}
+\end{prooftree*}
+
+\noindent
+Then we combine the first two assumptions with the \tensorIntro/ rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, c)}
+  \infer2[\tensorIntro/]{b(s) \tensor/ t(s, c)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(c, z)}
+  \hypo{}
+  \infer1[\startrule/]{t(z, p)}
+  \infer[rule style=no rule]2{}
+  
+  \infer[rule style=no rule]2{}
+\end{prooftree*}
+
+\noindent
+And then we combine the last two assumptions with the \tensorIntro/ rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, c)}
+  \infer2[\tensorIntro/]{b(s) \tensor/ t(s, c)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(c, z)}
+  \hypo{}
+  \infer1[\startrule/]{t(z, p)}
+  \infer2[\tensorIntro/]{t(c, z) \tensor/ t(z, p)}
+  
+  \infer[rule style=no rule]2{}
+\end{prooftree*}
+
+\noindent
+Finally, we apply the \tensorIntro/ rule again, to combine the bottom two tensors:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{b(s)}
+  \hypo{}
+  \infer1[\startrule/]{t(s, c)}
+  \infer2[\tensorIntro/]{b(s) \tensor/ t(s, c)}
+
+  \hypo{}
+  \infer1[\startrule/]{t(c, z)}
+  \hypo{}
+  \infer1[\startrule/]{t(z, p)}
+  \infer2[\tensorIntro/]{t(c, z) \tensor/ t(z, p)}
+  
+  \infer2[\tensorIntro/]{(b(s) \tensor/ t(s, c)) \tensor/ (t(c, z) \tensor/ t(z, p))}
+\end{prooftree*}
+
+\noindent
+In this case, we built two smaller tensors first, then we combined them into a bigger tensor.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+The \tensorIntro/ rule can be used to combine any two assumptions we like. We can also use the \tensorIntro/ rule over and over, to put together multiple tensors.
+
+
+\end{document}

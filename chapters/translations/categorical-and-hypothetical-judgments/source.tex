@@ -1,0 +1,242 @@
+\documentclass[../../../main.tex]{subfiles}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Categorical and hypothetical judgments}
+
+In the last chapter, we learned how to translate individual judgments from minimal logic into linear logic. In this chapter, we'll look at how to translate categorical and hypothetical judgments from minimal logic into linear logic.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Equivalent hypothetical judgments}
+
+Let's discuss hypothetical judgments first. Suppose we have a hypothetical judgment in minimal logic that has this shape (omitting the ``$:: true$'' annotations):
+
+\begin{equation*}
+  \nd{A}_{1}, \ldots, \nd{A}_{n} \ndturnstile/ \nd{B}
+\end{equation*}
+
+\noindent
+This judgment says: ``$\nd{B}$'' is true, given assumptions ``$\nd{A}_{1}$'' to ``$\nd{A}_{n}$'' (where ``$\nd{A}_{1}$'' to ``$\nd{A}_{n}$'' could be any number of assumptions). 
+
+What would an equivalent hypothetical judgment look like in linear logic? Well, first we should translate all of the propositions in the judgment. We can indicate that with asterisks:
+
+\begin{equation*}
+  \nd{A}_{1}^{*}, \ldots, \nd{A}_{n}^{*} \ndturnstile/ \nd{B}^{*}
+\end{equation*}
+
+\noindent
+However, this is not enough. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Bang the assumptions}
+
+Suppose that ``$\nd{A}_{1}$'' through ``$\nd{A}_{n}$'' are atomic propositions in minimal logic. If we follow the translation rules from the last chapter, we translate each of those directly to atomic propositions in linear logic. So we get this:
+
+\begin{equation*}
+  A_{1}, \ldots, A_{n} \ndturnstile/ \nd{B}^{*}
+\end{equation*}
+
+\noindent
+But think about this. In linear logic, we have to use up every non-banged assumption exactly once. So this judgment says we can prove ``$\nd{B}^{*}$'' by using up each of ``$A_{1}$'' through ``$A_{n}$'' exactly once.
+
+But that is not what the hypothetical judgment in minimal logic says. In minimal logic, you can use every assumption as many times as you like. That is, each assumption in minimal logic is always available.
+
+So what we really need to do in the linear logic translation is put a bang in front of each assumption in the judgment. Like this:
+
+\begin{equation*}
+  \bang/A_{1}, \ldots, \bang/A_{n} \ndturnstile/ \nd{B}^{*}
+\end{equation*}
+
+\noindent
+That would be equivalent to the hypothetical judgment in minimal logic. The key is to add the bang up front.
+
+So, to translate any hypothetical judgment from minimal logic into linear logic, we need to not only translate each of the propositions involved, we also need to add a bang to the front of each assumption. We can write that like this:
+
+\begin{equation*}
+  \bang/\nd{A}_{1}^{*}, \ldots, \bang/\nd{A}_{n}^{*} \ndturnstile/ \nd{B}^{*}
+\end{equation*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Don't bang the consequent}
+
+What about the consequent? Do we need to put a bang in front of it? Should our translation scheme look like this?
+
+\begin{equation*}
+  \bang/\nd{A}_{1}^{*}, \ldots, \bang/\nd{A}_{n}^{*} \ndturnstile/~\bang/\nd{B}^{*}
+\end{equation*}
+
+\noindent
+The answer is no. I mean, we could add a bang to the consequent if we really wanted to, but it's not necessary. The reason is that all of the assumptions are banged, which means that we can derive the consequent as many times as we need. 
+
+Besides, if for some reason we do need a banged consequent, we can always use the promotion rule to promote the conclusion of the proof. Suppose we have a proof of the above hypothetical that looks something like this:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\startrule/]{\bang/A_{1}}
+  \ellipsis{}{}
+
+  \hypo{\ldots}
+  \infer[no rule]1{}
+  \ellipsis{}{}
+
+  \hypo{}
+  \infer1[\startrule/]{\bang/A_{n}}
+  \ellipsis{}{}
+
+  \infer[no rule]3{}
+  \ellipsis{}{B}
+\end{prooftree*}
+
+\noindent
+We can assume the bangs on a side branch, and show that they lead to ``$B$'':
+
+\begin{prooftree*}
+
+  \hypo{}
+  \infer1[\startrule/]{\bang/A_{1}}
+
+  \hypo{\ldots}
+  \infer[no rule]1{}
+
+  \hypo{}
+  \infer1[\startrule/]{\bang/A_{n}}
+
+  \hypo{}
+  \infer1[\startrule/]{\bang/A_{1}}
+  \ellipsis{}{}
+
+  \hypo{\ldots}
+  \infer[no rule]1{}
+  \ellipsis{}{}
+
+  \hypo{}
+  \infer1[\startrule/]{\bang/A_{n}}
+  \ellipsis{}{}
+
+  \infer[no rule]3{}
+  \ellipsis{}{B}
+  
+  \infer[no rule]4{}
+\end{prooftree*}
+
+\noindent
+Then we can discharge that branch and use \bangProm/ to promote ``$B$'' to ``$\bang/B$'':
+
+\begin{prooftree*}
+
+  \hypo{}
+  \infer1[\startrule/]{\bang/A_{1}}
+
+  \hypo{\ldots}
+  \infer[no rule]1{}
+
+  \hypo{}
+  \infer1[\startrule/]{\bang/A_{n}}
+
+  \hypo{}
+  \infer1[\startrule/]{\bang/A_{1}^{x_{1}}}
+  \ellipsis{}{}
+
+  \hypo{\ldots}
+  \infer[no rule]1{}
+  \ellipsis{}{}
+
+  \hypo{}
+  \infer1[\startrule/]{\bang/A_{n}^{x_{n}}}
+  \ellipsis{}{}
+
+  \infer[no rule]3{}
+  \ellipsis{}{B}
+  
+  \infer4[\bangProm/$^{x_{1}, \ldots, x_{n}}$]{\bang/B}
+\end{prooftree*}
+
+\noindent
+This will work for any conclusion ``$B$'' that is derived entirely from all banged assumptions ``$A_{1}$'' through ``$A_{n}$'' (whatever they might be).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The translation scheme}
+
+At this point, we can state clearly how we are going to translate hypothetical judgments. We will do it like this:
+
+\begin{equation*}
+  \nd{A}_{1}, \ldots, \nd{A}_{n} \ndturnstile/ \nd{B}
+  \hskip 1cm \rightsquigarrow \hskip 1cm
+  \bang/\nd{A}_{1}^{*}, \ldots, \bang/\nd{A}_{n}^{*} \ndturnstile/ \nd{B}^{*}
+\end{equation*}
+
+\noindent
+This says that, if we have a hypothetical judgment in minimal logic which claims that ``$\nd{B}$'' is true given the assumptions ``$\nd{A}_{1}$'' through ``$\nd{A}_{n}$,'' then we can translate that into an equivalent hypothetical judgment in linear logic which claims that ``$\nd{B}^{*}$'' (the translation of ``$\nd{B}$'') is true, given the assumptions ``$\bang/\nd{A}_{1}^{*}$'' through ``$\bang/\nd{A}_{n}^{*}$'' (the translations of ``$\nd{A}_{1}$'' through ``$\nd{A}_{n}$,'' but banged). 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Equivalent categorical judgments}
+
+Translating categorical judgments presents no particular problem. Suppose we have a categorical judgment from minimal logic (omitting the ``$:: true$'' annotation):
+
+\begin{equation*}
+  \ndturnstile/ \nd{A}
+\end{equation*}
+
+\noindent
+To translate this into linear logic, we of course first want to translate the consequent, so we indicate that by marking it with an asterisk:
+
+\begin{equation*}
+  \ndturnstile/ \nd{A} \hskip 1cm \rightsquigarrow \hskip 1cm \ndturnstile/ \nd{A}^{*}
+\end{equation*}
+
+\noindent
+But that's all we need to do. In minimal logic, the conclusion ``$\nd{A}$'' is always available, because all judgments are always available in minimal logic. But the categorical judgment ``$\nd{A}^{*}$'' (i.e., whatever ``$\nd{A}$'' translates to) is always available in linear logic too. Remember that in linear logic, if we can prove a conclusion from no assumptions, then we can promote it to a bang. That's precisely what the \bangIntro/ rule says. 
+
+So we don't need to do anything special to translate categorical judgments from minimal logic into linear logic, aside from translating the conclusion itself (i.e., whatever ``$\nd{A}$'' is).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The translation scheme again}
+
+We said before that we will translate hypothetical judgments like this:
+
+\begin{equation*}
+  \nd{A}_{1}, \ldots, \nd{A}_{n} \ndturnstile/ \nd{B}
+  \hskip 1cm \rightsquigarrow \hskip 1cm
+  \bang/\nd{A}_{1}^{*}, \ldots, \bang/\nd{A}_{n}^{*} \ndturnstile/ \nd{B}^{*}
+\end{equation*}
+
+\noindent
+We can say that this one scheme captures how we will translate \emph{categorical} judgments too. For categorical judgments, we simply specialize the scheme so that there are zero assumptions on the left hand side of the turnstile. That is, we use the above scheme, where $n = 0$. If we let $n$ be $0$, then the scheme looks like this:
+
+\begin{equation*}
+  \ndturnstile/ \nd{B}
+  \hskip 1cm \rightsquigarrow \hskip 1cm
+  \ndturnstile/ \nd{B}^{*}
+\end{equation*}
+
+\noindent
+And that describes exactly how we said we will translate categorical judgments.
+
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+
+In this chapter, we looked at translating hypothetical and categorical judgments from minimal logic into linear logic. 
+
+To translate a hypothetical judgment from minimal logic into linear logic, we need to translate each judgment, but we also need to add a bang to each assumption. We do not need to add a bang to the consequent of the hypothetical judgment, since any conclusion we can prove from all bangs is always available, since it can be proven again if we need it, or it can be promoted. 
+
+We can translate a categorical judgment from minimal logic into linear logic simply by translating the conclusion of the categorical judgment. In linear logic, any conclusion we can prove without assumptions is always available, because we can always just prove it again if we need it.
+
+
+\end{document}
